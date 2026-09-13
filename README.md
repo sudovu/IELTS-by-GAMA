@@ -101,6 +101,24 @@
 7. **Multi-Platform Interfaces**
    - **Interactive Terminal CLI**: `python ielts_cli.py`
    - **Local Web/Desktop Responsive UI**: `python run_ui.py` (served on `http://127.0.0.1:8080` with Web Speech API integration).
+   - **Android 11+ & Tablet Application**: Self-contained offline APK with responsive split-screen tablet layout and hardware-accelerated WebView (`dist/ielts-by-gama-tablet-android11+.apk`).
+
+---
+
+## 📱 Android App (Android 11+ & Tablets)
+
+The project includes an Android APK built for **Android 11+ (API 30+)** optimized for both phones and **Android tablets** (portrait and landscape orientations):
+- **Direct APK Download**: [`dist/ielts-by-gama-tablet-android11+.apk`](dist/ielts-by-gama-tablet-android11+.apk)
+- **Features**:
+  - Tablet-optimized split-screen layout for Reading (Passage + Questions side-by-side) and Writing (Task + Essay Editor).
+  - 100% offline-first engine bundled into assets—no server or Python runtime required on device.
+  - Microphone and speech synthesis support for Speaking section practice.
+  - Back-button navigation and hardware acceleration.
+- **Build from Source**:
+  ```bash
+  cd platform/android
+  ./gradlew assembleDebug
+  ```
 
 ---
 
@@ -142,4 +160,4 @@ python -m unittest discover tests
 ---
 
 ## 📜 License
-Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
+Distributed under the GNU Affero General Public License v3.0 (AGPLv3). See [`LICENSE`](LICENSE) for more information.
