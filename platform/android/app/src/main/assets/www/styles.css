@@ -44,6 +44,8 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
+  min-height: var(--app-height, 100vh);
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
@@ -53,6 +55,9 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: var(--app-height, 100vh);
+  height: 100dvh;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -71,28 +76,53 @@ body {
 .header-brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .brand-logo {
-  background: var(--primary-gradient);
-  color: #fff;
-  font-weight: 800;
-  font-size: 1.15rem;
-  padding: 6px 14px;
-  border-radius: 8px;
-  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: transparent;
+  flex-shrink: 0;
+  transition: transform var(--transition-speed);
+}
+
+.brand-logo:hover {
+  transform: scale(1.05);
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(79, 70, 229, 0.4));
 }
 
 .brand-title h1 {
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: 1.18rem;
+  font-weight: 800;
   color: var(--text-primary);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-accent {
+  background: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
 }
 
 .brand-title .subtext {
-  font-size: 0.75rem;
+  font-size: 0.73rem;
   color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .header-controls {
@@ -512,8 +542,178 @@ body {
   }
 }
 
+/* =============================================================
+   Developer Showcase Card (Settings Tab)
+   ============================================================= */
+.developer-showcase-card {
+  background: linear-gradient(145deg, rgba(26, 36, 54, 0.85) 0%, rgba(17, 24, 39, 0.95) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45), 0 0 20px rgba(99, 102, 241, 0.1);
+  padding: clamp(16px, 3vw, 28px);
+  position: relative;
+  overflow: hidden;
+}
+
+.developer-showcase-card::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.developer-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: clamp(16px, 3vw, 32px);
+}
+
+.developer-img-frame {
+  position: relative;
+  flex-shrink: 0;
+  width: clamp(120px, 20vw, 170px);
+  aspect-ratio: 4 / 5;
+  border-radius: 18px;
+  padding: 3px;
+  background: linear-gradient(135deg, #6366f1 0%, #38bdf8 50%, #10b981 100%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+.developer-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 15px;
+  display: block;
+  background: #1e293b;
+}
+
+.developer-status-pill {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  backdrop-filter: blur(8px);
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.developer-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.badge-developer {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #818cf8;
+  background: rgba(99, 102, 241, 0.12);
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  margin-bottom: 6px;
+}
+
+.developer-name {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.developer-bio {
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.developer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.tag-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.developer-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.spec-cell {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spec-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.spec-value {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* =============================================================
+   Screen Fit & Responsive Adaptations (Every Screen Size)
+   ============================================================= */
+
+/* High-Resolution Tablets & Desktop */
 @media (min-width: 1024px) {
-  /* Tablet Landscape & Desktop High-Resolution */
   .sidebar {
     width: 280px;
   }
@@ -528,7 +728,58 @@ body {
   }
 }
 
+/* Tablets (Portrait & Mid Landscape 768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sidebar {
+    width: 220px;
+    padding: 12px 8px;
+  }
+  .nav-item {
+    padding: 8px 10px;
+    font-size: 0.84rem;
+  }
+  .grid-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .split-view {
+    flex-direction: row;
+    gap: 16px;
+  }
+  .passage-pane, .questions-pane {
+    max-height: 65vh;
+  }
+}
+
+/* Mobile & Small Screen (< 768px) */
 @media (max-width: 767px) {
+  .app-header {
+    height: 58px;
+    padding: 0 12px;
+  }
+  .header-brand {
+    gap: 8px;
+  }
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+  .brand-title h1 {
+    font-size: 1.05rem;
+  }
+  .brand-title .subtext {
+    display: none;
+  }
+  .header-controls {
+    gap: 6px;
+  }
+  .status-badge {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
+  #toggleOfflineBtn {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
   .app-body {
     flex-direction: column;
   }
@@ -537,21 +788,74 @@ body {
     height: auto;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
-    padding: 8px 12px;
+    padding: 6px 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
   .nav-links {
     flex-direction: row;
     overflow-x: auto;
     gap: 6px;
     padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar {
+    display: none;
   }
   .nav-item {
     padding: 6px 10px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     white-space: nowrap;
+    border-radius: 8px;
+  }
+  .sidebar-footer {
+    display: none;
+  }
+  .content-stage {
+    padding: 12px;
+  }
+  .grid-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
   .split-view {
     flex-direction: column;
+    gap: 12px;
+  }
+  .passage-pane, .questions-pane {
+    max-height: none;
+    overflow-y: visible;
+  }
+  .developer-layout {
+    flex-direction: column;
+    text-align: center;
+  }
+  .developer-img-frame {
+    width: 130px;
+    margin: 0 auto;
+  }
+  .developer-tags {
+    justify-content: center;
+  }
+  .developer-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Extra Small Phones (< 380px) */
+@media (max-width: 380px) {
+  .app-header {
+    height: 52px;
+    padding: 0 8px;
+  }
+  .brand-title h1 {
+    font-size: 0.95rem;
+  }
+  .status-badge span:not(.dot) {
+    display: none;
+  }
+  .developer-specs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 

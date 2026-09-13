@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IELTS by GAMA - Hybrid Online + Offline AI English Tutor</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -14,10 +15,12 @@
     <!-- Top Header -->
     <header class="app-header">
       <div class="header-brand">
-        <div class="brand-logo">GAMA</div>
+        <div class="brand-logo">
+          <img src="images/logo.svg" alt="IELTS by GAMA Logo" class="brand-logo-img">
+        </div>
         <div class="brand-title">
-          <h1>IELTS by GAMA</h1>
-          <span class="subtext">Hybrid Online + Offline AI English Tutor</span>
+          <h1>IELTS <span class="brand-accent">by GAMA</span></h1>
+          <span class="subtext" id="screenDimensionBadge">Hybrid Online + Offline AI Tutor</span>
         </div>
       </div>
 
@@ -360,6 +363,49 @@
               <button id="importDataBtn" class="btn btn-outline">Import Learning Data</button>
             </div>
             <textarea id="dataTransferArea" rows="4" class="mt-2" placeholder="Exported JSON or JSON to import will appear here..."></textarea>
+          </div>
+
+          <!-- Developed by GAMA Section -->
+          <div class="card developer-showcase-card mt-3">
+            <div class="developer-layout">
+              <div class="developer-img-frame">
+                <img src="images/gama_developer.jpg" alt="Developed by GAMA" class="developer-photo" id="developerPhoto">
+                <div class="developer-status-pill">
+                  <span class="pulse-dot"></span> System Architect
+                </div>
+              </div>
+              <div class="developer-details">
+                <div class="badge-developer">CREATOR & DEVELOPER</div>
+                <h3 class="developer-name">Developed by GAMA</h3>
+                <p class="developer-bio">
+                  Architected with a hybrid-first offline intelligence foundation for IELTS mastery and English linguistic confidence. Designed to operate completely self-contained with sub-millisecond local retrieval, formative correction rubrics, and privacy-by-default execution.
+                </p>
+                <div class="developer-tags">
+                  <span class="tag-pill">Hybrid AI</span>
+                  <span class="tag-pill">Offline-First</span>
+                  <span class="tag-pill">IELTS Mastery</span>
+                  <span class="tag-pill">Adaptive RAG</span>
+                </div>
+                <div class="developer-specs-grid">
+                  <div class="spec-cell">
+                    <span class="spec-label">Version</span>
+                    <strong class="spec-value">v1.2.0 Production</strong>
+                  </div>
+                  <div class="spec-cell">
+                    <span class="spec-label">Engine</span>
+                    <strong class="spec-value">GAMA Local RAG</strong>
+                  </div>
+                  <div class="spec-cell">
+                    <span class="spec-label">Active Screen</span>
+                    <strong class="spec-value" id="devScreenSpec">Detecting...</strong>
+                  </div>
+                  <div class="spec-cell">
+                    <span class="spec-label">Platform Support</span>
+                    <strong class="spec-value">Android 11+ & Tablet & Web</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </main>

@@ -476,6 +476,7 @@ async function callApi(endpoint, method = "GET", data = null) {
 // DOM Lifecycle & Controller Initializations
 // -------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
+  initScreenSizeManager();
   initNavigation();
   initThemeToggle();
   initOfflineToggle();
@@ -494,6 +495,77 @@ document.addEventListener("DOMContentLoaded", () => {
   checkStatus();
   setInterval(checkStatus, 6000);
 });
+
+// -------------------------------------------------------------
+// Dynamic Screen Size Grabber & Universal Layout Adapter
+// -------------------------------------------------------------
+function initScreenSizeManager() {
+  function updateScreenMetrics() {
+    const w = window.innerWidth || document.documentElement.clientWidth;
+    const h = window.innerHeight || document.documentElement.clientHeight;
+    const dpr = (window.devicePixelRatio || 1).toFixed(1);
+    const isLandscape = w > h;
+    const orientation = isLandscape ? "landscape" : "portrait";
+
+    // Set dynamic viewport CSS variables for pixel-perfect viewport fitting
+    document.documentElement.style.setProperty("--app-width", `${w}px`);
+    document.documentElement.style.setProperty("--app-height", `${h}px`);
+    document.documentElement.style.setProperty("--vh", `${h * 0.01}px`);
+
+    let tier = "desktop";
+    let tierLabel = "DESKTOP";
+    if (w < 600) {
+      tier = "phone";
+      tierLabel = "PHONE";
+    } else if (w < 768) {
+      tier = "mobile-large";
+      tierLabel = "PHABLET";
+    } else if (w < 1024) {
+      tier = "tablet";
+      tierLabel = "TABLET";
+    } else if (w < 1440) {
+      tier = "tablet-landscape";
+      tierLabel = "TABLET HD";
+    }
+
+    document.body.setAttribute("data-screen-tier", tier);
+    document.body.setAttribute("data-orientation", orientation);
+
+    // Live update in sidebar footer
+    const devLabel = document.getElementById("deviceProfileLabel");
+    if (devLabel) {
+      devLabel.textContent = `${tierLabel} (${w}×${h})`;
+    }
+
+    // Live update in Developed by GAMA card
+    const devSpec = document.getElementById("devScreenSpec");
+    if (devSpec) {
+      devSpec.textContent = `${w}×${h} px (${tierLabel} • ${dpr}x DPR)`;
+    }
+
+    // Live subtitle badge in header
+    const screenBadge = document.getElementById("screenDimensionBadge");
+    if (screenBadge) {
+      screenBadge.textContent = `${tierLabel} • ${w}×${h} • Offline-Ready`;
+    }
+  }
+
+  updateScreenMetrics();
+
+  window.addEventListener("resize", () => {
+    updateScreenMetrics();
+  }, { passive: true });
+
+  window.addEventListener("orientationchange", () => {
+    setTimeout(updateScreenMetrics, 150);
+  });
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", () => {
+      updateScreenMetrics();
+    }, { passive: true });
+  }
+}
 
 function initNavigation() {
   const items = document.querySelectorAll(".nav-item");
