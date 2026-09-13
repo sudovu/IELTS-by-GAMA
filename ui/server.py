@@ -109,11 +109,22 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             self._send_json(passage)
 
         elif path == "/api/listening":
-            sec = self.listening.get_section("sec_1", show_transcript=True)
-            self._send_json(sec)
+            sec_id = parsed.query.replace("sec_id=", "").strip() if "sec_id=" in parsed.query else "sec_1"
+            sec = self.listening.get_section(sec_id or "sec_1", show_transcript=True)
+            self._send_json(sec or self.listening.get_section("sec_1", show_transcript=True))
+
+        elif path == "/api/speaking/sets":
+            sets = self.speaking.get_exam_sets()
+            self._send_json({"sets": sets})
 
         elif path == "/api/speaking/prompts":
-            prompts = self.speaking.get_test_prompts()
+            card_idx = 0
+            if "card_idx=" in parsed.query:
+                try:
+                    card_idx = int(parsed.query.replace("card_idx=", "").strip())
+                except ValueError:
+                    card_idx = 0
+            prompts = self.speaking.get_test_prompts(card_idx)
             self._send_json(prompts)
 
         elif path == "/api/grammar/adaptive":
@@ -171,8 +182,9 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
 
         elif path == "/api/listening/submit":
             answers_raw = body.get("answers", {})
+            sec_id = body.get("section_id", "sec_1")
             user_answers = {int(k): v for k, v in answers_raw.items()}
-            res = self.listening.evaluate_submission("sec_1", user_answers)
+            res = self.listening.evaluate_submission(sec_id, user_answers)
             self._send_json(res)
 
         elif path == "/api/writing/evaluate":

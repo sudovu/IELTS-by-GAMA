@@ -251,6 +251,14 @@
           </div>
 
           <div class="card">
+            <div class="section-selector-bar mb-3">
+              <span style="font-weight: 600; margin-right: 8px; font-size: 0.9rem;">Select Section:</span>
+              <button class="btn btn-sm btn-primary active" id="secBtn_sec_1" onclick="switchListeningSection('sec_1')">Sec 1: Accommodation</button>
+              <button class="btn btn-sm btn-outline" id="secBtn_sec_2" onclick="switchListeningSection('sec_2')">Sec 2: Arts Centre</button>
+              <button class="btn btn-sm btn-outline" id="secBtn_sec_3" onclick="switchListeningSection('sec_3')">Sec 3: Solar Microgrids</button>
+              <button class="btn btn-sm btn-outline" id="secBtn_sec_4" onclick="switchListeningSection('sec_4')">Sec 4: Cetacean Bioacoustics</button>
+            </div>
+
             <h3 id="listeningTitle">Loading Listening Scenario...</h3>
             <div class="audio-control-bar mt-2">
               <button id="playAudioScriptBtn" class="btn btn-secondary">🔊 Play Audio with Speech Synthesizer</button>
@@ -293,27 +301,98 @@
         <!-- 9. Speaking Tab -->
         <section id="tab-speaking" class="tab-pane">
           <div class="pane-header">
-            <h2>AI Speaking Examiner & Fluency Coach</h2>
-            <p class="subtitle">Measures Words Per Minute (WPM), hesitation, fillers, and coherence.</p>
+            <h2>AI IELTS Speaking Examiner Room</h2>
+            <p class="subtitle">Official 3-Part Interview Simulation with Dr. Harrison (British Council / Cambridge Examiner).</p>
           </div>
 
-          <div class="card">
-            <div id="cueCardBox" class="cue-card">
-              <h3>Part 2 Cue Card</h3>
-              <div id="cueCardContent">Loading prompt...</div>
+          <!-- Interview Progress Stepper -->
+          <div class="interview-stepper">
+            <div class="step-badge active" id="badgePart1">
+              <span class="badge-number">1</span>
+              <span>Part 1: Interview</span>
             </div>
+            <div class="step-badge" id="badgePart2">
+              <span class="badge-number">2</span>
+              <span>Part 2: Cue Card</span>
+            </div>
+            <div class="step-badge" id="badgePart3">
+              <span class="badge-number">3</span>
+              <span>Part 3: Discussion</span>
+            </div>
+            <div class="step-badge" id="badgeResult">
+              <span class="badge-number">✓</span>
+              <span>Diagnostic Report</span>
+            </div>
+          </div>
 
-            <div class="speech-recording-area mt-3">
-              <div class="timer-display" id="speakingTimer">00:00</div>
-              <div class="speech-btn-group">
-                <button id="startSpeechRecordBtn" class="btn btn-primary">🎙️ Start Speaking (Web Speech)</button>
-                <button id="stopSpeechRecordBtn" class="btn btn-secondary" disabled>⏹️ Finish & Evaluate</button>
+          <!-- Topic Selection & Controls -->
+          <div class="card mb-3">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <label for="speakingExamSetSelect" style="font-weight: 600; font-size: 0.9rem; margin-right: 8px;">Official Exam Topic:</label>
+                <select id="speakingExamSetSelect" class="form-select" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--surface-secondary); color: var(--text-primary); font-size: 0.9rem;">
+                  <option value="0">Exam Set 1: Career, Goals & Ambition</option>
+                  <option value="1">Exam Set 2: Sustainable Living & Urban Heritage</option>
+                  <option value="2">Exam Set 3: Artificial Intelligence & Automation</option>
+                </select>
               </div>
-              <textarea id="speakingTranscriptInput" rows="4" class="mt-2" placeholder="Your spoken transcript will appear here live (or you can type/paste)..."></textarea>
-              <button id="evaluateSpeakingBtn" class="btn btn-primary mt-2">Evaluate Speaking Response</button>
+              <div style="display: flex; gap: 8px;">
+                <button id="startInterviewBtn" class="btn btn-primary btn-sm">▶️ Begin Official Interview</button>
+                <button id="resetInterviewBtn" class="btn btn-outline btn-sm">🔄 Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage 1 & 3: Interactive Interview Room -->
+          <div class="card examiner-stage-card" id="examinerRoomCard">
+            <div class="examiner-avatar-row">
+              <div class="examiner-avatar">👨‍🏫</div>
+              <div class="examiner-info">
+                <div class="examiner-name">Dr. Harrison (Examiner) <span class="badge-role">Certified Examiner</span></div>
+                <div class="examiner-status" id="examinerStatusLabel">Ready to begin interview</div>
+              </div>
             </div>
 
-            <div id="speakingEvalReport" class="report-box mt-3" style="display:none;"></div>
+            <div class="examiner-speech-bubble" id="examinerSpeechBubble">
+              "Good day. Welcome to the IELTS Speaking test. Please select a topic above and press 'Begin Official Interview' to start."
+            </div>
+
+            <!-- Part 2 Prep Countdown Card (Hidden until Part 2) -->
+            <div class="prep-timer-card" id="part2PrepCard" style="display: none;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="margin: 0; color: #f59e0b;">⏱️ 1-Minute Preparation Time</h4>
+                <div class="prep-countdown" id="prepCountdownText">01:00</div>
+              </div>
+              <div id="part2CueCardText" class="mt-2" style="font-size: 0.95rem; line-height: 1.5;"></div>
+              <textarea id="part2NotesInput" class="mt-2" rows="2" placeholder="Scratchpad: jot bullet points or lexical keywords here during your 1-minute prep..." style="width: 100%; font-size: 0.85rem; border-radius: 6px;"></textarea>
+              <div class="mt-2">
+                <button id="skipPrepBtn" class="btn btn-sm btn-outline">Skip Prep & Start Speaking Now</button>
+              </div>
+            </div>
+
+            <!-- Dialogue History -->
+            <div class="interview-dialogue-history mt-3" id="interviewDialogueHistory">
+              <!-- Live conversational turns appear here -->
+            </div>
+
+            <!-- Candidate Response Controls -->
+            <div class="speech-recording-area mt-3">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="timer-display" id="speakingTimer">00:00</div>
+                <span id="speakingStatusText" style="font-size: 0.85rem; color: var(--text-secondary);">Tap microphone to reply to examiner</span>
+              </div>
+              <div class="speech-btn-group mt-2">
+                <button id="startSpeechRecordBtn" class="btn btn-primary" disabled>🎙️ Answer Examiner (Speak)</button>
+                <button id="stopSpeechRecordBtn" class="btn btn-secondary" disabled>⏹️ Send Answer to Examiner</button>
+                <button id="replayQuestionBtn" class="btn btn-outline" style="font-size: 0.85rem;">🔊 Repeat Question</button>
+              </div>
+              <textarea id="speakingTranscriptInput" rows="3" class="mt-2" placeholder="Your live response appears here (or you can type your answer)..."></textarea>
+            </div>
+          </div>
+
+          <!-- Stage 4: Comprehensive Optimization & Diagnostic Report -->
+          <div class="card mt-3" id="speakingReportContainer" style="display: none;">
+            <div id="speakingEvalReport" class="report-box"></div>
           </div>
         </section>
 

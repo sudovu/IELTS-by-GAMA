@@ -63,6 +63,124 @@ class ListeningEngine:
                     "distractor_note": "Orientation begins earlier, but key collection is specifically on the 18th of September."
                 }
             ]
+        },
+        "sec_2": {
+            "id": "sec_2",
+            "section_number": 2,
+            "title": "Greendale Community Arts Centre & Gallery Tour",
+            "audio_script": (
+                "GUIDE: Good afternoon everyone, and welcome to Greendale Arts Centre. "
+                "Before we tour the studios, let me outline key visitor details. "
+                "The centre was founded in 1994, although major renovations took place in 2018. "
+                "Our ceramic pottery workshop is located on the ground floor next to the courtyard garden. "
+                "Opening hours on weekdays are 9 AM to 8 PM, while weekend entry closes earlier at 6 PM. "
+                "Membership for local residents costs 45 pounds annually, which grants free admission to special exhibitions. "
+                "For visitors arriving by public transport, bus route number 14 stops directly in front of the main entrance."
+            ),
+            "questions": [
+                {
+                    "num": 1,
+                    "prompt": "Year of major centre renovations: _____",
+                    "acceptable": ["2018"],
+                    "max_words": 1,
+                    "distractor_note": "Founded in 1994, but major renovations took place in 2018."
+                },
+                {
+                    "num": 2,
+                    "prompt": "Pottery workshop location: next to the _____ garden",
+                    "acceptable": ["courtyard"],
+                    "max_words": 1,
+                    "distractor_note": "Directly mentioned as courtyard garden on the ground floor."
+                },
+                {
+                    "num": 3,
+                    "prompt": "Weekend closing time: _____ PM",
+                    "acceptable": ["6", "6:00"],
+                    "max_words": 1,
+                    "distractor_note": "Weekday closing is 8 PM, but weekend entry closes at 6 PM."
+                },
+                {
+                    "num": 4,
+                    "prompt": "Direct bus route number: _____",
+                    "acceptable": ["14"],
+                    "max_words": 1,
+                    "distractor_note": "Bus route 14 stops directly at main entrance."
+                }
+            ]
+        },
+        "sec_3": {
+            "id": "sec_3",
+            "section_number": 3,
+            "title": "Academic Tutorial: Renewable Microgrid Projects",
+            "audio_script": (
+                "TUTOR: Good afternoon, Liam and Clara. Let's discuss your engineering fieldwork proposal. "
+                "CLARA: Thanks, Professor. We decided to investigate solar microgrids installed on university rooftops. "
+                "LIAM: Yes, we initially thought about wind turbines, but building height regulations made solar photovoltaic panels far more viable. "
+                "TUTOR: An astute decision. And what primary variable will you measure over the six-month trial? "
+                "CLARA: We are analyzing peak storage efficiency, specifically measuring battery discharge rates under cloudy conditions. "
+                "TUTOR: Excellent. Keep in mind that your interim progress report must be submitted by November 12th. "
+                "LIAM: Understood. We have already calibrated our digital telemetry sensors."
+            ),
+            "questions": [
+                {
+                    "num": 1,
+                    "prompt": "Chosen renewable technology: solar _____ panels",
+                    "acceptable": ["photovoltaic"],
+                    "max_words": 1,
+                    "distractor_note": "Wind turbines were initially considered, but solar photovoltaic was chosen."
+                },
+                {
+                    "num": 2,
+                    "prompt": "Primary measured variable: peak storage _____",
+                    "acceptable": ["efficiency"],
+                    "max_words": 1,
+                    "distractor_note": "Specifically stated as peak storage efficiency."
+                },
+                {
+                    "num": 3,
+                    "prompt": "Interim report deadline: _____ 12th",
+                    "acceptable": ["November"],
+                    "max_words": 1,
+                    "distractor_note": "Tutor explicitly mandates November 12th."
+                }
+            ]
+        },
+        "sec_4": {
+            "id": "sec_4",
+            "section_number": 4,
+            "title": "Academic Lecture: Cetacean Bioacoustics in Polar Oceans",
+            "audio_script": (
+                "PROFESSOR: Welcome back to Marine Biology 402. Today we examine acoustic communication in Arctic cetaceans, "
+                "specifically beluga whales and narwhals. In frozen ocean environments where solar illumination is virtually absent for months, "
+                "sound waves represent the primary sensory modality for navigation, social cohesion, and prey localization. "
+                "Beluga vocalizations encompass a dynamic acoustic spectrum ranging from low-frequency groans to ultrasonic clicks reaching 120 kilohertz. "
+                "Recent bioacoustic telemetry indicates that anthropogenic noise from commercial shipping vessels causes significant acoustic masking, "
+                "which forces pods to increase their call amplitude—a physiological adaptation known as the Lombard effect. "
+                "Furthermore, the warming of sea ice has accelerated ambient underwater noise levels by nearly three decibels per decade."
+            ),
+            "questions": [
+                {
+                    "num": 1,
+                    "prompt": "Primary sensory modality in Arctic waters: _____ waves",
+                    "acceptable": ["sound"],
+                    "max_words": 1,
+                    "distractor_note": "Sound waves serve as the primary sensory modality."
+                },
+                {
+                    "num": 2,
+                    "prompt": "Maximum frequency of beluga ultrasonic clicks: _____ kilohertz",
+                    "acceptable": ["120"],
+                    "max_words": 1,
+                    "distractor_note": "Stated as reaching 120 kilohertz."
+                },
+                {
+                    "num": 3,
+                    "prompt": "Vocal elevation under ambient noise is known as the _____ effect",
+                    "acceptable": ["Lombard"],
+                    "max_words": 1,
+                    "distractor_note": "Physiological adaptation known as the Lombard effect."
+                }
+            ]
         }
     }
 

@@ -786,22 +786,31 @@ body {
   .sidebar {
     width: 100%;
     height: auto;
+    flex-shrink: 0;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
     padding: 6px 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    overflow: visible;
   }
   .nav-links {
     flex-direction: row;
+    display: flex;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     gap: 6px;
     padding-bottom: 4px;
-    scrollbar-width: none;
+    scrollbar-width: thin;
   }
   .nav-links::-webkit-scrollbar {
-    display: none;
+    height: 3px;
+  }
+  .nav-links::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
   }
   .nav-item {
+    flex-shrink: 0;
     padding: 6px 10px;
     font-size: 0.78rem;
     white-space: nowrap;
@@ -856,6 +865,127 @@ body {
   .developer-specs-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Interactive IELTS Speaking Examiner Room */
+.interview-stepper {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+.step-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+  transition: all var(--transition-speed);
+}
+.step-badge.active {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+.examiner-stage-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.examiner-profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.examiner-avatar-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.examiner-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+.examiner-info h4 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.examiner-info span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.examiner-speech-bubble {
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-left: 4px solid var(--primary-accent);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+.interview-dialogue-history {
+  max-height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+.dialogue-turn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+.dialogue-turn.examiner {
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid var(--primary-accent);
+}
+.dialogue-turn.candidate {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--success-color);
+}
+.prep-timer-card {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+  padding: 12px;
+}
+.band-upgrade-box {
+  background: rgba(129, 140, 248, 0.08);
+  border: 1px solid rgba(129, 140, 248, 0.25);
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+}
+.upgrade-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 8px;
+}
+.upgrade-item strong {
+  color: #38bdf8;
 }
 
 

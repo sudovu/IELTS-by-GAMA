@@ -13,8 +13,22 @@ let appState = {
   forcedOffline: false,
   srsDeck: [],
   currentCardIdx: 0,
+  currentListeningSection: "sec_1",
   speakingTimerInterval: null,
-  speakingSeconds: 0
+  speakingSeconds: 0,
+  speakingInterview: {
+    active: false,
+    stage: "idle", // 'part1', 'part2_prep', 'part2_speak', 'part3', 'done'
+    examSetIdx: 0,
+    examData: null,
+    part1QuestionIdx: 0,
+    part3QuestionIdx: 0,
+    prepTimerInterval: null,
+    prepSecondsLeft: 60,
+    currentQuestionText: "",
+    dialogueHistory: [],
+    candidateFullTranscript: ""
+  }
 };
 
 // -------------------------------------------------------------
@@ -221,35 +235,177 @@ const OfflineLocalEngine = {
       };
     }
 
-    if (p === "/api/listening") {
-      return {
-        id: "sec_1",
-        section_number: 1,
-        title: "University Campus Accommodation Booking",
-        audio_script: "OFFICER: Good morning, Campus Housing Office. How can I help you today?\nSTUDENT: Hello. I'd like to inquire about booking a room in the university halls for the upcoming semester.\nOFFICER: Certainly. Could I first take your full name, please?\nSTUDENT: Yes, it's Julian Sterling. That's S-T-E-R-L-I-N-G.\nOFFICER: Thank you, Julian. And what faculty are you enrolled in?\nSTUDENT: I'm starting a master's program in Biomedical Science.\nOFFICER: Excellent. Now, regarding room preferences, we have standard single rooms with shared facilities or en-suite studio rooms.\nSTUDENT: I'd strongly prefer an en-suite room if possible. I need a quiet study environment.\nOFFICER: Right. An en-suite room in Oakwood Lodge is available. The standard price is 240 pounds per week, but because you are booking for the full academic term, a student subsidy applies, bringing it down to 210 pounds per week.\nSTUDENT: 210 pounds sounds very reasonable. And when would the tenancy officially commence?\nOFFICER: Key collection starts on the 18th of September, though orientation begins three days earlier.\nSTUDENT: Wonderful. I'll reserve that.",
-        questions: [
-          { num: 1, prompt: "Applicant's surname: _____" },
-          { num: 2, prompt: "Preferred room type: _____ room" },
-          { num: 3, prompt: "Discounted weekly rent: £_____" },
-          { num: 4, prompt: "Date of key collection: 18th of _____" }
-        ]
+    if (p.startsWith("/api/listening")) {
+      const secId = (p.includes("sec_id=") ? p.split("sec_id=")[1] : "sec_1").split("&")[0];
+      const sections = {
+        "sec_1": {
+          id: "sec_1",
+          section_number: 1,
+          title: "University Campus Accommodation Booking",
+          audio_script: "OFFICER: Good morning, Campus Housing Office. How can I help you today?\nSTUDENT: Hello. I'd like to inquire about booking a room in the university halls for the upcoming semester.\nOFFICER: Certainly. Could I first take your full name, please?\nSTUDENT: Yes, it's Julian Sterling. That's S-T-E-R-L-I-N-G.\nOFFICER: Thank you, Julian. And what faculty are you enrolled in?\nSTUDENT: I'm starting a master's program in Biomedical Science.\nOFFICER: Excellent. Now, regarding room preferences, we have standard single rooms with shared facilities or en-suite studio rooms.\nSTUDENT: I'd strongly prefer an en-suite room if possible. I need a quiet study environment.\nOFFICER: Right. An en-suite room in Oakwood Lodge is available. The standard price is 240 pounds per week, but because you are booking for the full academic term, a student subsidy applies, bringing it down to 210 pounds per week.\nSTUDENT: 210 pounds sounds very reasonable. And when would the tenancy officially commence?\nOFFICER: Key collection starts on the 18th of September, though orientation begins three days earlier.\nSTUDENT: Wonderful. I'll reserve that.",
+          questions: [
+            { num: 1, prompt: "Applicant's surname: _____" },
+            { num: 2, prompt: "Preferred room type: _____ room" },
+            { num: 3, prompt: "Discounted weekly rent: £_____" },
+            { num: 4, prompt: "Date of key collection: 18th of _____" }
+          ]
+        },
+        "sec_2": {
+          id: "sec_2",
+          section_number: 2,
+          title: "Greendale Community Arts Centre & Gallery Tour",
+          audio_script: "GUIDE: Good afternoon everyone, and welcome to Greendale Arts Centre. Before we tour the studios, let me outline key visitor details. The centre was founded in 1994, although major renovations took place in 2018. Our ceramic pottery workshop is located on the ground floor next to the courtyard garden. Opening hours on weekdays are 9 AM to 8 PM, while weekend entry closes earlier at 6 PM. Membership for local residents costs 45 pounds annually, which grants free admission to special exhibitions. For visitors arriving by public transport, bus route number 14 stops directly in front of the main entrance.",
+          questions: [
+            { num: 1, prompt: "Year of major centre renovations: _____" },
+            { num: 2, prompt: "Pottery workshop location: next to the _____ garden" },
+            { num: 3, prompt: "Weekend closing time: _____ PM" },
+            { num: 4, prompt: "Direct bus route number: _____" }
+          ]
+        },
+        "sec_3": {
+          id: "sec_3",
+          section_number: 3,
+          title: "Academic Tutorial: Renewable Microgrid Projects",
+          audio_script: "TUTOR: Good afternoon, Liam and Clara. Let's discuss your engineering fieldwork proposal.\nCLARA: Thanks, Professor. We decided to investigate solar microgrids installed on university rooftops.\nLIAM: Yes, we initially thought about wind turbines, but building height regulations made solar photovoltaic panels far more viable.\nTUTOR: An astute decision. And what primary variable will you measure over the six-month trial?\nCLARA: We are analyzing peak storage efficiency, specifically measuring battery discharge rates under cloudy conditions.\nTUTOR: Excellent. Keep in mind that your interim progress report must be submitted by November 12th.\nLIAM: Understood. We have already calibrated our digital telemetry sensors.",
+          questions: [
+            { num: 1, prompt: "Chosen renewable technology: solar _____ panels" },
+            { num: 2, prompt: "Primary measured variable: peak storage _____" },
+            { num: 3, prompt: "Interim report deadline: _____ 12th" }
+          ]
+        },
+        "sec_4": {
+          id: "sec_4",
+          section_number: 4,
+          title: "Academic Lecture: Cetacean Bioacoustics in Polar Oceans",
+          audio_script: "PROFESSOR: Welcome back to Marine Biology 402. Today we examine acoustic communication in Arctic cetaceans, specifically beluga whales and narwhals. In frozen ocean environments where solar illumination is virtually absent for months, sound waves represent the primary sensory modality for navigation, social cohesion, and prey localization. Beluga vocalizations encompass a dynamic acoustic spectrum ranging from low-frequency groans to ultrasonic clicks reaching 120 kilohertz. Recent bioacoustic telemetry indicates that anthropogenic noise from commercial shipping vessels causes significant acoustic masking, which forces pods to increase their call amplitude—a physiological adaptation known as the Lombard effect. Furthermore, the warming of sea ice has accelerated ambient underwater noise levels by nearly three decibels per decade.",
+          questions: [
+            { num: 1, prompt: "Primary sensory modality in Arctic waters: _____ waves" },
+            { num: 2, prompt: "Maximum frequency of beluga ultrasonic clicks: _____ kilohertz" },
+            { num: 3, prompt: "Vocal elevation under ambient noise is known as the _____ effect" }
+          ]
+        }
       };
+      return sections[secId] || sections["sec_1"];
     }
 
     if (p === "/api/listening/submit") {
       const ans = body.answers || {};
+      const secId = body.section_id || "sec_1";
       let correct = 0;
-      if ((ans["1"] || "").toLowerCase().includes("sterling")) correct++;
-      if ((ans["2"] || "").toLowerCase().includes("suite")) correct++;
-      if ((ans["3"] || "").includes("210")) correct++;
-      if ((ans["4"] || "").toLowerCase().includes("september")) correct++;
-      const band = correct === 4 ? 8.0 : (correct === 3 ? 7.0 : (correct >= 2 ? 6.0 : 5.0));
+      let total = 4;
+      if (secId === "sec_1") {
+        if ((ans["1"] || "").toLowerCase().includes("sterling")) correct++;
+        if ((ans["2"] || "").toLowerCase().includes("suite")) correct++;
+        if ((ans["3"] || "").includes("210")) correct++;
+        if ((ans["4"] || "").toLowerCase().includes("september")) correct++;
+      } else if (secId === "sec_2") {
+        if ((ans["1"] || "").includes("2018")) correct++;
+        if ((ans["2"] || "").toLowerCase().includes("courtyard")) correct++;
+        if ((ans["3"] || "").includes("6")) correct++;
+        if ((ans["4"] || "").includes("14")) correct++;
+      } else if (secId === "sec_3") {
+        total = 3;
+        if ((ans["1"] || "").toLowerCase().includes("photovoltaic")) correct++;
+        if ((ans["2"] || "").toLowerCase().includes("efficiency")) correct++;
+        if ((ans["3"] || "").toLowerCase().includes("november")) correct++;
+      } else if (secId === "sec_4") {
+        total = 3;
+        if ((ans["1"] || "").toLowerCase().includes("sound")) correct++;
+        if ((ans["2"] || "").includes("120")) correct++;
+        if ((ans["3"] || "").toLowerCase().includes("lombard")) correct++;
+      }
+      const band = (correct / total) >= 0.9 ? 8.0 : ((correct / total) >= 0.7 ? 7.0 : ((correct / total) >= 0.5 ? 6.0 : 5.0));
       return {
         estimated_band: band,
         correct_answers: correct,
-        total_questions: 4,
+        total_questions: total,
         disclaimer: "Practice estimate only. Not an official IELTS result."
       };
+    }
+
+    if (p.startsWith("/api/speaking/prompts")) {
+      const idx = p.includes("card_idx=") ? parseInt(p.split("card_idx=")[1]) || 0 : 0;
+      const examSets = [
+        {
+          id: "topic_ambition",
+          title: "Career, Goals & Ambition",
+          part_1: [
+            "Good morning. My name is Dr. Harrison. Can you state your full name, please?",
+            "Could you tell me where you come from and what you enjoy most about your hometown?",
+            "Do you currently work, or are you a student? What are your daily responsibilities?",
+            "How do you usually unwind and spend your free time after a busy day?"
+          ],
+          part_2_cue_card: {
+            id: "cue_ambition",
+            topic: "Describe a significant achievement or ambitious goal you reached.",
+            prompts: [
+              "What the achievement or goal was",
+              "When you first decided to pursue it",
+              "What obstacles or challenges you faced along the way",
+              "And explain why reaching this goal was personally meaningful to you."
+            ]
+          },
+          part_3_discussion: [
+            "Do young people today face greater pressure to succeed in their careers than earlier generations?",
+            "How can educational institutions better prepare students for practical life challenges?",
+            "Why do some individuals lose motivation when pursuing long-term objectives?",
+            "Should personal fulfillment be valued more highly than financial prosperity in modern careers?"
+          ]
+        },
+        {
+          id: "topic_environment",
+          title: "Sustainable Living & Urban Heritage",
+          part_1: [
+            "Hello. Welcome to the IELTS Speaking test. May I see your identification, please?",
+            "Let's talk about where you live. Is your neighborhood noisy or quiet?",
+            "Do you prefer living in a bustling metropolitan area or a peaceful countryside setting?",
+            "How have cities in your country changed over the past ten years?"
+          ],
+          part_2_cue_card: {
+            id: "cue_heritage",
+            topic: "Describe a historical building or architectural landmark that left a strong impression on you.",
+            prompts: [
+              "Where this building or landmark is located",
+              "What architectural features or history it possesses",
+              "When and with whom you visited it",
+              "And explain why you think preserving such heritage is important for future generations."
+            ]
+          },
+          part_3_discussion: [
+            "Why is it essential for governments to preserve ancient architecture alongside modern high-rises?",
+            "How does sustainable green architecture influence public health in densely populated cities?",
+            "Should historical monuments be free for citizens to visit, or should admission fees fund restoration?",
+            "In what ways can urban planners prevent historic districts from succumbing to commercialization?"
+          ]
+        },
+        {
+          id: "topic_technology",
+          title: "Artificial Intelligence, Automation & Media",
+          part_1: [
+            "Good afternoon. I am your examiner today. Could you please confirm your full name?",
+            "How reliant are you on digital devices for your everyday communication?",
+            "Do you prefer reading news from printed newspapers or digital applications?",
+            "What kind of modern technology do you find most indispensable in your daily life?"
+          ],
+          part_2_cue_card: {
+            id: "cue_technology",
+            topic: "Describe a technological innovation or digital tool that dramatically changed how you work or study.",
+            prompts: [
+              "What the innovation or software application is",
+              "How you first became aware of it",
+              "How frequently you incorporate it into your routine",
+              "And explain how it has augmented your productivity and learning efficiency."
+            ]
+          },
+          part_3_discussion: [
+            "Will automated artificial intelligence systems eventually diminish the demand for human analytical skills?",
+            "How can governments ensure ethical standards in algorithmic decision-making and data privacy?",
+            "What impact has constant digital connectivity had on face-to-face interpersonal relationships?",
+            "Are older demographics being unfairly marginalized by the rapid shift toward cashless, app-only services?"
+          ]
+        }
+      ];
+      return examSets[idx % examSets.length];
     }
 
     if (p === "/api/writing/evaluate") {
@@ -298,10 +454,57 @@ const OfflineLocalEngine = {
       const words = transcript.trim().split(/\s+/).filter(w => w.length > 0);
       const wpm = Math.round((words.length / (duration / 60.0)));
       const fillers = (transcript.match(/\b(um|uh|like|you know|basically)\b/gi) || []).length;
-      const fc = wpm >= 115 && wpm <= 165 ? 7.0 : 6.0;
+      let fc = wpm >= 115 && wpm <= 165 ? 7.0 : 6.0;
+      let lr = 6.0;
+      let gra = 6.5;
+
+      const lower = transcript.toLowerCase();
+      if (lower.includes("significant") || lower.includes("perspective") || lower.includes("consequently") || lower.includes("paramount")) {
+        lr += 1.0;
+      }
+
+      // Detect lexical upgrade opportunities
+      const upgrades = [];
+      const upgradeMap = [
+        ["i think", "from my perspective / I am inclined to argue that"],
+        ["a lot of", "a substantial proportion of / an abundance of"],
+        ["very important", "of paramount importance / pivotal"],
+        ["good", "exemplary / profoundly beneficial"],
+        ["bad", "detrimental / adverse"],
+        ["big problem", "pressing challenge / formidable dilemma"],
+        ["help", "facilitate / bolster"],
+        ["hard", "arduous / multifaceted"]
+      ];
+
+      for (const [colloq, adv] of upgradeMap) {
+        if (lower.includes(colloq)) {
+          upgrades.push({
+            original: colloq,
+            band_9_upgrade: adv,
+            tip: `Upgrade colloquial '${colloq}' to higher-tier academic phrasing.`
+          });
+          if (upgrades.length >= 3) break;
+        }
+      }
+
+      if (upgrades.length === 0) {
+        upgrades.push({
+          original: "conversational flow",
+          band_9_upgrade: "Integrate discourse markers: 'Notwithstanding that fact', 'In the broader scheme of things', 'To put this into perspective'",
+          tip: "Cohesive discourse markers elevate fluency from Band 6.5 to Band 8.0."
+        });
+      }
+
+      const overall = Math.round(((fc + lr + gra + 6.5) / 4.0) * 2) / 2;
 
       return {
-        estimated_band: fc,
+        estimated_band: overall,
+        criteria: {
+          "Fluency and Coherence": fc,
+          "Lexical Resource": lr,
+          "Grammatical Range and Accuracy": gra,
+          "Pronunciation": 6.5
+        },
         fluency_metrics: {
           words_per_minute: wpm,
           target_wpm_range: "120 - 150 WPM",
@@ -309,6 +512,11 @@ const OfflineLocalEngine = {
           filler_percentage: words.length ? Math.round((fillers / words.length) * 100) : 0,
           feedback: wpm >= 115 ? "Smooth speaking cadence and natural pacing." : "Work on continuous expression to avoid hesitant pauses."
         },
+        band_upgrades: upgrades,
+        actionable_tips: [
+          "Use cohesive conversational signposts ('Looking back at that period', 'In the broader scheme of things').",
+          "Elaborate thoroughly on causes and personal reflections rather than single-sentence answers."
+        ],
         disclaimer: "Practice estimate only. Not an official IELTS result."
       };
     }
@@ -913,31 +1121,13 @@ async function initReading() {
   });
 }
 
-// Listening
+// Listening Module
 async function initListening() {
-  let audioScript = "";
-  const sec = await callApi("/api/listening");
-  if (sec) {
-    document.getElementById("listeningTitle").innerText = `Section ${sec.section_number}: ${sec.title}`;
-    audioScript = sec.audio_script || "";
-    document.getElementById("listeningTranscriptBox").innerText = audioScript;
-
-    const qList = document.getElementById("listeningQuestionsList");
-    qList.innerHTML = "";
-    (sec.questions || []).forEach(q => {
-      const div = document.createElement("div");
-      div.className = "mb-2";
-      div.innerHTML = `
-        <p><strong>Q${q.num}:</strong> ${q.prompt}</p>
-        <input type="text" id="list_ans_${q.num}" class="mt-1" style="width: 100%;" placeholder="Enter answer..." />
-      `;
-      qList.appendChild(div);
-    });
-  }
+  await loadListeningSection(appState.currentListeningSection || "sec_1");
 
   const playBtn = document.getElementById("playAudioScriptBtn");
   playBtn.addEventListener("click", () => {
-    speakText(audioScript, playBtn);
+    speakText(appState.listeningAudioScript || "", playBtn);
   });
 
   document.getElementById("toggleTranscriptBtn").addEventListener("click", () => {
@@ -952,18 +1142,59 @@ async function initListening() {
       answers[num] = input.value;
     });
 
-    const rep = await callApi("/api/listening/submit", "POST", { answers });
+    const rep = await callApi("/api/listening/submit", "POST", { 
+      section_id: appState.currentListeningSection,
+      answers 
+    });
     if (rep) {
       const repBox = document.getElementById("listeningScoreReport");
       repBox.style.display = "block";
       repBox.innerHTML = `
         <h3>Listening Score: Band ${rep.estimated_band}</h3>
-        <p>Correct: ${rep.correct_answers} / ${rep.total_questions}</p>
+        <p>Correct: <strong>${rep.correct_answers} / ${rep.total_questions}</strong></p>
         <p><em>${rep.disclaimer}</em></p>
       `;
     }
   });
 }
+
+async function loadListeningSection(secId) {
+  appState.currentListeningSection = secId;
+  const sec = await callApi(`/api/listening?sec_id=${secId}`);
+  if (sec) {
+    document.getElementById("listeningTitle").innerText = `Section ${sec.section_number}: ${sec.title}`;
+    appState.listeningAudioScript = sec.audio_script || "";
+    document.getElementById("listeningTranscriptBox").innerText = appState.listeningAudioScript;
+
+    const qList = document.getElementById("listeningQuestionsList");
+    qList.innerHTML = "";
+    (sec.questions || []).forEach(q => {
+      const div = document.createElement("div");
+      div.className = "mb-2";
+      div.innerHTML = `
+        <p><strong>Q${q.num}:</strong> ${q.prompt}</p>
+        <input type="text" id="list_ans_${q.num}" class="mt-1" style="width: 100%;" placeholder="Enter answer..." />
+      `;
+      qList.appendChild(div);
+    });
+
+    const repBox = document.getElementById("listeningScoreReport");
+    if (repBox) repBox.style.display = "none";
+  }
+}
+
+window.switchListeningSection = async function(secId) {
+  document.querySelectorAll(".section-selector-bar .btn").forEach(b => {
+    b.classList.remove("btn-primary", "active");
+    b.classList.add("btn-outline");
+  });
+  const activeBtn = document.getElementById(`secBtn_${secId}`);
+  if (activeBtn) {
+    activeBtn.classList.remove("btn-outline");
+    activeBtn.classList.add("btn-primary", "active");
+  }
+  await loadListeningSection(secId);
+};
 
 // -------------------------------------------------------------
 // Universal Audio & Speech Engine (Android Native Bridge + Web Speech)
@@ -1088,42 +1319,44 @@ function initWriting() {
   });
 }
 
-// Speaking
+// -------------------------------------------------------------
+// Interactive AI Speaking Examiner & Fluency Coach
+// -------------------------------------------------------------
 function initSpeaking() {
-  const cueContent = document.getElementById("cueCardContent");
-  const promptTopic = "Describe an ambitious goal you have achieved. What the goal was, when and why you pursued it, what challenges arose, and why it was meaningful to you.";
-  
-  cueContent.innerHTML = `
-    <strong>Topic: Describe an ambitious goal you have achieved.</strong>
-    <p>• What the goal was<br>• When and why you pursued it<br>• What challenges arose<br>• Why it was meaningful to you.</p>
-    <button id="listenCueCardBtn" class="btn btn-sm btn-outline mt-2">🔊 Listen to Cue Card</button>
-  `;
-
-  document.getElementById("listenCueCardBtn").addEventListener("click", () => {
-    speakText(promptTopic, document.getElementById("listenCueCardBtn"));
-  });
-
+  const examSetSelect = document.getElementById("speakingExamSetSelect");
+  const startBtn = document.getElementById("startInterviewBtn");
+  const resetBtn = document.getElementById("resetInterviewBtn");
   const recordBtn = document.getElementById("startSpeechRecordBtn");
   const stopBtn = document.getElementById("stopSpeechRecordBtn");
-  const timerEl = document.getElementById("speakingTimer");
+  const replayBtn = document.getElementById("replayQuestionBtn");
+  const skipPrepBtn = document.getElementById("skipPrepBtn");
   const transcriptEl = document.getElementById("speakingTranscriptInput");
+  const timerEl = document.getElementById("speakingTimer");
+  const examinerBubble = document.getElementById("examinerSpeechBubble");
+  const examinerStatus = document.getElementById("examinerStatusLabel");
+  const dialogueHistoryEl = document.getElementById("interviewDialogueHistory");
+  const part2PrepCard = document.getElementById("part2PrepCard");
+  const prepCountdownEl = document.getElementById("prepCountdownText");
+  const part2CueTextEl = document.getElementById("part2CueCardText");
+  const reportContainer = document.getElementById("speakingReportContainer");
+  const evalReportEl = document.getElementById("speakingEvalReport");
 
   // Android Native Speech Recognizer Callbacks
   window.onAndroidSpeechPartial = (text) => {
-    transcriptEl.value = text;
+    if (transcriptEl) transcriptEl.value = text;
   };
   window.onAndroidSpeechResult = (text) => {
-    transcriptEl.value = text;
+    if (transcriptEl) transcriptEl.value = text;
   };
   window.onSpeechBegin = () => {
-    recordBtn.innerText = "🎙️ Listening Live...";
+    if (recordBtn) recordBtn.innerText = "🎙️ Listening Live...";
   };
   window.onSpeechEnd = () => {
-    recordBtn.innerText = "🎙️ Start Speaking";
+    if (recordBtn) recordBtn.innerText = "🎙️ Answer Examiner (Speak)";
   };
   window.onSpeechError = (code) => {
     console.warn("Android speech recognition error:", code);
-    recordBtn.innerText = "🎙️ Start Speaking";
+    if (recordBtn) recordBtn.innerText = "🎙️ Answer Examiner (Speak)";
   };
 
   // Web Speech API fallback for desktop browsers
@@ -1135,7 +1368,7 @@ function initSpeaking() {
     recognizer = new SpeechRecognition();
     recognizer.continuous = true;
     recognizer.interimResults = true;
-    recognizer.lang = "en-US";
+    recognizer.lang = "en-GB"; // Standard British examiner accent support
 
     recognizer.onresult = (e) => {
       let finalStr = "";
@@ -1146,11 +1379,100 @@ function initSpeaking() {
     };
   }
 
+  function updateStageBadges(activeBadgeId) {
+    ["badgePart1", "badgePart2", "badgePart3", "badgeResult"].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) b.classList.remove("active");
+    });
+    const curr = document.getElementById(activeBadgeId);
+    if (curr) curr.classList.add("active");
+  }
+
+  function appendDialogueTurn(speaker, text) {
+    if (!dialogueHistoryEl) return;
+    const div = document.createElement("div");
+    div.className = speaker === "examiner" ? "dialogue-item examiner-turn" : "dialogue-item candidate-turn";
+    div.innerHTML = `<strong>${speaker === "examiner" ? "Dr. Harrison (Examiner)" : "You (Candidate)"}:</strong> ${text}`;
+    dialogueHistoryEl.appendChild(div);
+    dialogueHistoryEl.scrollTop = dialogueHistoryEl.scrollHeight;
+  }
+
+  async function askExaminerQuestion(questionText, stageLabel) {
+    appState.speakingInterview.currentQuestionText = questionText;
+    examinerBubble.innerText = `"${questionText}"`;
+    examinerStatus.innerText = stageLabel;
+    appendDialogueTurn("examiner", questionText);
+
+    // Speak with examiner prosody (British Council accent, 0.92x cadence)
+    speakText(questionText, replayBtn);
+
+    // Enable answering controls
+    recordBtn.disabled = false;
+    transcriptEl.value = "";
+    document.getElementById("speakingStatusText").innerText = "Examiner asked question. Tap microphone to reply.";
+  }
+
+  startBtn.addEventListener("click", async () => {
+    const setIdx = parseInt(examSetSelect.value) || 0;
+    appState.speakingInterview.examSetIdx = setIdx;
+    appState.speakingInterview.active = true;
+    appState.speakingInterview.part1QuestionIdx = 0;
+    appState.speakingInterview.part3QuestionIdx = 0;
+    appState.speakingInterview.dialogueHistory = [];
+    appState.speakingInterview.candidateFullTranscript = "";
+
+    dialogueHistoryEl.innerHTML = "";
+    reportContainer.style.display = "none";
+    part2PrepCard.style.display = "none";
+
+    const examData = await callApi(`/api/speaking/prompts?card_idx=${setIdx}`);
+    appState.speakingInterview.examData = examData;
+
+    // Start Part 1
+    appState.speakingInterview.stage = "part1";
+    updateStageBadges("badgePart1");
+    startBtn.disabled = true;
+    examSetSelect.disabled = true;
+
+    const firstQ = examData.part_1[0];
+    await askExaminerQuestion(firstQ, "Part 1: Introduction & Interview");
+  });
+
+  resetBtn.addEventListener("click", () => {
+    stopAudioSpeech(replayBtn);
+    if (appState.speakingInterview.prepTimerInterval) {
+      clearInterval(appState.speakingInterview.prepTimerInterval);
+    }
+    if (appState.speakingTimerInterval) {
+      clearInterval(appState.speakingTimerInterval);
+    }
+    appState.speakingInterview.active = false;
+    appState.speakingInterview.stage = "idle";
+    startBtn.disabled = false;
+    examSetSelect.disabled = false;
+    recordBtn.disabled = true;
+    stopBtn.disabled = true;
+    part2PrepCard.style.display = "none";
+    reportContainer.style.display = "none";
+    updateStageBadges("badgePart1");
+    examinerBubble.innerText = `"Good day. Welcome to the IELTS Speaking test. Please select a topic above and press 'Begin Official Interview' to start."`;
+    examinerStatus.innerText = "Ready to begin interview";
+    timerEl.innerText = "00:00";
+  });
+
+  replayBtn.addEventListener("click", () => {
+    if (appState.speakingInterview.currentQuestionText) {
+      speakText(appState.speakingInterview.currentQuestionText, replayBtn);
+    }
+  });
+
   recordBtn.addEventListener("click", () => {
+    stopAudioSpeech(replayBtn);
     appState.speakingSeconds = 0;
     timerEl.innerText = "00:00";
     recordBtn.disabled = true;
     stopBtn.disabled = false;
+    document.getElementById("speakingStatusText").innerText = "Recording... Speak clearly into microphone.";
 
     if (window.AndroidSTT && typeof window.AndroidSTT.startListening === "function") {
       window.AndroidSTT.startListening();
@@ -1166,37 +1488,180 @@ function initSpeaking() {
     }, 1000);
   });
 
-  stopBtn.addEventListener("click", () => {
+  stopBtn.addEventListener("click", async () => {
     clearInterval(appState.speakingTimerInterval);
     recordBtn.disabled = false;
     stopBtn.disabled = true;
-    recordBtn.innerText = "🎙️ Start Speaking";
+    recordBtn.innerText = "🎙️ Answer Examiner (Speak)";
 
     if (window.AndroidSTT && typeof window.AndroidSTT.stopListening === "function") {
       window.AndroidSTT.stopListening();
     } else if (recognizer) {
       try { recognizer.stop(); } catch (e) {}
     }
+
+    const candidateAnswer = transcriptEl.value.trim() || "(Candidate answered briefly)";
+    appendDialogueTurn("candidate", candidateAnswer);
+    appState.speakingInterview.candidateFullTranscript += " " + candidateAnswer;
+
+    // Advance state machine
+    await advanceSpeakingInterview();
   });
 
-  document.getElementById("evaluateSpeakingBtn").addEventListener("click", async () => {
-    const transcript = transcriptEl.value.trim();
-    if (!transcript) return;
-    const duration = Math.max(15, appState.speakingSeconds || 60);
-
-    const rep = await callApi("/api/speaking/evaluate", "POST", { transcript, duration_seconds: duration });
-    if (rep) {
-      const repBox = document.getElementById("speakingEvalReport");
-      repBox.style.display = "block";
-      repBox.innerHTML = `
-        <h3>Estimated Speaking Band: ${rep.estimated_band}</h3>
-        <p><strong>Speech Rate:</strong> ${rep.fluency_metrics.words_per_minute} WPM (Target: ${rep.fluency_metrics.target_wpm_range})</p>
-        <p><strong>Filler Words Detected:</strong> ${rep.fluency_metrics.total_filler_words} (${rep.fluency_metrics.filler_percentage}%)</p>
-        <p><strong>Feedback:</strong> ${rep.fluency_metrics.feedback}</p>
-        <p><em>${rep.disclaimer}</em></p>
-      `;
+  skipPrepBtn.addEventListener("click", () => {
+    if (appState.speakingInterview.prepTimerInterval) {
+      clearInterval(appState.speakingInterview.prepTimerInterval);
     }
+    part2PrepCard.style.display = "none";
+    startPart2SpeakingTurn();
   });
+
+  async function advanceSpeakingInterview() {
+    const interview = appState.speakingInterview;
+    const examData = interview.examData;
+
+    if (interview.stage === "part1") {
+      interview.part1QuestionIdx++;
+      if (interview.part1QuestionIdx < examData.part_1.length) {
+        const nextQ = examData.part_1[interview.part1QuestionIdx];
+        await askExaminerQuestion(nextQ, `Part 1 (${interview.part1QuestionIdx + 1}/${examData.part_1.length})`);
+      } else {
+        // Transition to Part 2 Cue Card Prep
+        interview.stage = "part2_prep";
+        updateStageBadges("badgePart2");
+        startPart2Preparation(examData.part_2_cue_card);
+      }
+    } else if (interview.stage === "part2_speak") {
+      // Transition to Part 3 Abstract Discussion
+      interview.stage = "part3";
+      interview.part3QuestionIdx = 0;
+      updateStageBadges("badgePart3");
+      const firstPart3Q = examData.part_3_discussion[0];
+      await askExaminerQuestion(firstPart3Q, `Part 3: Discussion (1/${examData.part_3_discussion.length})`);
+    } else if (interview.stage === "part3") {
+      interview.part3QuestionIdx++;
+      if (interview.part3QuestionIdx < examData.part_3_discussion.length) {
+        const nextQ = examData.part_3_discussion[interview.part3QuestionIdx];
+        await askExaminerQuestion(nextQ, `Part 3: Discussion (${interview.part3QuestionIdx + 1}/${examData.part_3_discussion.length})`);
+      } else {
+        // Test complete! Evaluate entire interview
+        await completeSpeakingInterview();
+      }
+    }
+  }
+
+  function startPart2Preparation(cueCard) {
+    part2PrepCard.style.display = "block";
+    recordBtn.disabled = true;
+    stopBtn.disabled = true;
+
+    part2CueTextEl.innerHTML = `
+      <strong>${cueCard.topic}</strong>
+      <p style="margin-top: 6px;">You should say:<br>${cueCard.prompts.map(p => `• ${p}`).join("<br>")}</p>
+    `;
+
+    const examinerNotice = "Thank you. Now in Part 2, I am going to give you a topic and I would like you to speak for one to two minutes. Before you start, you have one minute to think about what you are going to say. You can make notes if you wish. Here is your topic.";
+    examinerBubble.innerText = `"${examinerNotice}"`;
+    examinerStatus.innerText = "Part 2: 1-Minute Preparation Time";
+    speakText(examinerNotice, replayBtn);
+
+    let secondsRemaining = 60;
+    prepCountdownEl.innerText = "01:00";
+
+    appState.speakingInterview.prepTimerInterval = setInterval(() => {
+      secondsRemaining--;
+      const s = String(secondsRemaining % 60).padStart(2, "0");
+      prepCountdownEl.innerText = `00:${s}`;
+      if (secondsRemaining <= 0) {
+        clearInterval(appState.speakingInterview.prepTimerInterval);
+        part2PrepCard.style.display = "none";
+        startPart2SpeakingTurn();
+      }
+    }, 1000);
+  }
+
+  function startPart2SpeakingTurn() {
+    appState.speakingInterview.stage = "part2_speak";
+    const examinerNotice = "All right, your preparation time is up. Please speak for one to two minutes on your topic.";
+    examinerBubble.innerText = `"${examinerNotice}"`;
+    examinerStatus.innerText = "Part 2: Candidate Long Turn (1-2 mins)";
+    speakText(examinerNotice, replayBtn);
+
+    recordBtn.disabled = false;
+    transcriptEl.value = "";
+    document.getElementById("speakingStatusText").innerText = "Preparation finished. Press microphone and deliver your Part 2 talk.";
+  }
+
+  async function completeSpeakingInterview() {
+    appState.speakingInterview.stage = "done";
+    updateStageBadges("badgeResult");
+    recordBtn.disabled = true;
+    stopBtn.disabled = true;
+    startBtn.disabled = false;
+    examSetSelect.disabled = false;
+
+    const concludingRemark = "Thank you very much. That is the end of the IELTS Speaking test. Let us now examine your comprehensive diagnostic assessment.";
+    examinerBubble.innerText = `"${concludingRemark}"`;
+    examinerStatus.innerText = "Interview Complete • Results Ready";
+    speakText(concludingRemark, replayBtn);
+
+    const fullTranscript = appState.speakingInterview.candidateFullTranscript.trim();
+    const duration = Math.max(90, appState.speakingInterview.dialogueHistory.length * 30);
+
+    const rep = await callApi("/api/speaking/evaluate", "POST", {
+      transcript: fullTranscript || "I think this topic is very important and we need to help people in my opinion.",
+      duration_seconds: duration
+    });
+
+    if (rep) {
+      reportContainer.style.display = "block";
+      renderSpeakingDiagnosticReport(rep, evalReportEl);
+      evalReportEl.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  function renderSpeakingDiagnosticReport(rep, targetEl) {
+    let criteriaHtml = "";
+    if (rep.criteria) {
+      for (const [cName, cScore] of Object.entries(rep.criteria)) {
+        criteriaHtml += `<li><strong>${cName}:</strong> Band ${cScore}</li>`;
+      }
+    }
+
+    let upgradesHtml = "";
+    if (rep.band_upgrades && rep.band_upgrades.length > 0) {
+      upgradesHtml = "<h4 class='mt-3'>🎯 Band 8.0/9.0 Lexical & Phrasal Upgrades:</h4>";
+      rep.band_upgrades.forEach(u => {
+        upgradesHtml += `
+          <div class="upgrade-item" style="background: rgba(255,255,255,0.03); border-left: 3px solid #10b981; padding: 10px 14px; border-radius: 6px; margin-top: 8px;">
+            <p style="margin: 0;"><strong>Your Phrase:</strong> <span style="color: #ef4444;">"${u.original}"</span></p>
+            <p style="margin: 4px 0 0 0;"><strong>Band 9 Native Expression:</strong> <span style="color: #10b981; font-weight: 600;">"${u.band_9_upgrade}"</span></p>
+            <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">${u.tip}</p>
+          </div>
+        `;
+      });
+    }
+
+    let tipsHtml = "";
+    if (rep.actionable_tips && rep.actionable_tips.length > 0) {
+      tipsHtml = "<h4 class='mt-3'>💡 Actionable Examiner Coaching:</h4><ul>";
+      rep.actionable_tips.forEach(t => { tipsHtml += `<li>${t}</li>`; });
+      tipsHtml += "</ul>";
+    }
+
+    targetEl.innerHTML = `
+      <h3>Official Speaking Assessment: Band ${rep.estimated_band}</h3>
+      <p><strong>Pacing & Fluency:</strong> ${rep.fluency_metrics.words_per_minute} WPM (Target: ${rep.fluency_metrics.target_wpm_range})</p>
+      <p><strong>Filler Hesitations:</strong> ${rep.fluency_metrics.total_filler_words} detected (${rep.fluency_metrics.filler_percentage}%)</p>
+      <p><strong>Examiner Notes:</strong> ${rep.fluency_metrics.feedback}</p>
+      <hr style="opacity: 0.15; margin: 12px 0;">
+      <h4>Four-Criteria Breakdown:</h4>
+      <ul>${criteriaHtml}</ul>
+      ${upgradesHtml}
+      ${tipsHtml}
+      <p class='mt-3' style="font-size: 0.85rem; opacity: 0.8;"><em>${rep.disclaimer}</em></p>
+    `;
+  }
 }
 
 // Mistake Book

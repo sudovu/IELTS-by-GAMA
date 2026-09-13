@@ -144,22 +144,51 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            val result = textToSpeech?.setLanguage(Locale.US)
-            isTtsReady = result != TextToSpeech.LANG_MISSING_DATA && result != TextToSpeech.LANG_NOT_SUPPORTED
-            Log.d(TAG, "TextToSpeech initialized successfully, ready: $isTtsReady")
-            if (isTtsReady) {
-                textToSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                    override fun onStart(utteranceId: String?) {
-                        evaluateJs("if (window.onTTSStarted) window.onTTSStarted('$utteranceId');")
-                    }
-                    override fun onDone(utteranceId: String?) {
-                        evaluateJs("if (window.onTTSFinished) window.onTTSFinished('$utteranceId');")
-                    }
-                    override fun onError(utteranceId: String?) {
-                        evaluateJs("if (window.onTTSError) window.onTTSError('$utteranceId');")
-                    }
-                })
+            // Prefer authentic British English (IELTS examiner voice standard)
+            val ukResult = textToSpeech?.setLanguage(Locale.UK)
+            if (ukResult == TextToSpeech.LANG_MISSING_DATA || ukResult == TextToSpeech.LANG_NOT_SUPPORTED) {
+                textToSpeech?.setLanguage(Locale.US)
             }
+
+            // Find high-quality / neural / natural voice
+            try {
+                val availableVoices = textToSpeech?.voices
+                val naturalVoice = availableVoices?.firstOrNull { v ->
+                    v.locale.language == "en" &&
+                    (v.name.contains("en-gb", ignoreCase = true) || v.name.contains("neural", ignoreCase = true) || v.name.contains("natural", ignoreCase = true)) &&
+                    !v.isNetworkConnectionRequired
+                } ?: availableVoices?.firstOrNull { v ->
+                    v.locale.language == "en" && v.locale.country.equals("GB", ignoreCase = true)
+                } ?: availableVoices?.firstOrNull { v ->
+                    v.locale.language == "en"
+                }
+
+                if (naturalVoice != null) {
+                    textToSpeech?.voice = naturalVoice
+                    Log.d(TAG, "Selected natural TTS voice: ${naturalVoice.name}")
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Could not select custom voice: ${e.message}")
+            }
+
+            // Human-like cadence: measured 0.92x speed, warm 0.98x pitch
+            textToSpeech?.setSpeechRate(0.92f)
+            textToSpeech?.setPitch(0.98f)
+
+            isTtsReady = true
+            Log.d(TAG, "TextToSpeech initialized with human-like prosody, ready: true")
+
+            textToSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String?) {
+                    evaluateJs("if (window.onTTSStarted) window.onTTSStarted('$utteranceId');")
+                }
+                override fun onDone(utteranceId: String?) {
+                    evaluateJs("if (window.onTTSFinished) window.onTTSFinished('$utteranceId');")
+                }
+                override fun onError(utteranceId: String?) {
+                    evaluateJs("if (window.onTTSError) window.onTTSError('$utteranceId');")
+                }
+            })
         } else {
             Log.e(TAG, "TextToSpeech init failed with status: $status")
         }
@@ -236,13 +265,32 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
                 if (textToSpeech == null) {
                     textToSpeech = TextToSpeech(applicationContext, this@MainActivity)
                 }
-                
-                // Chunk long passages so Android TTS never overflows buffer
-                val chunks = clean.chunked(1200)
-                chunks.forEachIndexed { index, chunk ->
-                    val queueMode = if (index == 0) TextToSpeech.QUEUE_FLUSH else TextToSpeech.QUEUE_ADD
-                    textToSpeech?.speak(chunk, queueMode, null, "${utteranceId}_$index")
+
+                // Check for multi-speaker dialog format (e.g. OFFICER: ... STUDENT: ...)
+                val turns = clean.split(Regex("(?<=\\.)\\s+(?=[A-Z]{3,}:)"))
+                if (turns.size > 1) {
+                    textToSpeech?.speak("", TextToSpeech.QUEUE_FLUSH, null, "${utteranceId}_init")
+                    turns.forEachIndexed { i, turn ->
+                        textToSpeech?.speak(turn.trim(), TextToSpeech.QUEUE_ADD, null, "${utteranceId}_$i")
+                        // Insert 500ms natural conversational pause between speakers
+                        textToSpeech?.playSilentUtterance(500, TextToSpeech.QUEUE_ADD, "${utteranceId}_pause_$i")
+                    }
+                } else {
+                    // Chunk long passages so Android TTS never overflows buffer
+                    val chunks = clean.chunked(1200)
+                    chunks.forEachIndexed { index, chunk ->
+                        val queueMode = if (index == 0) TextToSpeech.QUEUE_FLUSH else TextToSpeech.QUEUE_ADD
+                        textToSpeech?.speak(chunk, queueMode, null, "${utteranceId}_$index")
+                    }
                 }
+            }
+        }
+
+        @JavascriptInterface
+        fun setVoiceProsody(rate: Float, pitch: Float) {
+            mainHandler.post {
+                textToSpeech?.setSpeechRate(rate.coerceIn(0.7f, 1.3f))
+                textToSpeech?.setPitch(pitch.coerceIn(0.7f, 1.3f))
             }
         }
 
