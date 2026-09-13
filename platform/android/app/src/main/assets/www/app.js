@@ -935,8 +935,9 @@ async function initListening() {
     });
   }
 
-  document.getElementById("playAudioScriptBtn").addEventListener("click", () => {
-    speakText(audioScript);
+  const playBtn = document.getElementById("playAudioScriptBtn");
+  playBtn.addEventListener("click", () => {
+    speakText(audioScript, playBtn);
   });
 
   document.getElementById("toggleTranscriptBtn").addEventListener("click", () => {
@@ -962,6 +963,81 @@ async function initListening() {
       `;
     }
   });
+}
+
+// -------------------------------------------------------------
+// Universal Audio & Speech Engine (Android Native Bridge + Web Speech)
+// -------------------------------------------------------------
+let isCurrentlySpeaking = false;
+
+function speakText(text, btnElement) {
+  if (!text) return;
+
+  if (isCurrentlySpeaking) {
+    stopAudioSpeech(btnElement);
+    return;
+  }
+
+  const cleanText = text.replace(/[#*_>`•\[\]]/g, " ").replace(/\s+/g, " ").trim();
+
+  // 1. Android Native TTS Bridge (Pixel Phone & Tablet APK)
+  if (window.AndroidTTS && typeof window.AndroidTTS.speak === "function") {
+    isCurrentlySpeaking = true;
+    if (btnElement) btnElement.innerHTML = "⏹️ Stop Audio";
+
+    window.onTTSStarted = () => {
+      isCurrentlySpeaking = true;
+      if (btnElement) btnElement.innerHTML = "⏹️ Stop Audio";
+    };
+    window.onTTSFinished = () => {
+      isCurrentlySpeaking = false;
+      if (btnElement) btnElement.innerHTML = "🔊 Play Audio Script";
+    };
+    window.onTTSError = () => {
+      isCurrentlySpeaking = false;
+      if (btnElement) btnElement.innerHTML = "🔊 Play Audio Script";
+    };
+
+    window.AndroidTTS.speak(cleanText);
+    return;
+  }
+
+  // 2. Desktop & Mobile Browser Web Speech API fallback
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(cleanText);
+    utt.lang = "en-US";
+    utt.rate = 0.95;
+
+    utt.onstart = () => {
+      isCurrentlySpeaking = true;
+      if (btnElement) btnElement.innerHTML = "⏹️ Stop Audio";
+    };
+    utt.onend = () => {
+      isCurrentlySpeaking = false;
+      if (btnElement) btnElement.innerHTML = "🔊 Play Audio Script";
+    };
+    utt.onerror = () => {
+      isCurrentlySpeaking = false;
+      if (btnElement) btnElement.innerHTML = "🔊 Play Audio Script";
+    };
+
+    window.speechSynthesis.speak(utt);
+    return;
+  }
+
+  alert("Audio speech output is not supported on this browser.");
+}
+
+function stopAudioSpeech(btnElement) {
+  isCurrentlySpeaking = false;
+  if (window.AndroidTTS && typeof window.AndroidTTS.stop === "function") {
+    window.AndroidTTS.stop();
+  }
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  if (btnElement) btnElement.innerHTML = "🔊 Play Audio Script";
 }
 
 // Writing
@@ -1015,18 +1091,46 @@ function initWriting() {
 // Speaking
 function initSpeaking() {
   const cueContent = document.getElementById("cueCardContent");
+  const promptTopic = "Describe an ambitious goal you have achieved. What the goal was, when and why you pursued it, what challenges arose, and why it was meaningful to you.";
+  
   cueContent.innerHTML = `
     <strong>Topic: Describe an ambitious goal you have achieved.</strong>
     <p>• What the goal was<br>• When and why you pursued it<br>• What challenges arose<br>• Why it was meaningful to you.</p>
+    <button id="listenCueCardBtn" class="btn btn-sm btn-outline mt-2">🔊 Listen to Cue Card</button>
   `;
+
+  document.getElementById("listenCueCardBtn").addEventListener("click", () => {
+    speakText(promptTopic, document.getElementById("listenCueCardBtn"));
+  });
 
   const recordBtn = document.getElementById("startSpeechRecordBtn");
   const stopBtn = document.getElementById("stopSpeechRecordBtn");
   const timerEl = document.getElementById("speakingTimer");
   const transcriptEl = document.getElementById("speakingTranscriptInput");
 
+  // Android Native Speech Recognizer Callbacks
+  window.onAndroidSpeechPartial = (text) => {
+    transcriptEl.value = text;
+  };
+  window.onAndroidSpeechResult = (text) => {
+    transcriptEl.value = text;
+  };
+  window.onSpeechBegin = () => {
+    recordBtn.innerText = "🎙️ Listening Live...";
+  };
+  window.onSpeechEnd = () => {
+    recordBtn.innerText = "🎙️ Start Speaking";
+  };
+  window.onSpeechError = (code) => {
+    console.warn("Android speech recognition error:", code);
+    recordBtn.innerText = "🎙️ Start Speaking";
+  };
+
+  // Web Speech API fallback for desktop browsers
   let recognizer = null;
-  if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+  const isAndroidApp = window.AndroidSTT && typeof window.AndroidSTT.startListening === "function";
+
+  if (!isAndroidApp && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognizer = new SpeechRecognition();
     recognizer.continuous = true;
@@ -1048,7 +1152,11 @@ function initSpeaking() {
     recordBtn.disabled = true;
     stopBtn.disabled = false;
 
-    if (recognizer) recognizer.start();
+    if (window.AndroidSTT && typeof window.AndroidSTT.startListening === "function") {
+      window.AndroidSTT.startListening();
+    } else if (recognizer) {
+      try { recognizer.start(); } catch (e) {}
+    }
 
     appState.speakingTimerInterval = setInterval(() => {
       appState.speakingSeconds++;
@@ -1062,7 +1170,13 @@ function initSpeaking() {
     clearInterval(appState.speakingTimerInterval);
     recordBtn.disabled = false;
     stopBtn.disabled = true;
-    if (recognizer) recognizer.stop();
+    recordBtn.innerText = "🎙️ Start Speaking";
+
+    if (window.AndroidSTT && typeof window.AndroidSTT.stopListening === "function") {
+      window.AndroidSTT.stopListening();
+    } else if (recognizer) {
+      try { recognizer.stop(); } catch (e) {}
+    }
   });
 
   document.getElementById("evaluateSpeakingBtn").addEventListener("click", async () => {
