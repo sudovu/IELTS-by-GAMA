@@ -1,0 +1,26 @@
+[
+  {
+    "topic": "Academic Collocations",
+    "subtopic": "Verbs and Nouns",
+    "query_trigger": "academic collocations make a decision conduct research",
+    "compact_knowledge": "Essential IELTS Academic Collocations: 'conduct research', 'reach a consensus', 'implement a policy', 'make a significant contribution', 'exercise discretion'. Avoid unnatural phrases like 'do a research' or 'make a consensus'.",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Academic Adjectives",
+    "subtopic": "Magnitude and Evidence",
+    "query_trigger": "substantial empirical compelling evidence",
+    "compact_knowledge": "Band 7+ Lexical Upgrades: Replace 'big proof' with 'compelling empirical evidence'. Replace 'big change' with 'a substantial transformation / marked disparity'.",
+    "source": "curated",
+    "confidence": 0.97
+  },
+  {
+    "topic": "Phrasal Verbs vs Formal Register",
+    "subtopic": "Academic Writing Substitutes",
+    "query_trigger": "phrasal verbs formal alternatives writing task 2",
+    "compact_knowledge": "In IELTS Academic Writing Task 2, prefer single Latinate verbs over informal phrasal verbs: 'account for' -> 'constitute/explain'; 'bring about' -> 'engender/precipitate'; 'look into' -> 'investigate'; 'give up' -> 'relinquish'.",
+    "source": "curated",
+    "confidence": 0.97
+  }
+]

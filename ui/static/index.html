@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS by GAMA - Hybrid Online + Offline AI English Tutor</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-logo">GAMA</div>
+        <div class="brand-title">
+          <h1>IELTS by GAMA</h1>
+          <span class="subtext">Hybrid Online + Offline AI English Tutor</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div id="connectivityBadge" class="status-badge offline">
+          <span class="dot">●</span> <span id="statusText">OFFLINE</span>
+        </div>
+        <button id="toggleOfflineBtn" class="btn btn-secondary btn-sm" title="Toggle forced offline mode for complete privacy">
+          Force Offline: OFF
+        </button>
+        <button id="themeToggleBtn" class="btn btn-icon btn-sm" title="Toggle Light/Dark Theme">
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="app-body">
+      <!-- Navigation Sidebar -->
+      <nav class="sidebar">
+        <ul class="nav-links">
+          <li class="nav-item active" data-tab="dashboard">
+            <span class="nav-icon">📊</span> <span class="nav-label">Dashboard</span>
+          </li>
+          <li class="nav-item" data-tab="chat">
+            <span class="nav-icon">💬</span> <span class="nav-label">AI Tutor Chat</span>
+          </li>
+          <li class="nav-item" data-tab="diagnostic">
+            <span class="nav-icon">🎯</span> <span class="nav-label">Diagnostic Test</span>
+          </li>
+          <li class="nav-item" data-tab="grammar">
+            <span class="nav-icon">📖</span> <span class="nav-label">Adaptive Grammar</span>
+          </li>
+          <li class="nav-item" data-tab="vocab">
+            <span class="nav-icon">🗂️</span> <span class="nav-label">Vocabulary & SRS</span>
+          </li>
+          <li class="nav-item" data-tab="reading">
+            <span class="nav-icon">📑</span> <span class="nav-label">Reading Practice</span>
+          </li>
+          <li class="nav-item" data-tab="listening">
+            <span class="nav-icon">🎧</span> <span class="nav-label">Listening Practice</span>
+          </li>
+          <li class="nav-item" data-tab="writing">
+            <span class="nav-icon">✍️</span> <span class="nav-label">Writing Studio</span>
+          </li>
+          <li class="nav-item" data-tab="speaking">
+            <span class="nav-icon">🎙️</span> <span class="nav-label">Speaking Examiner</span>
+          </li>
+          <li class="nav-item" data-tab="mistakes">
+            <span class="nav-icon">📕</span> <span class="nav-label">Mistake Book</span>
+          </li>
+          <li class="nav-item" data-tab="settings">
+            <span class="nav-icon">⚙️</span> <span class="nav-label">Settings & Data</span>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+          <div class="device-pill">
+            <span class="small-label">Device Tier:</span>
+            <strong id="deviceProfileLabel">DESKTOP</strong>
+          </div>
+          <div class="model-pill">
+            <span class="small-label">Active Model:</span>
+            <span id="modelNameLabel">GAM IELTS Standard</span>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content Stage -->
+      <main class="content-stage">
+        <!-- 1. Dashboard Tab -->
+        <section id="tab-dashboard" class="tab-pane active">
+          <div class="pane-header">
+            <h2>Personal Learning Dashboard</h2>
+            <p class="subtitle" id="dailyGreetingText">Welcome back! Loading study recommendations...</p>
+          </div>
+
+          <div class="grid-cards">
+            <div class="card stat-card primary">
+              <span class="card-label">Current Estimated Band</span>
+              <div class="big-metric" id="currentBandMetric">5.5</div>
+              <span class="metric-sub" id="cefrMetric">CEFR Level: B2</span>
+            </div>
+
+            <div class="card stat-card">
+              <span class="card-label">Target Band</span>
+              <div class="big-metric" id="targetBandMetric">7.0</div>
+              <span class="metric-sub">Track: Academic</span>
+            </div>
+
+            <div class="card stat-card">
+              <span class="card-label">SRS Flashcards Due</span>
+              <div class="big-metric" id="srsDueMetric">0</div>
+              <span class="metric-sub">Spaced Repetition SM-2</span>
+            </div>
+
+            <div class="card stat-card">
+              <span class="card-label">Active Mistakes</span>
+              <div class="big-metric" id="activeMistakesMetric">0</div>
+              <span class="metric-sub" id="accuracyRateMetric">Accuracy: 100%</span>
+            </div>
+          </div>
+
+          <div class="split-view mt-4">
+            <div class="card flex-1">
+              <h3>Today's Structured Study Plan</h3>
+              <div id="dailyPlanTasksList" class="tasks-list mt-2">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <div class="card flex-1">
+              <h3>Skills Performance Radar</h3>
+              <div id="skillsRadarBox" class="radar-bars mt-2">
+                <!-- Radar bars injected via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. AI Tutor Chat Tab -->
+        <section id="tab-chat" class="tab-pane">
+          <div class="pane-header">
+            <h2>Unified AI English Tutor</h2>
+            <p class="subtitle">Ask grammar rules, check sentences, or explore IELTS topics. 100% local by default.</p>
+          </div>
+
+          <div class="chat-container card">
+            <div id="chatMessages" class="chat-messages">
+              <div class="message tutor">
+                <div class="msg-bubble">
+                  Hello! I am your AI English & IELTS Tutor. How can I help you today?
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-input-bar">
+              <input type="text" id="chatInput" placeholder="Ask a grammar rule (e.g. affect vs effect), type 'I am agree', or request an IELTS prompt..." />
+              <button id="voiceInputBtn" class="btn btn-icon" title="Speak message (Web Speech API)">🎙️</button>
+              <button id="sendMessageBtn" class="btn btn-primary">Send</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Diagnostic Test Tab -->
+        <section id="tab-diagnostic" class="tab-pane">
+          <div class="pane-header">
+            <h2>Initial CEFR & IELTS Diagnostic Assessment</h2>
+            <p class="subtitle">Complete this 6-question diagnostic to benchmark your baseline CEFR and IELTS band.</p>
+          </div>
+
+          <div class="card">
+            <div id="diagnosticQuestionsContainer"></div>
+            <button id="submitDiagnosticBtn" class="btn btn-primary mt-3">Submit Diagnostic</button>
+
+            <div id="diagnosticReport" class="report-box mt-3" style="display: none;"></div>
+          </div>
+        </section>
+
+        <!-- 4. Adaptive Grammar Tab -->
+        <section id="tab-grammar" class="tab-pane">
+          <div class="pane-header">
+            <h2>Adaptive Grammar Coach</h2>
+            <p class="subtitle">Targeted drills driven by your personal mistake frequency.</p>
+          </div>
+
+          <div class="card">
+            <div id="grammarSessionContent">
+              <p>Loading adaptive session...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Vocabulary & SRS Tab -->
+        <section id="tab-vocab" class="tab-pane">
+          <div class="pane-header">
+            <h2>Vocabulary & Spaced Repetition (SRS)</h2>
+            <p class="subtitle">SuperMemo SM-2 algorithm ensures high-yield Academic Word List mastery.</p>
+          </div>
+
+          <div class="card srs-card-container">
+            <div id="srsFlashcard" class="flashcard">
+              <div class="flashcard-front">
+                <h3 id="cardPrompt">Loading due cards...</h3>
+              </div>
+              <div class="flashcard-back" id="cardAnswerBox" style="display: none;">
+                <hr>
+                <div id="cardAnswer"></div>
+                <div class="rating-buttons mt-3">
+                  <span>Rate your recall:</span>
+                  <button class="btn btn-danger btn-sm" onclick="gradeCard(0)">0 - Blank</button>
+                  <button class="btn btn-warning btn-sm" onclick="gradeCard(3)">3 - Hesitant</button>
+                  <button class="btn btn-success btn-sm" onclick="gradeCard(5)">5 - Perfect</button>
+                </div>
+              </div>
+            </div>
+            <button id="revealCardBtn" class="btn btn-secondary mt-3">Reveal Answer</button>
+          </div>
+        </section>
+
+        <!-- 6. Reading Tab -->
+        <section id="tab-reading" class="tab-pane">
+          <div class="pane-header">
+            <h2>IELTS Reading Practice (Academic)</h2>
+            <p class="subtitle">Original, copyright-compliant passage and automated band grading.</p>
+          </div>
+
+          <div class="split-view reading-split">
+            <div class="card passage-pane">
+              <h3 id="readingTitle">Loading Passage...</h3>
+              <div id="readingText" class="passage-text mt-2"></div>
+            </div>
+
+            <div class="card questions-pane">
+              <h3>Questions</h3>
+              <div id="readingQuestionsList" class="mt-2"></div>
+              <button id="submitReadingBtn" class="btn btn-primary mt-3">Submit Reading Answers</button>
+              <div id="readingScoreReport" class="report-box mt-3" style="display:none;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. Listening Tab -->
+        <section id="tab-listening" class="tab-pane">
+          <div class="pane-header">
+            <h2>IELTS Listening Module</h2>
+            <p class="subtitle">Audio script playback, distractor detection, and spelling bounds.</p>
+          </div>
+
+          <div class="card">
+            <h3 id="listeningTitle">Loading Listening Scenario...</h3>
+            <div class="audio-control-bar mt-2">
+              <button id="playAudioScriptBtn" class="btn btn-secondary">🔊 Play Audio with Speech Synthesizer</button>
+              <button id="toggleTranscriptBtn" class="btn btn-outline btn-sm">Show / Hide Transcript</button>
+            </div>
+            <div id="listeningTranscriptBox" class="transcript-box mt-2" style="display:none;"></div>
+
+            <div id="listeningQuestionsList" class="mt-3"></div>
+            <button id="submitListeningBtn" class="btn btn-primary mt-3">Submit Listening Answers</button>
+            <div id="listeningScoreReport" class="report-box mt-3" style="display:none;"></div>
+          </div>
+        </section>
+
+        <!-- 8. Writing Studio Tab -->
+        <section id="tab-writing" class="tab-pane">
+          <div class="pane-header">
+            <h2>IELTS Writing Studio & Formative Feedback</h2>
+            <p class="subtitle">Evaluates Task 1 & 2 with criteria band scores and 'Teach Through Correction'.</p>
+          </div>
+
+          <div class="card">
+            <div class="prompt-box">
+              <h3>Task 2: Secondary Education Curriculum (Academic)</h3>
+              <p>Some educationalists argue that high school curricula should prioritize STEM subjects over arts. Discuss both views and give your opinion. (Minimum 250 words).</p>
+            </div>
+
+            <div class="essay-editor-wrapper mt-3">
+              <textarea id="essayInput" rows="12" placeholder="Type or paste your essay here..."></textarea>
+              <div class="word-counter-bar">
+                <span>Word Count: <strong id="wordCountLabel">0</strong></span>
+                <span class="req-text">(Target: 250+ words)</span>
+              </div>
+            </div>
+
+            <button id="evaluateWritingBtn" class="btn btn-primary mt-3">Evaluate Essay with Rubrics</button>
+            <div id="writingEvalReport" class="report-box mt-3" style="display:none;"></div>
+          </div>
+        </section>
+
+        <!-- 9. Speaking Tab -->
+        <section id="tab-speaking" class="tab-pane">
+          <div class="pane-header">
+            <h2>AI Speaking Examiner & Fluency Coach</h2>
+            <p class="subtitle">Measures Words Per Minute (WPM), hesitation, fillers, and coherence.</p>
+          </div>
+
+          <div class="card">
+            <div id="cueCardBox" class="cue-card">
+              <h3>Part 2 Cue Card</h3>
+              <div id="cueCardContent">Loading prompt...</div>
+            </div>
+
+            <div class="speech-recording-area mt-3">
+              <div class="timer-display" id="speakingTimer">00:00</div>
+              <div class="speech-btn-group">
+                <button id="startSpeechRecordBtn" class="btn btn-primary">🎙️ Start Speaking (Web Speech)</button>
+                <button id="stopSpeechRecordBtn" class="btn btn-secondary" disabled>⏹️ Finish & Evaluate</button>
+              </div>
+              <textarea id="speakingTranscriptInput" rows="4" class="mt-2" placeholder="Your spoken transcript will appear here live (or you can type/paste)..."></textarea>
+              <button id="evaluateSpeakingBtn" class="btn btn-primary mt-2">Evaluate Speaking Response</button>
+            </div>
+
+            <div id="speakingEvalReport" class="report-box mt-3" style="display:none;"></div>
+          </div>
+        </section>
+
+        <!-- 10. Mistake Book Tab -->
+        <section id="tab-mistakes" class="tab-pane">
+          <div class="pane-header">
+            <h2>Personalized Mistake Book</h2>
+            <p class="subtitle">Track recurring errors across grammar, vocabulary, and exam tasks.</p>
+          </div>
+
+          <div class="card">
+            <div id="mistakeBookSummary">Loading mistake ledger...</div>
+            <div id="mistakeBookList" class="mt-3"></div>
+          </div>
+        </section>
+
+        <!-- 11. Settings & Data Tab -->
+        <section id="tab-settings" class="tab-pane">
+          <div class="pane-header">
+            <h2>Settings & Data Privacy</h2>
+            <p class="subtitle">Control offline execution, privacy boundaries, and data export.</p>
+          </div>
+
+          <div class="card">
+            <h3>Privacy & AI Preferences</h3>
+            <div class="setting-item mt-2">
+              <label>
+                <input type="checkbox" id="settingForcedOffline"> Force 100% Offline Mode (Never send requests online)
+              </label>
+            </div>
+            <div class="setting-item mt-2">
+              <label>
+                <input type="checkbox" id="settingCloudAI"> Enable Optional Cloud AI (Gemini) when online
+              </label>
+            </div>
+            <div class="setting-item mt-2">
+              <label>
+                <input type="checkbox" id="settingAutoResearch" checked> Automatic Online-to-Offline Research (when local confidence is low)
+              </label>
+            </div>
+
+            <hr class="my-3">
+            <h3>Data Backup & Portability</h3>
+            <p class="small-text">Export your learning records, mistake book, and progress in open JSON format.</p>
+            <div class="btn-group mt-2">
+              <button id="exportDataBtn" class="btn btn-secondary">Export Learning Data (JSON)</button>
+              <button id="importDataBtn" class="btn btn-outline">Import Learning Data</button>
+            </div>
+            <textarea id="dataTransferArea" rows="4" class="mt-2" placeholder="Exported JSON or JSON to import will appear here..."></textarea>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

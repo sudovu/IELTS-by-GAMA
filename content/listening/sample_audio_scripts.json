@@ -1,0 +1,16 @@
+[
+  {
+    "id": "listen_sample_sec1",
+    "section": 1,
+    "title": "Community Library Registration Dialogue",
+    "speakers": ["Librarian", "Resident"],
+    "distractor_focus": "Address numbers and appointment time changes"
+  },
+  {
+    "id": "listen_sample_sec4",
+    "section": 4,
+    "title": "Bio-acoustic Monitoring of Marine Mammals",
+    "speakers": ["Senior Researcher"],
+    "distractor_focus": "Numerical acoustic frequencies in kilohertz"
+  }
+]

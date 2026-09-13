@@ -1,0 +1,29 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Local databases and runtime data
+data/*.db
+data/*.db-wal
+data/*.db-shm
+*.gama
+
+# Temporary audio files and exports
+*.wav
+*.mp3
+scratch/
+temp/
+
+# Environment and secrets
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# OS specific files
+.DS_Store
+Thumbs.db

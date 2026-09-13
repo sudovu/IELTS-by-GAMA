@@ -1,0 +1,42 @@
+[
+  {
+    "topic": "Articles",
+    "subtopic": "Uncountable Nouns",
+    "query_trigger": "articles uncountable nouns advice information",
+    "compact_knowledge": "Uncountable nouns in English (e.g. information, advice, research, equipment, luggage) never take the indefinite article 'a' or 'an' and never take a plural '-s'. Use 'a piece of advice' or zero article: 'She gave me valuable advice'.",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Subject-Verb Agreement",
+    "subtopic": "Collective and Quantified Subjects",
+    "query_trigger": "subject verb agreement collective each every",
+    "compact_knowledge": "Phrases beginning with 'each of', 'every one of', or 'neither of' require a singular verb in formal academic English: 'Each of the participants was interviewed.' Do not let intervening plural nouns mislead you.",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Conditionals",
+    "subtopic": "Unreal Past (Third Conditional)",
+    "query_trigger": "third conditional unreal past would have had",
+    "compact_knowledge": "Third conditional describes hypothetical past situations and their outcomes: 'If + past perfect, would have + past participle'. Example: 'If governments had invested earlier in renewables, emissions would have declined faster.'",
+    "source": "curated",
+    "confidence": 0.97
+  },
+  {
+    "topic": "Inversion",
+    "subtopic": "Negative Adverbials for IELTS Band 8+",
+    "query_trigger": "inversion negative adverbials seldom rarely",
+    "compact_knowledge": "Negative or restrictive adverbials placed at the start of a sentence require subject-auxiliary inversion: 'Seldom do we witness such rapid technological transformation.' 'Not only did the project reduce costs, but it also improved safety.'",
+    "source": "curated",
+    "confidence": 0.96
+  },
+  {
+    "topic": "Affect vs Effect",
+    "subtopic": "Confused Words",
+    "query_trigger": "difference between affect and effect explain affect and effect",
+    "compact_knowledge": "Affect is predominantly a verb meaning to influence or impact ('Rising inflation affects household savings'). Effect is predominantly a noun meaning the result or consequence ('The policy had an immediate effect'). Remember RAVEN: Remember Affect Verb, Effect Noun.",
+    "source": "curated",
+    "confidence": 0.99
+  }
+]

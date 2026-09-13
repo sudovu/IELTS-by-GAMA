@@ -1,0 +1,114 @@
+{
+  "version": "1.0.0",
+  "learner_profile": {
+    "id": "default_learner",
+    "name": "GAMA Student",
+    "target_band": 7.0,
+    "current_band": 5.5,
+    "cefr_level": "B2",
+    "track": "Academic",
+    "daily_minutes": 30,
+    "created_at": "2026-09-13T05:09:34.908619",
+    "updated_at": "2026-09-13T05:09:34.908619"
+  },
+  "mistakes": [],
+  "test_history": [],
+  "custom_knowledge": [
+    {
+      "id": "3bf161be-6dcc-4560-9d76-02299b932ca6",
+      "topic": "Academic Adjectives",
+      "subtopic": "Magnitude and Evidence",
+      "query_trigger": "substantial empirical compelling evidence",
+      "compact_knowledge": "Band 7+ Lexical Upgrades: Replace 'big proof' with 'compelling empirical evidence'. Replace 'big change' with 'a substantial transformation / marked disparity'.",
+      "source": "curated",
+      "confidence": 0.97,
+      "version": "1.0.0",
+      "created_at": "2026-09-13T05:09:34.909861",
+      "updated_at": "2026-09-13T05:09:41.007474"
+    },
+    {
+      "id": "a27e218a-b2a0-4968-92cc-b9f195708f82",
+      "topic": "Academic Collocations",
+      "subtopic": "Verbs and Nouns",
+      "query_trigger": "academic collocations make a decision conduct research",
+      "compact_knowledge": "Essential IELTS Academic Collocations: 'conduct research', 'reach a consensus', 'implement a policy', 'make a significant contribution', 'exercise discretion'. Avoid unnatural phrases like 'do a research' or 'make a consensus'.",
+      "source": "curated",
+      "confidence": 0.98,
+      "version": "1.0.0",
+      "created_at": "2026-09-13T05:09:34.909788",
+      "updated_at": "2026-09-13T05:09:41.007390"
+    },
+    {
+      "id": "fe6d3ea8-8cc7-4805-9994-d46690aa5b4c",
+      "topic": "Affect vs Effect",
+      "subtopic": "Confused Words",
+      "query_trigger": "difference between affect and effect explain affect and effect",
+      "compact_knowledge": "Affect is predominantly a verb meaning to influence or impact ('Rising inflation affects household savings'). Effect is predominantly a noun meaning the result or consequence ('The policy had an immediate effect'). Remember RAVEN: Remember Affect Verb, Effect Noun.",
+      "source": "curated",
+      "confidence": 0.99,
+      "version": "1.0.0",
+      "created_at": "2026-09-13T05:09:34.909508",
+      "updated_at": "2026-09-13T05:09:41.007099"
+    },
+    {
+      "id": "4ef0130e-93a7-4878-ae25-7e359940c2a1",
+      "topic": "Articles",
+      "subtopic": "Uncountable Nouns",
+      "query_trigger": "articles uncountable nouns advice information",
+      "compact_knowledge": "Uncountable nouns in English (e.g. information, advice, research, equipment, luggage) never take the indefinite article 'a' or 'an' and never take a plural '-s'. Use 'a piece of advice' or zero article: 'She gave me valuable advice'.",
+      "source": "curated",
+      "confidence": 0.98,
+      "version": "1.0.0",
+      "created_at": "2026-09-13T05:09:34.909054",
+      "updated_at": "2026-09-13T05:09:41.006638"
+    },
+    {
+      "id": "e467b758-4fa7-4646-bf44-dd2b70d56c65",
+      "topic": "Conditionals",
+      "subtopic": "Unreal Past (Third Conditional)",
+      "query_trigger": "third conditional unreal past would have had",
+      "compact_knowledge": "Third conditional describes hypothetical past situations and their outcomes: 'If + past perfect, would have + past participle'. Example: 'If governments had invested earlier in renewables, emissions would have declined faster.'",
+      "source": "curated",
+      "confidence": 0.97,
+      "version": "1.0.0",
+      "created_at": "2026-09-13T05:09:34.909353",
+      "updated_at": "2026-09-13T05:09:41.006965"
+    },
+    {
+      "id": "e8d8a2a7-8deb-4bfe-a24e-01b369e17889",
+      "topic": "Inversion",
+      "subtopic": "Negative Adverbials for IELTS Band 8+",
+      "query_trigger": "inversion negative adverbials seldom rarely",
+      "compact_knowledge": "Negative or restrictive adverbials placed at the start of a sentence require subject-auxiliary inversion: 'Seldom do we witness such rapid technological transformation.' 'Not only did the project reduce costs, but it also improved safety.'",
+      "source": "curated",
+      "confidence": 0.96,
+      "version": "1.0.0",
+      "created_at": "2026-09-13T05:09:34.909431",
+      "updated_at": "2026-09-13T05:09:41.007032"
+    },
+    {
+      "id": "e681f2bf-f799-4996-9596-21d9a467fae9",
+      "topic": "Phrasal Verbs vs Formal Register",
+      "subtopic": "Academic Writing Substitutes",
+      "query_trigger": "phrasal verbs formal alternatives writing task 2",
+      "compact_knowledge": "In IELTS Academic Writing Task 2, prefer single Latinate verbs over informal phrasal verbs: 'account for' -> 'constitute/explain'; 'bring about' -> 'engender/precipitate'; 'look into' -> 'investigate'; 'give up' -> 'relinquish'.",
+      "source": "curated",
+      "confidence": 0.97,
+      "version": "1.0.0",
+      "created_at": "2026-09-13T05:09:34.909906",
+      "updated_at": "2026-09-13T05:09:41.007530"
+    },
+    {
+      "id": "99255d43-1b3a-4ab0-98d3-1d9f2d21294f",
+      "topic": "Subject-Verb Agreement",
+      "subtopic": "Collective and Quantified Subjects",
+      "query_trigger": "subject verb agreement collective each every",
+      "compact_knowledge": "Phrases beginning with 'each of', 'every one of', or 'neither of' require a singular verb in formal academic English: 'Each of the participants was interviewed.' Do not let intervening plural nouns mislead you.",
+      "source": "curated",
+      "confidence": 0.98,
+      "version": "1.0.0",
+      "created_at": "2026-09-13T05:09:34.909259",
+      "updated_at": "2026-09-13T05:09:41.006882"
+    }
+  ]
+}
