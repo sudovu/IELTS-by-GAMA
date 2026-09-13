@@ -24,6 +24,15 @@ env/
 venv/
 ENV/
 
+# Android build outputs and caches
+.gradle/
+.kotlin/
+platform/android/.gradle/
+platform/android/.kotlin/
+platform/android/build/
+platform/android/app/build/
+platform/android/local.properties
+
 # OS specific files
 .DS_Store
 Thumbs.db
