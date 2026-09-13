@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.IELTSByGAMA" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.IELTSByGAMA" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#161e2b</item>
+        <item name="android:navigationBarColor">#0f141c</item>
+        <item name="android:windowBackground">#0f141c</item>
+    </style>
 </resources>

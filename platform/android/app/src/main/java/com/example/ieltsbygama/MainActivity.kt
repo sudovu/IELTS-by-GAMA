@@ -91,12 +91,21 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
             addJavascriptInterface(AndroidSTTBridge(), "AndroidSTT")
         }
 
+        // Set dark status bar and navigation bar with white icons
+        window.statusBarColor = Color.parseColor("#161e2b")
+        window.navigationBarColor = Color.parseColor("#0f141c")
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = false
+        insetsController.isAppearanceLightNavigationBars = false
+
+        val initialStatusHeight = getStatusBarHeight()
         val rootContainer = FrameLayout(this).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-            setBackgroundColor(Color.parseColor("#0f141c"))
+            setBackgroundColor(Color.parseColor("#161e2b"))
+            setPadding(0, initialStatusHeight, 0, 0)
             addView(webView, FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT
@@ -105,10 +114,12 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
 
         setContentView(rootContainer)
 
-        // Handle edge-to-edge system bar insets so UI doesn't overlap status bar or gesture bar
+        // Handle edge-to-edge system bar and camera cutout insets
         ViewCompat.setOnApplyWindowInsetsListener(rootContainer) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            val insetsType = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            val bars = insets.getInsets(insetsType)
+            val topPadding = maxOf(bars.top, initialStatusHeight)
+            view.setPadding(bars.left, topPadding, bars.right, bars.bottom)
             insets
         }
 
@@ -199,6 +210,11 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
         mainHandler.post {
             webView.evaluateJavascript(script, null)
         }
+    }
+
+    private fun getStatusBarHeight(): Int {
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        return if (resourceId > 0) resources.getDimensionPixelSize(resourceId) else 0
     }
 
     // Native Text-To-Speech JavaScript Interface
