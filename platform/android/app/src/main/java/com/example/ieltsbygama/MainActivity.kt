@@ -78,6 +78,11 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     return false
                 }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    applyWindowInsetsToJs()
+                }
             }
 
             webChromeClient = object : WebChromeClient() {
@@ -89,39 +94,32 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
             // Expose native Android audio capabilities to JavaScript
             addJavascriptInterface(AndroidTTSBridge(), "AndroidTTS")
             addJavascriptInterface(AndroidSTTBridge(), "AndroidSTT")
+            addJavascriptInterface(AndroidThemeBridge(), "AndroidTheme")
         }
 
-        // Set dark status bar and navigation bar with white icons
-        window.statusBarColor = Color.parseColor("#161e2b")
+        // Set edge-to-edge system bars so header seamlessly fills status bar area
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.statusBarColor = Color.TRANSPARENT
         window.navigationBarColor = Color.parseColor("#0f141c")
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = false
         insetsController.isAppearanceLightNavigationBars = false
 
-        val initialStatusHeight = getStatusBarHeight()
-        val rootContainer = FrameLayout(this).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            setBackgroundColor(Color.parseColor("#161e2b"))
-            setPadding(0, initialStatusHeight, 0, 0)
-            addView(webView, FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
-            ))
-        }
-
-        setContentView(rootContainer)
-
-        // Handle edge-to-edge system bar and camera cutout insets
-        ViewCompat.setOnApplyWindowInsetsListener(rootContainer) { view, insets ->
-            val insetsType = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
-            val bars = insets.getInsets(insetsType)
-            val topPadding = maxOf(bars.top, initialStatusHeight)
-            view.setPadding(bars.left, topPadding, bars.right, bars.bottom)
+        // Listen for Window Insets and inject dynamic status bar and nav bar heights into CSS
+        ViewCompat.setOnApplyWindowInsetsListener(webView) { _, insets ->
+            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            val navBar = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            val density = resources.displayMetrics.density
+            val statusBarDp = (statusBar.top / density).toInt()
+            val navBarDp = (navBar.bottom / density).toInt()
+            if (statusBarDp > 0 || navBarDp > 0) {
+                evaluateJs("document.documentElement.style.setProperty('--sat', '${statusBarDp}px'); document.documentElement.style.setProperty('--sab', '${navBarDp}px');")
+            }
             insets
         }
+
+        // Mount WebView directly so screen fits automatically with zero gap
+        setContentView(webView)
 
         // Handle Back button navigation inside WebView
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -354,6 +352,40 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
         @JavascriptInterface
         fun isAvailable(): Boolean {
             return SpeechRecognizer.isRecognitionAvailable(this@MainActivity)
+        }
+    }
+
+    // Native Dynamic Theme JavaScript Interface
+    inner class AndroidThemeBridge {
+        @JavascriptInterface
+        fun setDarkMode(isDark: Boolean) {
+            mainHandler.post {
+                val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+                window.statusBarColor = Color.TRANSPARENT
+                if (isDark) {
+                    window.navigationBarColor = Color.parseColor("#0f141c")
+                    insetsController.isAppearanceLightStatusBars = false
+                    insetsController.isAppearanceLightNavigationBars = false
+                } else {
+                    window.navigationBarColor = Color.parseColor("#ffffff")
+                    insetsController.isAppearanceLightStatusBars = true
+                    insetsController.isAppearanceLightNavigationBars = true
+                }
+            }
+        }
+    }
+
+    private fun applyWindowInsetsToJs() {
+        mainHandler.post {
+            val insets = ViewCompat.getRootWindowInsets(webView) ?: return@post
+            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            val navBar = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            val density = resources.displayMetrics.density
+            val statusBarDp = (statusBar.top / density).toInt()
+            val navBarDp = (navBar.bottom / density).toInt()
+            if (statusBarDp > 0 || navBarDp > 0) {
+                evaluateJs("document.documentElement.style.setProperty('--sat', '${statusBarDp}px'); document.documentElement.style.setProperty('--sab', '${navBarDp}px');")
+            }
         }
     }
 

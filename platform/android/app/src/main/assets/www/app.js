@@ -6,7 +6,7 @@
  */
 
 const API_BASE = "";
-const APP_VERSION = "1.5.1";
+const APP_VERSION = "1.5.2";
 
 // Global State
 let appState = {
@@ -1202,7 +1202,7 @@ function updateScreenDimensions() {
   const deviceLabel = document.getElementById("deviceProfileLabel");
 
   const badgeText = `${osLabel} • ${w}×${h} (${devLabel})`;
-  if (badge) badge.innerHTML = `${badgeText} • <span class="version-tag" id="headerVersionBadge">v1.5.1</span>`;
+  if (badge) badge.innerHTML = `${badgeText} • <span class="version-tag" id="headerVersionBadge">v1.5.2</span>`;
   if (devScreen) devScreen.innerText = `${badgeText} @ ${dpr.toFixed(1)}x DPR`;
   if (deviceLabel) deviceLabel.innerText = `${devLabel.toUpperCase()} (${osLabel})`;
 
@@ -1293,6 +1293,15 @@ function updateThemeUI() {
   }
   if (metaThemeColor) {
     metaThemeColor.setAttribute("content", isLight ? "#f8fafc" : "#0f141c");
+  }
+
+  // Synchronize native Android system status bar and navigation bar seamlessly
+  if (window.AndroidTheme && typeof window.AndroidTheme.setDarkMode === 'function') {
+    try {
+      window.AndroidTheme.setDarkMode(!isLight);
+    } catch (e) {
+      console.warn("Could not sync Android native theme:", e);
+    }
   }
 }
 

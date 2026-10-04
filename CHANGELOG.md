@@ -9,6 +9,19 @@ The versioning follows the convention:
 
 ---
 
+## [v1.5.2] - 2026-10-04 (Small Changes: Zero Top Gap & Seamless System Bar Auto-Fit)
+
+### Fixed & Improved
+- **Zero Top Gap Elimination**:
+  - Removed duplicate top insets between native Android FrameLayout (`rootContainer`) and CSS (`body { padding-top: var(--sat); }`).
+  - Switched native Android container to `WindowCompat.setDecorFitsSystemWindows(window, true)` with direct `setContentView(webView)`, allowing the top header to sit seamlessly flush with the Android status bar with zero artificial blank space.
+- **Native Android Dynamic Theme Bridge**:
+  - Implemented `AndroidThemeBridge` (`AndroidTheme.setDarkMode(isDark)`) to synchronize the native Android OS system status bar and navigation bar in real time with the app theme (`#161e2b` with light icons in dark mode, `#f8fafc` with dark icons in light mode).
+- **Website & Documentation Synchronization**:
+  - Fully synchronized all version tags, JSON-LD Schema records, and Developments Hub / Projects references across `gautambhuwan.com.np` to reflect `v1.5.2`.
+
+---
+
 ## [v1.5.1] - 2026-10-04 (Small Changes: Auto Screen Lock & Rock-Solid Header Seating)
 
 ### Fixed & Improved

@@ -1,16 +1,15 @@
 {
-  "version": "1.5.1",
-  "versionCode": 6,
-  "releaseName": "Auto Screen Lock & Rock-Solid Header Seating (Zero Horizontal Shift)",
+  "version": "1.5.2",
+  "versionCode": 7,
+  "releaseName": "Zero Top Gap & Seamless System Bar Auto-Fit",
   "releaseDate": "2026-10-04",
   "type": "patch",
   "changelog": {
     "highlights": [
-      "Auto Screen Fit & Strict Viewport Lock: Locked viewport scaling (maximum-scale=1.0, user-scalable=no, touch-action: pan-y) completely eliminating unwanted horizontal panning or dragging across all screen sizes",
-      "Rock-Solid Header Seating: Redesigned header layout and compact controls so the top bar sits perfectly within 100vw without horizontal overflow on mobile phones",
-      "Dynamic Status Indicator: Responsive connectivity status badge ('ONLINE'/'OFFLINE' on mobile screens < 768px, 'ONLINE (Hybrid)' on desktop) to ensure full single-line fitting",
-      "Zero Horizontal Overflow: Applied strict overflow clipping to html, body, and app-container to prevent horizontal shifting or manual adjustment needs",
-      "Light Theme Polish: Preserved crisp high-contrast snowy cards and readability with refined mobile padding"
+      "Zero Top Gap Auto-Fit: Removed duplicate native FrameLayout and CSS body insets, allowing WebView and header to sit completely flush with the system status bar with zero blank gap",
+      "Native Android Dynamic Theme Bridge: Injected AndroidTheme bridge synchronizing Android OS status bar and navigation bar colors seamlessly between dark (#161e2b) and light (#f8fafc)",
+      "Automatic Screen Fitting: Eliminated manual adjustment requirements; app fills display naturally and immobiled on all mobile, tablet, and desktop form factors",
+      "Developments Hub & Projects Sync: Synchronized website documentation and software version references to v1.5.2 across all development cards and tables"
     ]
   }
 }

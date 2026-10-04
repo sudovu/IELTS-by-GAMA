@@ -2,8 +2,8 @@
 <resources>
 
     <style name="Theme.IELTSByGAMA" parent="android:Theme.Material.NoActionBar">
-        <item name="android:statusBarColor">#161e2b</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">#0f141c</item>
-        <item name="android:windowBackground">#0f141c</item>
+        <item name="android:windowBackground">#161e2b</item>
     </style>
 </resources>
