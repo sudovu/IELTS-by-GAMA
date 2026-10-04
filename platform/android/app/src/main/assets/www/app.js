@@ -6,7 +6,7 @@
  */
 
 const API_BASE = "";
-const APP_VERSION = "1.5.0";
+const APP_VERSION = "1.5.1";
 
 // Global State
 let appState = {
@@ -1202,9 +1202,12 @@ function updateScreenDimensions() {
   const deviceLabel = document.getElementById("deviceProfileLabel");
 
   const badgeText = `${osLabel} • ${w}×${h} (${devLabel})`;
-  if (badge) badge.innerHTML = `${badgeText} • <span class="version-tag" id="headerVersionBadge">v1.5.0</span>`;
+  if (badge) badge.innerHTML = `${badgeText} • <span class="version-tag" id="headerVersionBadge">v1.5.1</span>`;
   if (devScreen) devScreen.innerText = `${badgeText} @ ${dpr.toFixed(1)}x DPR`;
   if (deviceLabel) deviceLabel.innerText = `${devLabel.toUpperCase()} (${osLabel})`;
+
+  // Ensure connectivity badge text fits the current screen size
+  updateConnectivityStatus();
 }
 
 window.addEventListener("resize", updateScreenDimensions);
@@ -1467,15 +1470,24 @@ window.selectSpeakingSetChip = function(setId, btn) {
 function updateConnectivityStatus() {
   const badge = document.getElementById("connectivityBadge");
   const text = document.getElementById("statusText");
+  const toggleBtn = document.getElementById("toggleOfflineBtn");
+  const isMobile = window.innerWidth < 768;
+
   if (appState.forcedOffline) {
-    badge.className = "status-badge offline";
-    text.innerText = "FORCED OFFLINE (100% Private)";
+    if (badge) badge.className = "status-badge offline";
+    if (badge) badge.title = "Offline Engine: Forced Offline (100% Private)";
+    if (text) text.innerText = isMobile ? "OFFLINE" : "OFFLINE (Private)";
+    if (toggleBtn) toggleBtn.innerText = isMobile ? "Offline: ON" : "Force Offline: ON";
   } else if (navigator.onLine) {
-    badge.className = "status-badge online";
-    text.innerText = "ONLINE (Cloud Hybrid Ready)";
+    if (badge) badge.className = "status-badge online";
+    if (badge) badge.title = "Hybrid Online + Offline AI Engine Ready";
+    if (text) text.innerText = isMobile ? "ONLINE" : "ONLINE (Hybrid)";
+    if (toggleBtn) toggleBtn.innerText = isMobile ? "Offline: OFF" : "Force Offline: OFF";
   } else {
-    badge.className = "status-badge offline";
-    text.innerText = "OFFLINE (Local RAG Active)";
+    if (badge) badge.className = "status-badge offline";
+    if (badge) badge.title = "Local Offline RAG Active";
+    if (text) text.innerText = isMobile ? "OFFLINE" : "OFFLINE (Local RAG)";
+    if (toggleBtn) toggleBtn.innerText = isMobile ? "Offline: OFF" : "Force Offline: OFF";
   }
 }
 

@@ -1,17 +1,16 @@
 {
-  "version": "1.5.0",
-  "versionCode": 5,
-  "releaseName": "Multi-Platform Compatibility (Tablet, iOS, Windows) & Crystal Clear Light Mode Redesign",
+  "version": "1.5.1",
+  "versionCode": 6,
+  "releaseName": "Auto Screen Lock & Rock-Solid Header Seating (Zero Horizontal Shift)",
   "releaseDate": "2026-10-04",
-  "type": "minor",
+  "type": "patch",
   "changelog": {
     "highlights": [
-      "Crystal Clear High-Contrast Light Mode: Complete UI redesign for light theme with calibrated typography, snowy cards, high-contrast borders, refined categorical pastels, and zero dark artifacts",
-      "Automatic Screen Size & Device Adaptation: Real-time detection across Mobile, Tablet, Desktop, and Ultrawide displays with dynamic CSS custom properties (--app-width, --app-height, --vh)",
-      "Tablet Split-View Enhancements: Optimized dual-pane layouts for iPads & Android tablets across Reading Passages, Writing Studio, and 2x2 Category Progress Grid",
-      "iOS Safe Area & WebKit Compatibility: Viewport-fit=cover, environment insets (notch/home indicator safe padding), momentum touch scrolling, and speech synthesis user gesture unlock",
-      "Windows Fluent Desktop Integration: Custom slim acrylic scrollbars, high-DPI scaling, and keyboard shortcuts (Alt+1..5 navigation, Alt+T theme toggle, Escape modal dismiss)",
-      "System Color Scheme Sync: Automatically aligns with OS light/dark mode preference with persistent manual override in local storage"
+      "Auto Screen Fit & Strict Viewport Lock: Locked viewport scaling (maximum-scale=1.0, user-scalable=no, touch-action: pan-y) completely eliminating unwanted horizontal panning or dragging across all screen sizes",
+      "Rock-Solid Header Seating: Redesigned header layout and compact controls so the top bar sits perfectly within 100vw without horizontal overflow on mobile phones",
+      "Dynamic Status Indicator: Responsive connectivity status badge ('ONLINE'/'OFFLINE' on mobile screens < 768px, 'ONLINE (Hybrid)' on desktop) to ensure full single-line fitting",
+      "Zero Horizontal Overflow: Applied strict overflow clipping to html, body, and app-container to prevent horizontal shifting or manual adjustment needs",
+      "Light Theme Polish: Preserved crisp high-contrast snowy cards and readability with refined mobile padding"
     ]
   }
 }

@@ -9,6 +9,21 @@ The versioning follows the convention:
 
 ---
 
+## [v1.5.1] - 2026-10-04 (Small Changes: Auto Screen Lock & Rock-Solid Header Seating)
+
+### Fixed & Improved
+- **Auto Screen Fit & Strict Viewport Lock**:
+  - Locked viewport scaling with `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">`.
+  - Added strict overflow clipping (`overflow-x: clip !important; overflow-x: hidden !important; touch-action: pan-y;`) across `html`, `body`, and `.app-container`.
+  - Completely resolved unwanted horizontal panning, dragging, and "movability", ensuring the screen sits perfectly stable on all mobile and tablet viewports without manual adjustment.
+- **Rock-Solid Header Seating**:
+  - Re-engineered `.app-header` with strict 100% width bounding, box-sizing, and compact single-line layout for mobile displays (`height: 52px`, `padding: 0 10px`, `gap: 6px`).
+  - Streamlined branding: scaled logo (`32px`), prevented title wrapping, and suppressed subtitle on mobile.
+  - Responsive connectivity status indicator: automatically displays compact `"ONLINE"` / `"OFFLINE"` badge on viewports under 768px and full badge on desktop, preventing horizontal flex overflow.
+  - Shortened control button labels (`Offline: OFF` / `Offline: ON`) to guarantee all header controls sit comfortably on a single line on any smartphone.
+
+---
+
 ## [v1.5.0] - 2026-10-04 (Big Changes: Multi-Platform Tablet/iOS/Windows & Light Mode Overhaul)
 
 ### Added
