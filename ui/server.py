@@ -82,6 +82,7 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
         if path == "/api/status":
             cfg = ProfileManager.get_hardware_config()
             self._send_json({
+                "version": "1.2.0",
                 "connectivity": self.connectivity.get_ui_indicator(),
                 "is_online": self.connectivity.is_online,
                 "forced_offline": self.connectivity.is_forced_offline,

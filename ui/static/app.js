@@ -6,9 +6,11 @@
  */
 
 const API_BASE = "";
+const APP_VERSION = "1.2.0";
 
 // Global State
 let appState = {
+  version: APP_VERSION,
   currentTab: "dashboard",
   connectivity: "OFFLINE",
   forcedOffline: false,
@@ -2453,4 +2455,11 @@ document.addEventListener("DOMContentLoaded", () => {
   updateConnectivityStatus();
   loadDashboard();
   onSpeakingSetChanged(0);
+
+  const verBadge = document.getElementById("appVersionBadge");
+  if (verBadge) verBadge.textContent = "v" + APP_VERSION;
+  const hdrBadge = document.getElementById("headerVersionBadge");
+  if (hdrBadge) hdrBadge.textContent = "v" + APP_VERSION;
+  const setVal = document.getElementById("settingsVersionValue");
+  if (setVal) setVal.textContent = "v" + APP_VERSION + " Production";
 });
