@@ -11,8 +11,8 @@ android {
         applicationId = "com.example.ieltsbygama"
         minSdk = 30
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.2.0"
+        versionCode = 3
+        versionName = "1.3.0"
     }
 
     signingConfigs {

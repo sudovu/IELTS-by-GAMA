@@ -20,7 +20,7 @@
         </div>
         <div class="brand-title">
           <h1>IELTS <span class="brand-accent">by GAMA</span></h1>
-          <span class="subtext" id="screenDimensionBadge">Hybrid Online + Offline AI Tutor • <span class="version-tag" id="headerVersionBadge">v1.2.0</span></span>
+          <span class="subtext" id="screenDimensionBadge">Hybrid Online + Offline AI Tutor • <span class="version-tag" id="headerVersionBadge">v1.3.0</span></span>
         </div>
       </div>
 
@@ -41,44 +41,103 @@
     <div class="app-body">
       <!-- Navigation Sidebar -->
       <nav class="sidebar">
-        <ul class="nav-links">
-          <li class="nav-item active" data-tab="dashboard">
-            <span class="nav-icon">📊</span> <span class="nav-label">Dashboard</span>
-          </li>
-          <li class="nav-item" data-tab="chat">
-            <span class="nav-icon">💬</span> <span class="nav-label">AI Tutor Chat</span>
-          </li>
-          <li class="nav-item" data-tab="diagnostic">
-            <span class="nav-icon">🎯</span> <span class="nav-label">Diagnostic Test</span>
-          </li>
-          <li class="nav-item" data-tab="advantage">
-            <span class="nav-icon">🧭</span> <span class="nav-label">Advantage Questionnaire</span>
-          </li>
-          <li class="nav-item" data-tab="grammar">
-            <span class="nav-icon">📖</span> <span class="nav-label">Grammar & Fill-Up</span>
-          </li>
-          <li class="nav-item" data-tab="vocab">
-            <span class="nav-icon">🗂️</span> <span class="nav-label">Vocabulary & SRS</span>
-          </li>
-          <li class="nav-item" data-tab="reading">
-            <span class="nav-icon">📑</span> <span class="nav-label">Reading Practice</span>
-          </li>
-          <li class="nav-item" data-tab="listening">
-            <span class="nav-icon">🎧</span> <span class="nav-label">Listening Module</span>
-          </li>
-          <li class="nav-item" data-tab="writing">
-            <span class="nav-icon">✍️</span> <span class="nav-label">Writing Studio</span>
-          </li>
-          <li class="nav-item" data-tab="speaking">
-            <span class="nav-icon">🎙️</span> <span class="nav-label">Speaking Examiner</span>
-          </li>
-          <li class="nav-item" data-tab="mistakes">
-            <span class="nav-icon">📕</span> <span class="nav-label">Mistake Book</span>
-          </li>
-          <li class="nav-item" data-tab="settings">
-            <span class="nav-icon">⚙️</span> <span class="nav-label">Settings & Data</span>
-          </li>
-        </ul>
+        <!-- Mobile Category Filter Strip -->
+        <div class="mobile-cat-filter" id="mobileCatFilter">
+          <button class="cat-filter-btn active" data-filter="all">🌐 All (12)</button>
+          <button class="cat-filter-btn" data-filter="exam">🎓 4-Skills Exam</button>
+          <button class="cat-filter-btn" data-filter="advantage">🧭 Advantage & Drills</button>
+          <button class="cat-filter-btn" data-filter="core">📊 Strategy & System</button>
+        </div>
+
+        <div class="sidebar-scrollable-content">
+          <!-- Category 1: Strategy & Core Diagnostics -->
+          <div class="nav-category-group" data-group="core">
+            <div class="nav-category-header">
+              <span class="cat-dot dot-core"></span>
+              <span class="cat-title">Strategy & Core</span>
+            </div>
+            <ul class="nav-links">
+              <li class="nav-item active" data-tab="dashboard" data-cat="core">
+                <span class="nav-icon">📊</span> <span class="nav-label">Dashboard</span>
+                <span class="nav-badge badge-core">Overview</span>
+              </li>
+              <li class="nav-item" data-tab="diagnostic" data-cat="core">
+                <span class="nav-icon">🎯</span> <span class="nav-label">Diagnostic Test</span>
+                <span class="nav-badge badge-core">12 Qs</span>
+              </li>
+              <li class="nav-item" data-tab="chat" data-cat="core">
+                <span class="nav-icon">💬</span> <span class="nav-label">AI Tutor Chat</span>
+                <span class="nav-badge badge-core">AI Assistant</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Category 2: Cambridge 4-Skills Exam Suite -->
+          <div class="nav-category-group" data-group="exam">
+            <div class="nav-category-header">
+              <span class="cat-dot dot-exam"></span>
+              <span class="cat-title">Cambridge 4-Skills Suite</span>
+            </div>
+            <ul class="nav-links">
+              <li class="nav-item" data-tab="speaking" data-cat="exam">
+                <span class="nav-icon">🎙️</span> <span class="nav-label">Speaking Examiner</span>
+                <span class="nav-badge badge-exam">Dr. Harrison</span>
+              </li>
+              <li class="nav-item" data-tab="writing" data-cat="exam">
+                <span class="nav-icon">✍️</span> <span class="nav-label">Writing Studio</span>
+                <span class="nav-badge badge-exam">Task 1 & 2</span>
+              </li>
+              <li class="nav-item" data-tab="reading" data-cat="exam">
+                <span class="nav-icon">📑</span> <span class="nav-label">Reading Practice</span>
+                <span class="nav-badge badge-exam">3 Passages</span>
+              </li>
+              <li class="nav-item" data-tab="listening" data-cat="exam">
+                <span class="nav-icon">🎧</span> <span class="nav-label">Listening Module</span>
+                <span class="nav-badge badge-exam">Sec 1-4</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Category 3: IELTS Advantage & Linguistic Drills -->
+          <div class="nav-category-group" data-group="advantage">
+            <div class="nav-category-header">
+              <span class="cat-dot dot-advantage"></span>
+              <span class="cat-title">Methodology & Drills</span>
+            </div>
+            <ul class="nav-links">
+              <li class="nav-item" data-tab="advantage" data-cat="advantage">
+                <span class="nav-icon">🧭</span> <span class="nav-label">Advantage Studio</span>
+                <span class="nav-badge badge-advantage">Pell Method</span>
+              </li>
+              <li class="nav-item" data-tab="grammar" data-cat="advantage">
+                <span class="nav-icon">📖</span> <span class="nav-label">Grammar & Clozes</span>
+                <span class="nav-badge badge-advantage">12 Fill-Ups</span>
+              </li>
+              <li class="nav-item" data-tab="vocab" data-cat="advantage">
+                <span class="nav-icon">🗂️</span> <span class="nav-label">Vocabulary & SRS</span>
+                <span class="nav-badge badge-advantage">10 Vaults</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Category 4: Tracking & System -->
+          <div class="nav-category-group" data-group="core">
+            <div class="nav-category-header">
+              <span class="cat-dot dot-system"></span>
+              <span class="cat-title">Tracking & System</span>
+            </div>
+            <ul class="nav-links">
+              <li class="nav-item" data-tab="mistakes" data-cat="core">
+                <span class="nav-icon">📕</span> <span class="nav-label">Mistake Book</span>
+                <span class="nav-badge badge-system">Errors</span>
+              </li>
+              <li class="nav-item" data-tab="settings" data-cat="core">
+                <span class="nav-icon">⚙️</span> <span class="nav-label">Settings & Data</span>
+                <span class="nav-badge badge-system">Privacy</span>
+              </li>
+            </ul>
+          </div>
+        </div>
 
         <div class="sidebar-footer">
           <div class="device-pill">
@@ -164,6 +223,14 @@
               </div>
             </div>
 
+            <div class="chat-quick-chips">
+              <span class="chip-label">Quick Prompts:</span>
+              <button class="chip-btn" onclick="sendQuickPrompt('Explain the IELTS Advantage 100% Rule for Task 2 question analysis.')">🧭 100% Rule Analysis</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('Give me a Band 8+ cue card opening structure for Part 2 Speaking.')">🎙️ Part 2 Cue Opening</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('How do I use negative adverbial inversion to boost GRA to Band 8?')">📖 Inversion in Writing</button>
+              <button class="chip-btn" onclick="sendQuickPrompt('What are top academic collocations for environmental essay topics?')">🌿 Environmental Lexis</button>
+            </div>
+
             <div class="chat-input-bar">
               <input type="text" id="chatInput" placeholder="Ask a grammar rule (e.g. affect vs effect), type 'I am agree', or ask for an IELTS prompt..." />
               <button id="voiceInputBtn" class="btn btn-icon" title="Speak message (Web Speech API)">🎙️</button>
@@ -195,10 +262,18 @@
 
           <!-- Studio Navigation Sub-bar -->
           <div class="sub-nav-bar mb-3">
-            <button class="btn btn-sm btn-primary active" id="btnAdvTab_analyzer" onclick="switchAdvantageSubTab('analyzer')">1. Question Breakdown Questionnaire</button>
-            <button class="btn btn-sm btn-outline" id="btnAdvTab_coffee" onclick="switchAdvantageSubTab('coffee')">2. Coffee Shop Idea Generator</button>
-            <button class="btn btn-sm btn-outline" id="btnAdvTab_peel" onclick="switchAdvantageSubTab('peel')">3. PEEL Paragraph Blueprint</button>
-            <button class="btn btn-sm btn-outline" id="btnAdvTab_checklist" onclick="switchAdvantageSubTab('checklist')">4. 10-Point Self-Assessment</button>
+            <button class="btn btn-sub-tool active" id="btnAdvTab_analyzer" onclick="switchAdvantageSubTab('analyzer')">
+              <span class="tool-step">1</span> <span class="tool-icon">🧭</span> Question Breakdown
+            </button>
+            <button class="btn btn-sub-tool" id="btnAdvTab_coffee" onclick="switchAdvantageSubTab('coffee')">
+              <span class="tool-step">2</span> <span class="tool-icon">☕</span> Coffee Shop Method
+            </button>
+            <button class="btn btn-sub-tool" id="btnAdvTab_peel" onclick="switchAdvantageSubTab('peel')">
+              <span class="tool-step">3</span> <span class="tool-icon">🧱</span> PEEL Blueprint
+            </button>
+            <button class="btn btn-sub-tool" id="btnAdvTab_checklist" onclick="switchAdvantageSubTab('checklist')">
+              <span class="tool-step">4</span> <span class="tool-icon">📋</span> 10-Point Audit
+            </button>
           </div>
 
           <!-- Sub-Tab 1: Question Breakdown Questionnaire -->
@@ -208,6 +283,15 @@
               <span class="badge-role">Pillar 1: Task Response</span>
             </div>
             <p class="small-text mt-1">Select an official essay prompt or type your own question to deconstruct it into its fundamental components.</p>
+
+            <div class="chip-selector-bar mt-2" id="advPromptChips">
+              <span class="chip-label">Quick Prompts:</span>
+              <button class="chip-btn active" onclick="selectAdvantageChip('stem', this)">🔬 STEM vs Arts</button>
+              <button class="chip-btn" onclick="selectAdvantageChip('ubi', this)">🤖 AI & UBI</button>
+              <button class="chip-btn" onclick="selectAdvantageChip('tourism', this)">✈️ Mass Tourism</button>
+              <button class="chip-btn" onclick="selectAdvantageChip('traffic', this)">🚗 Traffic Congestion</button>
+              <button class="chip-btn" onclick="selectAdvantageChip('fashion', this)">👗 Fast Fashion</button>
+            </div>
 
             <div class="form-group mt-2">
               <label for="advPromptSelect"><strong>Select Practice Prompt:</strong></label>
@@ -353,17 +437,31 @@
 
           <!-- Sub-bar for Grammar Modes -->
           <div class="sub-nav-bar mb-3">
-            <button class="btn btn-sm btn-primary active" id="btnGrammar_fillup" onclick="switchGrammarMode('fillup')">✏️ Interactive Grammar Fill-Up (Clozes)</button>
-            <button class="btn btn-sm btn-outline" id="btnGrammar_adaptive" onclick="switchGrammarMode('adaptive')">🎯 Personalized Weakness Lessons</button>
+            <button class="btn btn-sub-tool active" id="btnGrammar_fillup" onclick="switchGrammarMode('fillup')">
+              <span class="tool-icon">✏️</span> Interactive Clozes (12 Drills)
+            </button>
+            <button class="btn btn-sub-tool" id="btnGrammar_adaptive" onclick="switchGrammarMode('adaptive')">
+              <span class="tool-icon">🎯</span> Personalized Weakness Lessons
+            </button>
           </div>
 
           <!-- Mode 1: Grammar Fill-Up -->
           <div id="grammarFillupView">
             <div class="card mb-3">
               <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                <div>
-                  <span style="font-weight: 600; font-size: 0.9rem; margin-right: 8px;">Filter Category:</span>
-                  <select id="grammarCategorySelect" class="form-select" onchange="filterFillupDrills(this.value)">
+                <div style="flex: 1;">
+                  <span style="font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 6px; display: block;">Drill Categories & Syntax:</span>
+                  <div class="chip-selector-bar" id="grammarCategoryChips">
+                    <button class="chip-btn active" onclick="selectGrammarFilter('all', this)">🌟 All (12 Drills)</button>
+                    <button class="chip-btn" onclick="selectGrammarFilter('Conditionals', this)">⚡ Conditionals</button>
+                    <button class="chip-btn" onclick="selectGrammarFilter('Inversion', this)">🔄 Inversion (Band 8+)</button>
+                    <button class="chip-btn" onclick="selectGrammarFilter('Passive Voice & Impersonal Structures', this)">🛡️ Passive & Impersonal</button>
+                    <button class="chip-btn" onclick="selectGrammarFilter('Relative & Participle Clauses', this)">🧩 Participle Clauses</button>
+                    <button class="chip-btn" onclick="selectGrammarFilter('Hedging & Modality', this)">🌿 Hedging</button>
+                    <button class="chip-btn" onclick="selectGrammarFilter('Subject-Verb Agreement', this)">⚖️ Subject-Verb</button>
+                    <button class="chip-btn" onclick="selectGrammarFilter('Articles & Countability', this)">🔤 Articles</button>
+                  </div>
+                  <select id="grammarCategorySelect" class="form-select mt-1" style="display: none;" onchange="filterFillupDrills(this.value)">
                     <option value="all">All Categories (12 Clozes)</option>
                     <option value="Conditionals">Conditionals (Band 7-9)</option>
                     <option value="Passive Voice & Impersonal Structures">Passive Voice & Impersonal</option>
@@ -405,29 +503,51 @@
 
           <!-- Sub-bar for Vocab Modes -->
           <div class="sub-nav-bar mb-3">
-            <button class="btn btn-sm btn-primary active" id="btnVocab_vault" onclick="switchVocabMode('vault')">📚 Topic Vocabulary Vault</button>
-            <button class="btn btn-sm btn-outline" id="btnVocab_collocations" onclick="switchVocabMode('collocations')">🔗 Collocation Matcher</button>
-            <button class="btn btn-sm btn-outline" id="btnVocab_upgrades" onclick="switchVocabMode('upgrades')">🚀 Lexical Upgrade Clinic</button>
-            <button class="btn btn-sm btn-outline" id="btnVocab_srs" onclick="switchVocabMode('srs')">🗂️ SM-2 Flashcards (<span id="srsTabCount">24</span>)</button>
+            <button class="btn btn-sub-tool active" id="btnVocab_vault" onclick="switchVocabMode('vault')">
+              <span class="tool-icon">📚</span> 10 Topic Vaults
+            </button>
+            <button class="btn btn-sub-tool" id="btnVocab_collocations" onclick="switchVocabMode('collocations')">
+              <span class="tool-icon">🔗</span> Collocation Matcher
+            </button>
+            <button class="btn btn-sub-tool" id="btnVocab_upgrades" onclick="switchVocabMode('upgrades')">
+              <span class="tool-icon">🚀</span> Lexical Upgrade Clinic
+            </button>
+            <button class="btn btn-sub-tool" id="btnVocab_srs" onclick="switchVocabMode('srs')">
+              <span class="tool-icon">🗂️</span> SM-2 Flashcards (<span id="srsTabCount">24</span>)
+            </button>
           </div>
 
           <!-- Mode 1: Topic Vocabulary Vault -->
           <div id="vocabVaultView" class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div class="section-title-row">
               <h3>10 High-Frequency IELTS Academic Topic Vaults</h3>
-              <select id="vocabTopicSelect" class="form-select" onchange="renderVocabTopic(this.value)">
-                <option value="environment">1. Environment & Climate Change</option>
-                <option value="education">2. Education & Academic Curricula</option>
-                <option value="technology">3. Technology & Automation</option>
-                <option value="health">4. Health, Diet & Modern Lifestyles</option>
-                <option value="crime">5. Crime, Justice & Rehabilitation</option>
-                <option value="globalization">6. Globalization & Cultural Identity</option>
-                <option value="work">7. Work, Employment & Automation</option>
-                <option value="urbanization">8. Urbanization & Housing</option>
-                <option value="media">9. Media & Advertising</option>
-                <option value="society">10. Society, Youth & Aging</option>
-              </select>
+              <span class="badge-role">Band 8+ Lexical Vault</span>
             </div>
+            <div class="chip-selector-bar mt-2" id="vocabTopicChips">
+              <span class="chip-label">Topics:</span>
+              <button class="chip-btn active" onclick="selectVocabTopicChip('environment', this)">🌿 Environment</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('education', this)">🎓 Education</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('technology', this)">🤖 Technology</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('health', this)">🩺 Health</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('crime', this)">⚖️ Crime</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('globalization', this)">🌐 Globalisation</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('work', this)">💼 Economy</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('urbanization', this)">🏙️ Urbanisation</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('media', this)">📺 Media</button>
+              <button class="chip-btn" onclick="selectVocabTopicChip('society', this)">👥 Society</button>
+            </div>
+            <select id="vocabTopicSelect" class="form-select mt-1" style="display: none;" onchange="renderVocabTopic(this.value)">
+              <option value="environment">1. Environment & Climate Change</option>
+              <option value="education">2. Education & Academic Curricula</option>
+              <option value="technology">3. Technology & Automation</option>
+              <option value="health">4. Health, Diet & Modern Lifestyles</option>
+              <option value="crime">5. Crime, Justice & Rehabilitation</option>
+              <option value="globalization">6. Globalization & Cultural Identity</option>
+              <option value="work">7. Work, Employment & Automation</option>
+              <option value="urbanization">8. Urbanization & Housing</option>
+              <option value="media">9. Media & Advertising</option>
+              <option value="society">10. Society, Youth & Aging</option>
+            </select>
 
             <div id="vocabTopicContent" class="mt-3">
               <!-- Dynamically populated topic cards -->
@@ -489,17 +609,21 @@
 
           <!-- Reading Passage Selector -->
           <div class="card mb-3">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-              <div>
-                <label for="readingPassageSelect"><strong>Select Academic Passage:</strong></label>
-                <select id="readingPassageSelect" class="form-select" onchange="switchReadingPassage(this.value)">
-                  <option value="acad_p1">Passage 1: Deep-Sea Hydrothermal Ecosystems (Biology & Geology)</option>
-                  <option value="acad_p2">Passage 2: Cognitive Architecture of Bilingualism (Neuroscience)</option>
-                  <option value="acad_p3">Passage 3: Urban Heat Islands & Microclimates (Architecture & Ecology)</option>
-                </select>
-              </div>
-              <button id="toggleSynonymTableBtn" class="btn btn-outline btn-sm" onclick="toggleSynonymTable()">🔍 Show Keyword & Synonym Mapping Table</button>
+            <div class="section-title-row">
+              <h3>Cambridge Academic Reading Passages</h3>
+              <button id="toggleSynonymTableBtn" class="btn btn-outline btn-sm" onclick="toggleSynonymTable()">🔍 Keyword & Synonym Table</button>
             </div>
+            <div class="chip-selector-bar mt-2" id="readingPassageChips">
+              <span class="chip-label">Passages:</span>
+              <button class="chip-btn active" onclick="selectReadingPassageChip('acad_p1', this)">🌊 Passage 1: Hydrothermal Ecosystems</button>
+              <button class="chip-btn" onclick="selectReadingPassageChip('acad_p2', this)">🧠 Passage 2: Bilingual Cognition</button>
+              <button class="chip-btn" onclick="selectReadingPassageChip('acad_p3', this)">🏙️ Passage 3: Urban Heat Islands</button>
+            </div>
+            <select id="readingPassageSelect" class="form-select mt-1" style="display: none;" onchange="switchReadingPassage(this.value)">
+              <option value="acad_p1">Passage 1: Deep-Sea Hydrothermal Ecosystems (Biology & Geology)</option>
+              <option value="acad_p2">Passage 2: Cognitive Architecture of Bilingualism (Neuroscience)</option>
+              <option value="acad_p3">Passage 3: Urban Heat Islands & Microclimates (Architecture & Ecology)</option>
+            </select>
             <div id="synonymTableBox" class="mt-3" style="display: none;">
               <!-- Synonym Table Injected -->
             </div>
@@ -514,7 +638,7 @@
             <div class="card questions-pane">
               <h3>Questions</h3>
               <div id="readingQuestionsList" class="mt-2"></div>
-              <button id="submitReadingBtn" class="btn btn-primary mt-3">Submit Reading Answers</button>
+              <button id="submitReadingBtn" class="btn btn-hero-exam mt-3">Submit Reading Answers</button>
               <div id="readingScoreReport" class="report-box mt-3" style="display:none;"></div>
             </div>
           </div>
@@ -528,18 +652,18 @@
           </div>
 
           <div class="card">
-            <div class="section-selector-bar mb-3">
-              <span style="font-weight: 600; margin-right: 8px; font-size: 0.9rem;">Select Section:</span>
-              <button class="btn btn-sm btn-primary active" id="secBtn_sec_1" onclick="switchListeningSection('sec_1')">Sec 1: Accommodation</button>
-              <button class="btn btn-sm btn-outline" id="secBtn_sec_2" onclick="switchListeningSection('sec_2')">Sec 2: Arts Centre</button>
-              <button class="btn btn-sm btn-outline" id="secBtn_sec_3" onclick="switchListeningSection('sec_3')">Sec 3: Solar Microgrids</button>
-              <button class="btn btn-sm btn-outline" id="secBtn_sec_4" onclick="switchListeningSection('sec_4')">Sec 4: Cetacean Bioacoustics</button>
+            <div class="chip-selector-bar mb-3" id="listeningSectionChips">
+              <span class="chip-label">Sections:</span>
+              <button class="chip-btn active" id="secBtn_sec_1" onclick="selectListeningSectionChip('sec_1', this)">🏘️ Sec 1: Accommodation</button>
+              <button class="chip-btn" id="secBtn_sec_2" onclick="selectListeningSectionChip('sec_2', this)">🎭 Sec 2: Arts Centre</button>
+              <button class="chip-btn" id="secBtn_sec_3" onclick="selectListeningSectionChip('sec_3', this)">⚡ Sec 3: Solar Microgrids</button>
+              <button class="chip-btn" id="secBtn_sec_4" onclick="selectListeningSectionChip('sec_4', this)">🐋 Sec 4: Cetaceans</button>
             </div>
 
             <h3 id="listeningTitle">Loading Listening Scenario...</h3>
             <div class="audio-control-bar mt-2">
-              <button id="playAudioScriptBtn" class="btn btn-secondary">🔊 Play Audio with Speech Synthesizer</button>
-              <button id="toggleTranscriptBtn" class="btn btn-outline btn-sm">Show / Hide Transcript</button>
+              <button id="playAudioScriptBtn" class="btn btn-hero-audio">🔊 Play Audio Simulation</button>
+              <button id="toggleTranscriptBtn" class="btn btn-cat-ghost btn-sm">📄 Show / Hide Transcript</button>
             </div>
             <div id="listeningTranscriptBox" class="transcript-box mt-2" style="display:none;"></div>
 
@@ -557,19 +681,25 @@
           </div>
 
           <div class="card mb-3">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-              <div>
-                <label for="writingPromptSelect"><strong>Select Task 2 Prompt:</strong></label>
-                <select id="writingPromptSelect" class="form-select" onchange="switchWritingPrompt(this.value)">
-                  <option value="acad_t2_stem">STEM vs Creative Arts (Discuss Both Views)</option>
-                  <option value="acad_t2_ubi">Universal Basic Income & AI (Opinion / Agree or Disagree)</option>
-                  <option value="acad_t2_tourism">Mass Tourism & Preservation (Advantages vs Disadvantages)</option>
-                  <option value="acad_t2_traffic">Urban Traffic Congestion (Causes & Solutions)</option>
-                  <option value="acad_t2_fast_fashion">Fast Fashion & Sustainability (Direct Two-Part Questions)</option>
-                </select>
-              </div>
-              <button class="btn btn-outline btn-sm" id="toggleModelEssayBtn" onclick="toggleModelEssay()">📖 View Band 9 Model Essay</button>
+            <div class="section-title-row">
+              <h3>Academic Task 2 Essay Types</h3>
+              <button class="btn btn-hero-advantage btn-sm" id="toggleModelEssayBtn" onclick="toggleModelEssay()">💡 Band 9 Model Essay</button>
             </div>
+            <div class="chip-selector-bar mt-2" id="writingPromptChips">
+              <span class="chip-label">Question Types:</span>
+              <button class="chip-btn active" onclick="selectWritingPromptChip('acad_t2_stem', this)">⚖️ Discuss Both Views</button>
+              <button class="chip-btn" onclick="selectWritingPromptChip('acad_t2_ubi', this)">💡 Opinion / Agree-Disagree</button>
+              <button class="chip-btn" onclick="selectWritingPromptChip('acad_t2_tourism', this)">⚖️ Advantages vs Disadvantages</button>
+              <button class="chip-btn" onclick="selectWritingPromptChip('acad_t2_traffic', this)">🛠️ Causes & Solutions</button>
+              <button class="chip-btn" onclick="selectWritingPromptChip('acad_t2_fast_fashion', this)">❓ Direct Two-Part</button>
+            </div>
+            <select id="writingPromptSelect" class="form-select mt-1" style="display: none;" onchange="switchWritingPrompt(this.value)">
+              <option value="acad_t2_stem">STEM vs Creative Arts (Discuss Both Views)</option>
+              <option value="acad_t2_ubi">Universal Basic Income & AI (Opinion / Agree or Disagree)</option>
+              <option value="acad_t2_tourism">Mass Tourism & Preservation (Advantages vs Disadvantages)</option>
+              <option value="acad_t2_traffic">Urban Traffic Congestion (Causes & Solutions)</option>
+              <option value="acad_t2_fast_fashion">Fast Fashion & Sustainability (Direct Two-Part Questions)</option>
+            </select>
 
             <!-- Band 9 Model Essay Box (Toggleable) -->
             <div id="modelEssayBox" class="mt-3 p-3 callout-card" style="display: none;">
@@ -592,7 +722,7 @@
               </div>
             </div>
 
-            <button id="evaluateWritingBtn" class="btn btn-primary mt-3">Evaluate Essay with Rubrics</button>
+            <button id="evaluateWritingBtn" class="btn btn-hero-exam mt-3">🚀 Evaluate Essay with Rubrics</button>
             <div id="writingEvalReport" class="report-box mt-3" style="display:none;"></div>
           </div>
         </section>
@@ -626,24 +756,31 @@
 
           <!-- Topic Selection & Controls -->
           <div class="card mb-3">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-              <div>
-                <label for="speakingExamSetSelect" style="font-weight: 600; font-size: 0.9rem; margin-right: 8px;">Official Exam Topic:</label>
-                <select id="speakingExamSetSelect" class="form-select" onchange="onSpeakingSetChanged(this.value)">
-                  <option value="0">Exam Set 1: Career, Goals & Ambition</option>
-                  <option value="1">Exam Set 2: Sustainable Living & Urban Heritage</option>
-                  <option value="2">Exam Set 3: Artificial Intelligence & Automation</option>
-                  <option value="3">Exam Set 4: International Tourism & Overtourism</option>
-                  <option value="4">Exam Set 5: Modern Education & Practical Skills</option>
-                  <option value="5">Exam Set 6: Public Health & Fast-Paced Lifestyles</option>
-                </select>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <button id="startInterviewBtn" class="btn btn-primary btn-sm">▶️ Begin Official Interview</button>
-                <button id="viewBand9SpeakingBtn" class="btn btn-outline btn-sm" onclick="toggleBand9SpeakingModel()">💡 View Band 9 Model</button>
-                <button id="resetInterviewBtn" class="btn btn-outline btn-sm">🔄 Reset</button>
+            <div class="section-title-row">
+              <h3>Cambridge 3-Part Speaking Tests</h3>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button id="startInterviewBtn" class="btn btn-hero-audio btn-sm btn-pulse">🎙️ Begin Interview</button>
+                <button id="viewBand9SpeakingBtn" class="btn btn-hero-advantage btn-sm" onclick="toggleBand9SpeakingModel()">💡 Band 9 Model</button>
+                <button id="resetInterviewBtn" class="btn btn-cat-ghost btn-sm">🔄 Reset</button>
               </div>
             </div>
+            <div class="chip-selector-bar mt-2" id="speakingExamChips">
+              <span class="chip-label">Exam Sets:</span>
+              <button class="chip-btn active" onclick="selectSpeakingSetChip('0', this)">🎯 Set 1: Career & Ambition</button>
+              <button class="chip-btn" onclick="selectSpeakingSetChip('1', this)">🌿 Set 2: Urban Heritage</button>
+              <button class="chip-btn" onclick="selectSpeakingSetChip('2', this)">🤖 Set 3: AI & Automation</button>
+              <button class="chip-btn" onclick="selectSpeakingSetChip('3', this)">✈️ Set 4: Overtourism</button>
+              <button class="chip-btn" onclick="selectSpeakingSetChip('4', this)">🎓 Set 5: Modern Education</button>
+              <button class="chip-btn" onclick="selectSpeakingSetChip('5', this)">🏥 Set 6: Fast Lifestyles</button>
+            </div>
+            <select id="speakingExamSetSelect" class="form-select mt-1" style="display: none;" onchange="onSpeakingSetChanged(this.value)">
+              <option value="0">Exam Set 1: Career, Goals & Ambition</option>
+              <option value="1">Exam Set 2: Sustainable Living & Urban Heritage</option>
+              <option value="2">Exam Set 3: Artificial Intelligence & Automation</option>
+              <option value="3">Exam Set 4: International Tourism & Overtourism</option>
+              <option value="4">Exam Set 5: Modern Education & Practical Skills</option>
+              <option value="5">Exam Set 6: Public Health & Fast-Paced Lifestyles</option>
+            </select>
 
             <!-- Band 9 Speaking Model (Toggleable) -->
             <div id="speakingBand9ModelBox" class="mt-3 p-3 callout-card" style="display: none;">
@@ -697,9 +834,9 @@
                 <span id="speakingStatusText" style="font-size: 0.85rem; color: var(--text-secondary);">Tap microphone to reply to examiner</span>
               </div>
               <div class="speech-btn-group mt-2">
-                <button id="startSpeechRecordBtn" class="btn btn-primary" disabled>🎙️ Answer Examiner (Speak)</button>
-                <button id="stopSpeechRecordBtn" class="btn btn-secondary" disabled>⏹️ Send Answer to Examiner</button>
-                <button id="replayQuestionBtn" class="btn btn-outline" style="font-size: 0.85rem;">🔊 Repeat Question</button>
+                <button id="startSpeechRecordBtn" class="btn btn-hero-audio" disabled>🎙️ Answer Examiner (Speak)</button>
+                <button id="stopSpeechRecordBtn" class="btn btn-hero-exam" disabled>⏹️ Send Answer to Examiner</button>
+                <button id="replayQuestionBtn" class="btn btn-cat-ghost" style="font-size: 0.85rem;">🔊 Repeat Question</button>
               </div>
               <textarea id="speakingTranscriptInput" rows="3" class="mt-2" placeholder="Your live response appears here (or you can type your answer)..."></textarea>
             </div>
@@ -783,7 +920,7 @@
                 <div class="developer-specs-grid">
                   <div class="spec-cell">
                     <span class="spec-label">Version</span>
-                    <strong class="spec-value" id="settingsVersionValue">v1.2.0 Production</strong>
+                    <strong class="spec-value" id="settingsVersionValue">v1.3.0 Production</strong>
                   </div>
                   <div class="spec-cell">
                     <span class="spec-label">Engine</span>

@@ -1,24 +1,18 @@
 {
-  "version": "1.2.0",
-  "versionCode": 2,
-  "releaseName": "IELTS Advantage Questionnaire Studio & Expanded Modules",
+  "version": "1.3.0",
+  "versionCode": 3,
+  "releaseName": "UI Modernization, Distinguishable Button System & Categorized Workspaces",
   "releaseDate": "2026-10-04",
   "type": "minor",
   "changelog": {
     "highlights": [
-      "IELTS Advantage Questionnaire Studio (#tab-advantage) with 4 interactive tools",
-      "Question Breakdown Questionnaire implementing Chris Pell's 100% Rule",
-      "The Coffee Shop Method for rapid, stress-free Task 2 idea generation",
-      "PEEL Paragraph Blueprint for structured academic essay bodies",
-      "10-Point Pre-Submission Self-Assessment Checklist with live score calculation",
-      "Interactive Grammar Fill-Up Cloze drills across Band 7-9 syntax structures",
-      "10 High-Frequency IELTS Topic Vocabulary Vaults with collocations",
-      "Collocation Matcher & Lexical Upgrade Clinic (Band 6 to 8+)",
-      "3 Full Cambridge Academic Reading Passages with TFNG & synonym mapping",
-      "6 Cambridge Speaking Examiner Sets with Dr. Harrison & 3-Step Strategy",
-      "5 Diverse Writing Task 2 prompts with Band 9 model essays",
-      "Expanded 12-question CEFR Diagnostic Assessment",
-      "Signed release APK with official release keystore and Android 11-16 compatibility"
+      "Categorized Sidebar Architecture: 4 distinct groups (Strategy & Core, Cambridge 4-Skills, Methodology & Drills, Tracking & System) with colored category dots and informative badges",
+      "Mobile Horizontal Category Filter: Segmented bar for instant filtering between Exam, Advantage Drills, and Core dashboards on smartphones",
+      "Distinguishable Hero Button Palette: Tactical tactile feedback, deep glowing action buttons (.btn-hero-exam, .btn-hero-advantage, .btn-hero-audio, .btn-pulse, .btn-cat-ghost)",
+      "Interactive Horizontal Chip Selector Bars: Replaced dull dropdown selects with tactile chips for Reading Passages, Listening Sections, Writing Essay Types, Speaking Exam Sets, Grammar Syntax, and Vocab Topics",
+      "Subcategorized Tool Switchers (.btn-sub-tool): Smooth numbered tool navigation across IELTS Advantage Studio, Grammar Coach, and Vocabulary Vault",
+      "AI Tutor Quick Prompt Chips: Instant 1-touch exploration of IELTS Advantage 100% Rule, Band 8 Cue Card openings, and GRA Inversion",
+      "Full synchronization to Android Release APK, standalone Offline Local Engine, and website downloads"
     ]
   }
 }

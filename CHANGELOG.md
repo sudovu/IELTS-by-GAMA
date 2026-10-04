@@ -9,6 +9,36 @@ The versioning follows the convention:
 
 ---
 
+## [v1.3.0] - 2026-10-04 (Big Changes: UI Modernization, Button System & Categorization)
+
+### Added
+- **Categorized Multi-Tier Navigation Structure**:
+  - Reorganized sidebar into 4 functional category blocks: *Strategy & Core*, *Cambridge 4-Skills Suite*, *Methodology & Drills*, and *Tracking & System*.
+  - Added category accent dots and metadata badges (e.g., `12 Qs`, `Dr. Harrison`, `Task 1 & 2`, `SM-2 SRS`).
+  - Added mobile horizontal category filter bar (`.mobile-cat-filter`) allowing quick segmented view toggling on smartphones.
+- **Distinguishable Button System & Tactile Feedback**:
+  - Implemented 3D active tactile states (`transform: translateY(2px)`, inset shadows) on all interactive buttons.
+  - Added hero action buttons: `.btn-hero-exam` (emerald glow for exam submissions), `.btn-hero-advantage` (amber glow for methodology tools), `.btn-hero-audio` (cyan pulse for audio and speaking).
+  - Added `.btn-cat-ghost` for secondary tools and `.btn-pulse` for live examiner/interview triggers.
+- **Interactive Chip Selector Bars**:
+  - Replaced native select dropdowns with horizontal sliding chip bars (`.chip-selector-bar`, `.chip-btn`):
+    - Cambridge Academic Reading Passages (1, 2, 3)
+    - Listening Sections (1, 2, 3, 4)
+    - Writing Task 2 Essay Types (5 prompt types)
+    - Speaking Exam Sets (Sets 1 to 6)
+    - Grammar Cloze Syntax categories (8 grammatical filters)
+    - Vocabulary Topic Vaults (10 topic categories)
+- **Subcategorized Tool Switchers (`.btn-sub-tool`)**:
+  - Distinct numbered sub-bar navigation for IELTS Advantage Studio (1. Question Breakdown, 2. Coffee Shop Method, 3. PEEL Blueprint, 4. 10-Point Audit).
+  - Clean mode switchers for Grammar Coach (Clozes vs Personalized Lessons) and Vocabulary (Vault, Collocations, Upgrades, SRS).
+- **AI Tutor Chat Quick Prompts**:
+  - One-touch prompt chips for 100% Rule question analysis, Part 2 cue card opening templates, adverbial inversion in writing, and environmental collocations.
+- **Platform & Mobile Sync**:
+  - Bumped Android Gradle build to `versionCode = 3`, `versionName = "1.3.0"`.
+  - Synced assets to `platform/android/app/src/main/assets/www/`.
+
+---
+
 ## [v1.2.0] - 2026-10-04 (Big Changes: IELTS Advantage & Content Expansion)
 
 ### Added

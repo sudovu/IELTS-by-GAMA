@@ -6,7 +6,7 @@
  */
 
 const API_BASE = "";
-const APP_VERSION = "1.2.0";
+const APP_VERSION = "1.3.0";
 
 // Global State
 let appState = {
@@ -1163,7 +1163,7 @@ function updateScreenDimensions() {
 window.addEventListener("resize", updateScreenDimensions);
 
 // -------------------------------------------------------------
-// Navigation Tabs
+// Navigation Tabs & Categorization
 // -------------------------------------------------------------
 function initNavigation() {
   const navItems = document.querySelectorAll(".nav-item");
@@ -1190,6 +1190,9 @@ function initNavigation() {
     });
   });
 
+  // Mobile Category Filter Strip
+  initMobileCategoryFilter();
+
   // Connectivity toggle
   const toggleBtn = document.getElementById("toggleOfflineBtn");
   toggleBtn.addEventListener("click", () => {
@@ -1204,6 +1207,120 @@ function initNavigation() {
     document.body.classList.toggle("light-theme");
   });
 }
+
+function initMobileCategoryFilter() {
+  const filterBtns = document.querySelectorAll(".cat-filter-btn");
+  const navGroups = document.querySelectorAll(".nav-category-group");
+  filterBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const filter = btn.getAttribute("data-filter");
+      navGroups.forEach(group => {
+        const groupCat = group.getAttribute("data-group");
+        if (filter === "all") {
+          group.style.display = "";
+        } else if (filter === "exam") {
+          group.style.display = groupCat === "exam" ? "" : "none";
+        } else if (filter === "advantage") {
+          group.style.display = groupCat === "advantage" ? "" : "none";
+        } else if (filter === "core") {
+          group.style.display = (groupCat === "core" || groupCat === "system") ? "" : "none";
+        } else {
+          group.style.display = groupCat === filter ? "" : "none";
+        }
+      });
+    });
+  });
+}
+
+// Quick AI Tutor Chat Prompt helper
+window.sendQuickPrompt = function(promptText) {
+  const input = document.getElementById("chatInput");
+  if (input) {
+    input.value = promptText;
+    const sendBtn = document.getElementById("sendMessageBtn");
+    if (sendBtn) sendBtn.click();
+  }
+};
+
+// Chip Selector Bridge Functions
+window.selectAdvantageChip = function(promptKey, btn) {
+  const container = document.getElementById("advantagePromptChips");
+  if (container) {
+    container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
+  }
+  if (btn) btn.classList.add("active");
+  const sel = document.getElementById("advantagePromptSelect");
+  if (sel) sel.value = promptKey;
+  loadAdvantagePrompt(promptKey);
+};
+
+window.selectGrammarFilter = function(category, btn) {
+  const container = document.getElementById("grammarClozeFilterChips");
+  if (container) {
+    container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
+  }
+  if (btn) btn.classList.add("active");
+  const sel = document.getElementById("clozeCategorySelect");
+  if (sel) sel.value = category;
+  filterFillupDrills(category);
+};
+
+window.selectVocabTopicChip = function(topicKey, btn) {
+  const container = document.getElementById("vocabTopicFilterChips");
+  if (container) {
+    container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
+  }
+  if (btn) btn.classList.add("active");
+  const sel = document.getElementById("vocabTopicSelect");
+  if (sel) sel.value = topicKey;
+  renderVocabTopic(topicKey);
+};
+
+window.selectReadingPassageChip = function(passageId, btn) {
+  const container = document.getElementById("readingPassageChips");
+  if (container) {
+    container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
+  }
+  if (btn) btn.classList.add("active");
+  const sel = document.getElementById("readingPassageSelect");
+  if (sel) sel.value = passageId;
+  switchReadingPassage(passageId);
+};
+
+window.selectListeningSectionChip = function(secId, btn) {
+  const container = document.getElementById("listeningSectionChips");
+  if (container) {
+    container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
+  }
+  if (btn) btn.classList.add("active");
+  switchListeningSection(secId);
+};
+
+window.selectWritingPromptChip = function(promptId, btn) {
+  const container = document.getElementById("writingPromptChips");
+  if (container) {
+    container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
+  }
+  if (btn) btn.classList.add("active");
+  const sel = document.getElementById("writingPromptSelect");
+  if (sel) sel.value = promptId;
+  switchWritingPrompt(promptId);
+};
+
+window.selectSpeakingSetChip = function(setId, btn) {
+  const container = document.getElementById("speakingExamChips");
+  if (container) {
+    container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
+  }
+  if (btn) btn.classList.add("active");
+  const sel = document.getElementById("speakingExamSetSelect");
+  if (sel) {
+    sel.value = setId;
+    if (window.onSpeakingSetChanged) window.onSpeakingSetChanged(setId);
+  }
+};
 
 function updateConnectivityStatus() {
   const badge = document.getElementById("connectivityBadge");
@@ -1439,7 +1556,7 @@ function switchAdvantageSubTab(subTab) {
   ["analyzer", "coffee", "peel", "checklist"].forEach(t => {
     const btn = document.getElementById("btnAdvTab_" + t);
     const pane = document.getElementById("advSubPane_" + t);
-    if (btn) btn.className = t === subTab ? "btn btn-sm btn-primary active" : "btn btn-sm btn-outline";
+    if (btn) btn.className = t === subTab ? "btn btn-sub-tool active" : "btn btn-sub-tool";
     if (pane) pane.style.display = t === subTab ? "block" : "none";
   });
 }
@@ -1477,8 +1594,10 @@ let activeFillupDrills = [];
 
 function switchGrammarMode(mode) {
   appState.grammarMode = mode;
-  document.getElementById("btnGrammar_fillup").className = mode === "fillup" ? "btn btn-sm btn-primary active" : "btn btn-sm btn-outline";
-  document.getElementById("btnGrammar_adaptive").className = mode === "adaptive" ? "btn btn-sm btn-primary active" : "btn btn-sm btn-outline";
+  const btnFill = document.getElementById("btnGrammar_fillup");
+  const btnAdapt = document.getElementById("btnGrammar_adaptive");
+  if (btnFill) btnFill.className = mode === "fillup" ? "btn btn-sub-tool active" : "btn btn-sub-tool";
+  if (btnAdapt) btnAdapt.className = mode === "adaptive" ? "btn btn-sub-tool active" : "btn btn-sub-tool";
 
   document.getElementById("grammarFillupView").style.display = mode === "fillup" ? "block" : "none";
   document.getElementById("grammarAdaptiveView").style.display = mode === "adaptive" ? "block" : "none";
@@ -1689,7 +1808,7 @@ function switchVocabMode(mode) {
   ["vault", "collocations", "upgrades", "srs"].forEach(m => {
     const btn = document.getElementById("btnVocab_" + m);
     const view = document.getElementById("vocab" + m.charAt(0).toUpperCase() + m.slice(1) + "View");
-    if (btn) btn.className = m === mode ? "btn btn-sm btn-primary active" : "btn btn-sm btn-outline";
+    if (btn) btn.className = m === mode ? "btn btn-sub-tool active" : "btn btn-sub-tool";
     if (view) view.style.display = m === mode ? "block" : "none";
   });
 
@@ -1919,7 +2038,7 @@ async function switchListeningSection(secId) {
   appState.currentListeningSection = secId;
   ["sec_1", "sec_2", "sec_3", "sec_4"].forEach(id => {
     const b = document.getElementById("secBtn_" + id);
-    if (b) b.className = id === secId ? "btn btn-sm btn-primary active" : "btn btn-sm btn-outline";
+    if (b) b.className = id === secId ? "chip-btn active" : "chip-btn";
   });
 
   const sec = await callApi(`/api/listening?sec_id=${secId}`);
