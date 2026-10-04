@@ -1,26 +1,66 @@
 [
   {
-    "topic": "Academic Collocations",
-    "subtopic": "Verbs and Nouns",
-    "query_trigger": "academic collocations make a decision conduct research",
-    "compact_knowledge": "Essential IELTS Academic Collocations: 'conduct research', 'reach a consensus', 'implement a policy', 'make a significant contribution', 'exercise discretion'. Avoid unnatural phrases like 'do a research' or 'make a consensus'.",
+    "topic": "Environment & Energy",
+    "subtopic": "High-Yield Collocations",
+    "query_trigger": "environment climate energy collocations",
+    "compact_knowledge": "Band 7+ Environmental Collocations: 'curb carbon emissions', 'deplete finite natural resources', 'combat ecological degradation', 'transition to renewable alternatives', 'exert an irreversible toll on biodiversity', 'enforce stringent environmental regulations'.",
     "source": "curated",
     "confidence": 0.98
   },
   {
-    "topic": "Academic Adjectives",
-    "subtopic": "Magnitude and Evidence",
-    "query_trigger": "substantial empirical compelling evidence",
-    "compact_knowledge": "Band 7+ Lexical Upgrades: Replace 'big proof' with 'compelling empirical evidence'. Replace 'big change' with 'a substantial transformation / marked disparity'.",
+    "topic": "Education & Learning",
+    "subtopic": "Academic Collocations",
+    "query_trigger": "education curriculum schooling collocations",
+    "compact_knowledge": "Band 7+ Education Collocations: 'foster critical thinking skills', 'broaden one's intellectual horizons', 'tailor educational curricula', 'bridge the socioeconomic divide', 'pursue tertiary qualifications', 'instill civic values'.",
     "source": "curated",
-    "confidence": 0.97
+    "confidence": 0.98
   },
   {
-    "topic": "Phrasal Verbs vs Formal Register",
-    "subtopic": "Academic Writing Substitutes",
-    "query_trigger": "phrasal verbs formal alternatives writing task 2",
-    "compact_knowledge": "In IELTS Academic Writing Task 2, prefer single Latinate verbs over informal phrasal verbs: 'account for' -> 'constitute/explain'; 'bring about' -> 'engender/precipitate'; 'look into' -> 'investigate'; 'give up' -> 'relinquish'.",
+    "topic": "Technology & Automation",
+    "subtopic": "Digital Era Collocations",
+    "query_trigger": "technology artificial intelligence automation collocations",
+    "compact_knowledge": "Band 7+ Technology Collocations: 'streamline operational workflows', 'precipitate widespread technological disruption', 'pervasive algorithmic surveillance', 'compromise user data privacy', 'render routine labor obsolete', 'foster digital literacy'.",
     "source": "curated",
-    "confidence": 0.97
+    "confidence": 0.98
+  },
+  {
+    "topic": "Health & Modern Lifestyle",
+    "subtopic": "Public Health Collocations",
+    "query_trigger": "health diet lifestyle sedentary wellness",
+    "compact_knowledge": "Band 7+ Health Collocations: 'combat sedentary lifestyle habits', 'impose taxes on sugar-sweetened beverages', 'alleviate psychological strain', 'place a severe burden on healthcare infrastructure', 'bolster physiological resilience'.",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Crime & Justice",
+    "subtopic": "Legal & Social Systems",
+    "query_trigger": "crime punishment prison rehabilitation deterrent",
+    "compact_knowledge": "Band 7+ Crime Collocations: 'serve as a potent deterrent', 'rehabilitate repeat offenders', 'curb recidivism rates', 'integrate ex-convicts into mainstream society', 'address underlying socioeconomic determinants of crime'.",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Lexical Upgrades (Band 6 to Band 8+)",
+    "subtopic": "Replacing Informal Vocabulary",
+    "query_trigger": "lexical upgrades replace boring words a lot of very important",
+    "compact_knowledge": "Academic Precision: Replace 'a lot of' with 'a substantial proportion of / an abundance of'; replace 'very important' with 'of paramount importance / pivotal'; replace 'bad effect' with 'detrimental impact / adverse repercussions'; replace 'big problem' with 'formidable dilemma / pressing challenge'; replace 'help' with 'facilitate / bolster / expedite'.",
+    "source": "curated",
+    "confidence": 0.99
+  },
+  {
+    "topic": "Academic Verbs & Formal Substitutes",
+    "subtopic": "Replacing Informal Phrasal Verbs",
+    "query_trigger": "phrasal verbs formal alternatives writing task 2",
+    "compact_knowledge": "In IELTS Academic Writing, prefer single Latinate verbs over informal phrasal verbs: 'account for' -> 'constitute/explain'; 'bring about' -> 'engender/precipitate'; 'look into' -> 'investigate'; 'give up' -> 'relinquish'; 'put forward' -> 'postulate/propose'; 'deal with' -> 'address/confront'.",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Discourse Linkers & Transitionals",
+    "subtopic": "Cohesion and Nuance",
+    "query_trigger": "discourse linkers transitions cohesive devices furthermore",
+    "compact_knowledge": "Natural Cohesive Markers: 'To put this into perspective', 'By the same token', 'Notwithstanding that assertion', 'In stark contrast to', 'Consequently, this precipitates', 'A compelling case in point is...'. Avoid overused cliches like 'every coin has two sides' or 'in a nutshell'.",
+    "source": "curated",
+    "confidence": 0.98
   }
 ]

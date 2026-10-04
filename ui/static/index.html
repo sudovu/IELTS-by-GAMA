@@ -51,8 +51,11 @@
           <li class="nav-item" data-tab="diagnostic">
             <span class="nav-icon">🎯</span> <span class="nav-label">Diagnostic Test</span>
           </li>
+          <li class="nav-item" data-tab="advantage">
+            <span class="nav-icon">🧭</span> <span class="nav-label">Advantage Questionnaire</span>
+          </li>
           <li class="nav-item" data-tab="grammar">
-            <span class="nav-icon">📖</span> <span class="nav-label">Adaptive Grammar</span>
+            <span class="nav-icon">📖</span> <span class="nav-label">Grammar & Fill-Up</span>
           </li>
           <li class="nav-item" data-tab="vocab">
             <span class="nav-icon">🗂️</span> <span class="nav-label">Vocabulary & SRS</span>
@@ -61,7 +64,7 @@
             <span class="nav-icon">📑</span> <span class="nav-label">Reading Practice</span>
           </li>
           <li class="nav-item" data-tab="listening">
-            <span class="nav-icon">🎧</span> <span class="nav-label">Listening Practice</span>
+            <span class="nav-icon">🎧</span> <span class="nav-label">Listening Module</span>
           </li>
           <li class="nav-item" data-tab="writing">
             <span class="nav-icon">✍️</span> <span class="nav-label">Writing Studio</span>
@@ -107,14 +110,14 @@
 
             <div class="card stat-card">
               <span class="card-label">Target Band</span>
-              <div class="big-metric" id="targetBandMetric">7.0</div>
+              <div class="big-metric" id="targetBandMetric">7.5</div>
               <span class="metric-sub">Track: Academic</span>
             </div>
 
             <div class="card stat-card">
               <span class="card-label">SRS Flashcards Due</span>
               <div class="big-metric" id="srsDueMetric">0</div>
-              <span class="metric-sub">Spaced Repetition SM-2</span>
+              <span class="metric-sub">SuperMemo SM-2 SRS</span>
             </div>
 
             <div class="card stat-card">
@@ -145,20 +148,20 @@
         <section id="tab-chat" class="tab-pane">
           <div class="pane-header">
             <h2>Unified AI English Tutor</h2>
-            <p class="subtitle">Ask grammar rules, check sentences, or explore IELTS topics. 100% local by default.</p>
+            <p class="subtitle">Ask grammar rules, test sentences, or explore IELTS strategies. 100% local by default.</p>
           </div>
 
           <div class="chat-container card">
             <div id="chatMessages" class="chat-messages">
               <div class="message tutor">
                 <div class="msg-bubble">
-                  Hello! I am your AI English & IELTS Tutor. How can I help you today?
+                  Hello! I am your AI English & IELTS Tutor, powered by GAMA with IELTS Advantage methodology. How can I help you today?
                 </div>
               </div>
             </div>
 
             <div class="chat-input-bar">
-              <input type="text" id="chatInput" placeholder="Ask a grammar rule (e.g. affect vs effect), type 'I am agree', or request an IELTS prompt..." />
+              <input type="text" id="chatInput" placeholder="Ask a grammar rule (e.g. affect vs effect), type 'I am agree', or ask for an IELTS prompt..." />
               <button id="voiceInputBtn" class="btn btn-icon" title="Speak message (Web Speech API)">🎙️</button>
               <button id="sendMessageBtn" class="btn btn-primary">Send</button>
             </div>
@@ -168,43 +171,295 @@
         <!-- 3. Diagnostic Test Tab -->
         <section id="tab-diagnostic" class="tab-pane">
           <div class="pane-header">
-            <h2>Initial CEFR & IELTS Diagnostic Assessment</h2>
-            <p class="subtitle">Complete this 6-question diagnostic to benchmark your baseline CEFR and IELTS band.</p>
+            <h2>Comprehensive CEFR & IELTS Diagnostic Assessment</h2>
+            <p class="subtitle">12-question diagnostic benchmarking Grammar, Vocabulary, Reading, Listening, and IELTS Advantage methodology.</p>
           </div>
 
           <div class="card">
             <div id="diagnosticQuestionsContainer"></div>
             <button id="submitDiagnosticBtn" class="btn btn-primary mt-3">Submit Diagnostic</button>
-
             <div id="diagnosticReport" class="report-box mt-3" style="display: none;"></div>
           </div>
         </section>
 
-        <!-- 4. Adaptive Grammar Tab -->
-        <section id="tab-grammar" class="tab-pane">
+        <!-- 4. IELTS Advantage Questionnaire & Planning Tab (NEW) -->
+        <section id="tab-advantage" class="tab-pane">
           <div class="pane-header">
-            <h2>Adaptive Grammar Coach</h2>
-            <p class="subtitle">Targeted drills driven by your personal mistake frequency.</p>
+            <h2>IELTS Advantage Question Analysis & Planning Studio</h2>
+            <p class="subtitle">Inspired by Chris Pell's IELTS Advantage methodology: eliminate Band 5-6 traps through systematic question breakdown and the Coffee Shop Method.</p>
           </div>
 
-          <div class="card">
-            <div id="grammarSessionContent">
-              <p>Loading adaptive session...</p>
+          <!-- Studio Navigation Sub-bar -->
+          <div class="sub-nav-bar mb-3">
+            <button class="btn btn-sm btn-primary active" id="btnAdvTab_analyzer" onclick="switchAdvantageSubTab('analyzer')">1. Question Breakdown Questionnaire</button>
+            <button class="btn btn-sm btn-outline" id="btnAdvTab_coffee" onclick="switchAdvantageSubTab('coffee')">2. Coffee Shop Idea Generator</button>
+            <button class="btn btn-sm btn-outline" id="btnAdvTab_peel" onclick="switchAdvantageSubTab('peel')">3. PEEL Paragraph Blueprint</button>
+            <button class="btn btn-sm btn-outline" id="btnAdvTab_checklist" onclick="switchAdvantageSubTab('checklist')">4. 10-Point Self-Assessment</button>
+          </div>
+
+          <!-- Sub-Tab 1: Question Breakdown Questionnaire -->
+          <div id="advSubPane_analyzer" class="card">
+            <div class="section-title-row">
+              <h3>Question Analysis Questionnaire (The 100% Rule)</h3>
+              <span class="badge-role">Pillar 1: Task Response</span>
+            </div>
+            <p class="small-text mt-1">Select an official essay prompt or type your own question to deconstruct it into its fundamental components.</p>
+
+            <div class="form-group mt-2">
+              <label for="advPromptSelect"><strong>Select Practice Prompt:</strong></label>
+              <select id="advPromptSelect" class="form-select mt-1" onchange="loadAdvantagePrompt(this.value)">
+                <option value="stem">Topic 1: STEM vs Creative Arts (Discuss Both Views)</option>
+                <option value="ubi">Topic 2: Universal Basic Income & AI Automation (Opinion / Agree or Disagree)</option>
+                <option value="tourism">Topic 3: Mass Tourism & Cultural Preservation (Advantages vs Disadvantages)</option>
+                <option value="traffic">Topic 4: Urban Traffic Congestion (Causes & Solutions)</option>
+                <option value="fashion">Topic 5: Fast Fashion & Consumer Society (Direct Two-Part Question)</option>
+              </select>
+            </div>
+
+            <div class="prompt-box mt-3" id="advPromptDisplayBox">
+              <h4 id="advPromptTitle">STEM vs Creative Arts in High School Curricula</h4>
+              <p id="advPromptText">Some educationalists argue that high school curricula should prioritize STEM subjects over creative arts to ensure economic competitiveness. Others believe artistic subjects are equally vital. Discuss both views and give your opinion. (250+ words).</p>
+            </div>
+
+            <div class="analysis-breakdown-grid mt-3">
+              <div class="breakdown-card">
+                <span class="badge-step">STEP 1</span>
+                <h4>General Topic</h4>
+                <p id="advGeneralTopic" class="highlight-text">Education & Curriculum Design</p>
+                <span class="sub-hint">The broad umbrella category for your vocabulary pool.</span>
+              </div>
+
+              <div class="breakdown-card">
+                <span class="badge-step">STEP 2</span>
+                <h4>Specific Micro-Topic</h4>
+                <p id="advMicroTopic" class="highlight-text">Whether schools should prioritize STEM over Arts or maintain balance</p>
+                <span class="sub-hint">The exact boundaries. Writing outside this causes a Band 5 Task Response penalty!</span>
+              </div>
+
+              <div class="breakdown-card">
+                <span class="badge-step">STEP 3</span>
+                <h4>Task Words & Instructions</h4>
+                <p id="advTaskWords" class="highlight-text">Discuss BOTH views AND give your OWN opinion</p>
+                <span class="sub-hint">Must balance both sides equally and maintain a clear personal stance throughout.</span>
+              </div>
+            </div>
+
+            <div class="callout-card mt-3">
+              <h4>⚠️ Examiner Trap Warning:</h4>
+              <p id="advTrapWarning">Do not spend the entire essay defending only one perspective! Because the prompt specifies "Discuss both views", spending 80% on STEM and 20% on arts automatically limits Task Achievement to Band 6.</p>
+            </div>
+          </div>
+
+          <!-- Sub-Tab 2: Coffee Shop Method Idea Generator -->
+          <div id="advSubPane_coffee" class="card" style="display: none;">
+            <div class="section-title-row">
+              <h3>The Coffee Shop Method (Natural Idea Generation)</h3>
+              <span class="badge-role">Anti-Panic Strategy</span>
+            </div>
+            <p class="small-text mt-1">
+              "Imagine you are in a coffee shop with a friend discussing this topic. What would you say in simple, logical terms? Examiners reward clear, realistic arguments—never memorize artificial 'genius' ideas!"
+            </p>
+
+            <div class="mt-3">
+              <label><strong>Brainstorm your Coffee Shop Ideas:</strong></label>
+              <textarea id="advCoffeeShopInput" rows="4" class="mt-1" placeholder="In plain English: What is your genuine opinion on this? What causes it? Give a simple real-world example..."></textarea>
+            </div>
+
+            <div class="coffee-guidance-box mt-3">
+              <h4>Band 7+ Idea Quality Filter:</h4>
+              <ul class="guidance-list">
+                <li>✅ <strong>Is it easy to explain?</strong> If an idea takes 3 complex sentences just to define, drop it.</li>
+                <li>✅ <strong>Can you give a concrete example?</strong> Avoid fake statistics ("A Harvard 2019 survey says 99%..."). Use real instances, policies, or documented trends.</li>
+                <li>✅ <strong>Does it directly address the micro-topic?</strong> Every point must link directly back to the question prompt.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Sub-Tab 3: PEEL Paragraph Blueprint -->
+          <div id="advSubPane_peel" class="card" style="display: none;">
+            <div class="section-title-row">
+              <h3>The PEEL Paragraph Blueprint (Point, Explain, Example, Link)</h3>
+              <span class="badge-role">Band 8+ Coherence</span>
+            </div>
+            <p class="small-text mt-1">Structure each body paragraph with surgical logic using the IELTS Advantage PEEL blueprint.</p>
+
+            <div class="peel-interactive-grid mt-3">
+              <div class="peel-card point">
+                <span class="peel-tag">P - Point</span>
+                <p><strong>Topic Sentence:</strong> State ONE central controlling idea clearly.</p>
+                <div id="advPeelPoint" class="peel-content">STEM disciplines directly power technological modernization and industrial competitiveness.</div>
+              </div>
+
+              <div class="peel-card explain">
+                <span class="peel-tag">E - Explain</span>
+                <p><strong>The 'Why' / 'How':</strong> Explain the underlying mechanism or societal consequence.</p>
+                <div id="advPeelExplain" class="peel-content">Modern knowledge economies require qualified software engineers, data analysts, and researchers to drive productivity.</div>
+              </div>
+
+              <div class="peel-card example">
+                <span class="peel-tag">E - Example</span>
+                <p><strong>Concrete Evidence:</strong> Illustrate with a realistic, recognizable real-world scenario.</p>
+                <div id="advPeelExample" class="peel-content">For instance, nations that subsidized technology education in secondary schools witnessed marked growth in high-tech exports.</div>
+              </div>
+
+              <div class="peel-card link">
+                <span class="peel-tag">L - Link / Result</span>
+                <p><strong>Summary & Impact:</strong> Conclude the thought and tie back to your overarching position.</p>
+                <div id="advPeelLink" class="peel-content">Consequently, allocating robust curriculum hours to STEM subjects is economically justified.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-Tab 4: 10-Point Self-Assessment Questionnaire -->
+          <div id="advSubPane_checklist" class="card" style="display: none;">
+            <div class="section-title-row">
+              <h3>The Official 10-Point Essay Self-Assessment Questionnaire</h3>
+              <span class="badge-role">Pre-Submission Quality Gate</span>
+            </div>
+            <p class="small-text mt-1">Never submit an essay without auditing these 10 points. Check each item as you review your draft.</p>
+
+            <div class="checklist-container mt-3" id="advChecklistContainer">
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 1. Did I answer ALL parts of the prompt (every question word)?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 2. Is my personal position clearly stated in both introduction and conclusion?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 3. Does each body paragraph focus on ONE central main point?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 4. Are ideas fully developed using Point, Explanation, and Concrete Example (PEEL)?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 5. Did I avoid sweeping over-generalizations by using academic hedging (e.g., 'tends to', 'could potentially')?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 6. Are cohesive linkers varied and natural (not mechanical like 'First of all, Secondly, Lastly')?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 7. Did I use topic-specific academic collocations instead of memorized idioms?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 8. Did I include a mix of complex sentences (conditionals, relative clauses, passive voice)?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 9. Did I proofread for simple slips (subject-verb agreement, plural '-s', articles)?</label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklistProgress()"> 10. Is the word count comfortably between 260 and 290 words (preventing underlength penalties)?</label>
+            </div>
+
+            <div class="progress-bar-container mt-3">
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="checklistProgressBar" style="width: 0%;"></div>
+              </div>
+              <span id="checklistScoreText" class="mt-1" style="font-size: 0.85rem; font-weight: 600;">0 of 10 checks verified (0%)</span>
             </div>
           </div>
         </section>
 
-        <!-- 5. Vocabulary & SRS Tab -->
-        <section id="tab-vocab" class="tab-pane">
+        <!-- 5. Adaptive Grammar & Grammar Fill-Up Tab -->
+        <section id="tab-grammar" class="tab-pane">
           <div class="pane-header">
-            <h2>Vocabulary & Spaced Repetition (SRS)</h2>
-            <p class="subtitle">SuperMemo SM-2 algorithm ensures high-yield Academic Word List mastery.</p>
+            <h2>Grammar Coach & Interactive Fill-Up Clozes</h2>
+            <p class="subtitle">Targeted cloze drills and personalized lessons driven by your error frequency.</p>
           </div>
 
-          <div class="card srs-card-container">
+          <!-- Sub-bar for Grammar Modes -->
+          <div class="sub-nav-bar mb-3">
+            <button class="btn btn-sm btn-primary active" id="btnGrammar_fillup" onclick="switchGrammarMode('fillup')">✏️ Interactive Grammar Fill-Up (Clozes)</button>
+            <button class="btn btn-sm btn-outline" id="btnGrammar_adaptive" onclick="switchGrammarMode('adaptive')">🎯 Personalized Weakness Lessons</button>
+          </div>
+
+          <!-- Mode 1: Grammar Fill-Up -->
+          <div id="grammarFillupView">
+            <div class="card mb-3">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <div>
+                  <span style="font-weight: 600; font-size: 0.9rem; margin-right: 8px;">Filter Category:</span>
+                  <select id="grammarCategorySelect" class="form-select" onchange="filterFillupDrills(this.value)">
+                    <option value="all">All Categories (12 Clozes)</option>
+                    <option value="Conditionals">Conditionals (Band 7-9)</option>
+                    <option value="Passive Voice & Impersonal Structures">Passive Voice & Impersonal</option>
+                    <option value="Subject-Verb Agreement">Subject-Verb Agreement</option>
+                    <option value="Inversion">Inversion (Band 8+)</option>
+                    <option value="Relative & Participle Clauses">Relative & Participle Clauses</option>
+                    <option value="Prepositions & Concordance">Prepositions & Concordance</option>
+                    <option value="Hedging & Modality">Hedging & Modality</option>
+                    <option value="Articles & Countability">Articles & Countability</option>
+                  </select>
+                </div>
+                <div class="fillup-stats-badge">
+                  Score: <strong id="fillupScore">0</strong> / <span id="fillupTotal">12</span> | Streak: <strong id="fillupStreak">0</strong> 🔥
+                </div>
+              </div>
+            </div>
+
+            <div id="fillupDrillsList" class="fillup-grid">
+              <!-- Drills dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Mode 2: Adaptive Weakness Lessons -->
+          <div id="grammarAdaptiveView" style="display: none;">
+            <div class="card">
+              <div id="grammarSessionContent">
+                <p>Loading adaptive session...</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. Vocabulary & 3-Step SRS Tab -->
+        <section id="tab-vocab" class="tab-pane">
+          <div class="pane-header">
+            <h2>Vocabulary Vault & SuperMemo SM-2 SRS</h2>
+            <p class="subtitle">IELTS Advantage 3-Step Vocabulary System: Read -> Record Collocations -> Review in Context.</p>
+          </div>
+
+          <!-- Sub-bar for Vocab Modes -->
+          <div class="sub-nav-bar mb-3">
+            <button class="btn btn-sm btn-primary active" id="btnVocab_vault" onclick="switchVocabMode('vault')">📚 Topic Vocabulary Vault</button>
+            <button class="btn btn-sm btn-outline" id="btnVocab_collocations" onclick="switchVocabMode('collocations')">🔗 Collocation Matcher</button>
+            <button class="btn btn-sm btn-outline" id="btnVocab_upgrades" onclick="switchVocabMode('upgrades')">🚀 Lexical Upgrade Clinic</button>
+            <button class="btn btn-sm btn-outline" id="btnVocab_srs" onclick="switchVocabMode('srs')">🗂️ SM-2 Flashcards (<span id="srsTabCount">24</span>)</button>
+          </div>
+
+          <!-- Mode 1: Topic Vocabulary Vault -->
+          <div id="vocabVaultView" class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <h3>10 High-Frequency IELTS Academic Topic Vaults</h3>
+              <select id="vocabTopicSelect" class="form-select" onchange="renderVocabTopic(this.value)">
+                <option value="environment">1. Environment & Climate Change</option>
+                <option value="education">2. Education & Academic Curricula</option>
+                <option value="technology">3. Technology & Automation</option>
+                <option value="health">4. Health, Diet & Modern Lifestyles</option>
+                <option value="crime">5. Crime, Justice & Rehabilitation</option>
+                <option value="globalization">6. Globalization & Cultural Identity</option>
+                <option value="work">7. Work, Employment & Automation</option>
+                <option value="urbanization">8. Urbanization & Housing</option>
+                <option value="media">9. Media & Advertising</option>
+                <option value="society">10. Society, Youth & Aging</option>
+              </select>
+            </div>
+
+            <div id="vocabTopicContent" class="mt-3">
+              <!-- Dynamically populated topic cards -->
+            </div>
+          </div>
+
+          <!-- Mode 2: Collocation Matcher -->
+          <div id="vocabCollocationsView" class="card" style="display: none;">
+            <div class="section-title-row">
+              <h3>Academic Collocation Matcher</h3>
+              <span class="badge-role">Band 7+ Lexical Resource</span>
+            </div>
+            <p class="small-text mt-1">Match each Academic Verb with its natural noun partner. Collocations make English sound authentic and un-memorized!</p>
+            <div id="collocationGameGrid" class="collocation-game-grid mt-3">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Mode 3: Lexical Upgrade Clinic -->
+          <div id="vocabUpgradesView" class="card" style="display: none;">
+            <div class="section-title-row">
+              <h3>Lexical Upgrade Clinic (Band 6 to Band 8+)</h3>
+              <span class="badge-role">Precision Vocabulary</span>
+            </div>
+            <p class="small-text mt-1">Learn to replace casual spoken words with precise academic equivalents recommended by former examiners.</p>
+            <div id="upgradesTableContainer" class="mt-3">
+              <!-- Upgrades Table -->
+            </div>
+          </div>
+
+          <!-- Mode 4: SM-2 Spaced Repetition Flashcards -->
+          <div id="vocabSrsView" class="card srs-card-container" style="display: none;">
             <div id="srsFlashcard" class="flashcard">
               <div class="flashcard-front">
-                <h3 id="cardPrompt">Loading due cards...</h3>
+                <span class="badge-step" id="cardCategoryBadge">VOCABULARY</span>
+                <h3 id="cardPrompt" class="mt-2">Loading due cards...</h3>
               </div>
               <div class="flashcard-back" id="cardAnswerBox" style="display: none;">
                 <hr>
@@ -221,11 +476,29 @@
           </div>
         </section>
 
-        <!-- 6. Reading Tab -->
+        <!-- 7. Reading Tab -->
         <section id="tab-reading" class="tab-pane">
           <div class="pane-header">
-            <h2>IELTS Reading Practice (Academic)</h2>
-            <p class="subtitle">Original, copyright-compliant passage and automated band grading.</p>
+            <h2>IELTS Reading Practice (Academic Passages)</h2>
+            <p class="subtitle">Complete original academic passages with True/False/Not Given, completion, and IELTS Advantage keyword-synonym mapping.</p>
+          </div>
+
+          <!-- Reading Passage Selector -->
+          <div class="card mb-3">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <label for="readingPassageSelect"><strong>Select Academic Passage:</strong></label>
+                <select id="readingPassageSelect" class="form-select" onchange="switchReadingPassage(this.value)">
+                  <option value="acad_p1">Passage 1: Deep-Sea Hydrothermal Ecosystems (Biology & Geology)</option>
+                  <option value="acad_p2">Passage 2: Cognitive Architecture of Bilingualism (Neuroscience)</option>
+                  <option value="acad_p3">Passage 3: Urban Heat Islands & Microclimates (Architecture & Ecology)</option>
+                </select>
+              </div>
+              <button id="toggleSynonymTableBtn" class="btn btn-outline btn-sm" onclick="toggleSynonymTable()">🔍 Show Keyword & Synonym Mapping Table</button>
+            </div>
+            <div id="synonymTableBox" class="mt-3" style="display: none;">
+              <!-- Synonym Table Injected -->
+            </div>
           </div>
 
           <div class="split-view reading-split">
@@ -243,11 +516,11 @@
           </div>
         </section>
 
-        <!-- 7. Listening Tab -->
+        <!-- 8. Listening Tab -->
         <section id="tab-listening" class="tab-pane">
           <div class="pane-header">
             <h2>IELTS Listening Module</h2>
-            <p class="subtitle">Audio script playback, distractor detection, and spelling bounds.</p>
+            <p class="subtitle">Cambridge-standard audio simulation, distractor detection, and spelling accuracy.</p>
           </div>
 
           <div class="card">
@@ -272,24 +545,46 @@
           </div>
         </section>
 
-        <!-- 8. Writing Studio Tab -->
+        <!-- 9. Writing Studio Tab -->
         <section id="tab-writing" class="tab-pane">
           <div class="pane-header">
             <h2>IELTS Writing Studio & Formative Feedback</h2>
-            <p class="subtitle">Evaluates Task 1 & 2 with criteria band scores and 'Teach Through Correction'.</p>
+            <p class="subtitle">5 Diverse Task 2 Question Types with Band 9 Model Essays, IELTS Advantage Checklist, and Criteria Band Scoring.</p>
+          </div>
+
+          <div class="card mb-3">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <label for="writingPromptSelect"><strong>Select Task 2 Prompt:</strong></label>
+                <select id="writingPromptSelect" class="form-select" onchange="switchWritingPrompt(this.value)">
+                  <option value="acad_t2_stem">STEM vs Creative Arts (Discuss Both Views)</option>
+                  <option value="acad_t2_ubi">Universal Basic Income & AI (Opinion / Agree or Disagree)</option>
+                  <option value="acad_t2_tourism">Mass Tourism & Preservation (Advantages vs Disadvantages)</option>
+                  <option value="acad_t2_traffic">Urban Traffic Congestion (Causes & Solutions)</option>
+                  <option value="acad_t2_fast_fashion">Fast Fashion & Sustainability (Direct Two-Part Questions)</option>
+                </select>
+              </div>
+              <button class="btn btn-outline btn-sm" id="toggleModelEssayBtn" onclick="toggleModelEssay()">📖 View Band 9 Model Essay</button>
+            </div>
+
+            <!-- Band 9 Model Essay Box (Toggleable) -->
+            <div id="modelEssayBox" class="mt-3 p-3 callout-card" style="display: none;">
+              <h4 id="modelEssayTitle">Band 9 Model Essay</h4>
+              <div id="modelEssayText" class="mt-2" style="line-height: 1.6; font-size: 0.95rem;"></div>
+            </div>
           </div>
 
           <div class="card">
             <div class="prompt-box">
-              <h3>Task 2: Secondary Education Curriculum (Academic)</h3>
-              <p>Some educationalists argue that high school curricula should prioritize STEM subjects over arts. Discuss both views and give your opinion. (Minimum 250 words).</p>
+              <h3 id="currentWritingTitle">Task 2: Secondary Education Curriculum (Academic)</h3>
+              <p id="currentWritingPrompt">Some educationalists argue that high school curricula should prioritize STEM subjects over creative arts. Discuss both views and give your opinion. (Minimum 250 words).</p>
             </div>
 
             <div class="essay-editor-wrapper mt-3">
               <textarea id="essayInput" rows="12" placeholder="Type or paste your essay here..."></textarea>
               <div class="word-counter-bar">
                 <span>Word Count: <strong id="wordCountLabel">0</strong></span>
-                <span class="req-text">(Target: 250+ words)</span>
+                <span class="req-text">(Sweet Spot: 260 - 290 words)</span>
               </div>
             </div>
 
@@ -298,11 +593,11 @@
           </div>
         </section>
 
-        <!-- 9. Speaking Tab -->
+        <!-- 10. Speaking Tab -->
         <section id="tab-speaking" class="tab-pane">
           <div class="pane-header">
             <h2>AI IELTS Speaking Examiner Room</h2>
-            <p class="subtitle">Official 3-Part Interview Simulation with Dr. Harrison (British Council / Cambridge Examiner).</p>
+            <p class="subtitle">Official 3-Part Interview Simulation with Dr. Harrison (Cambridge-standard 6 Exam Sets & Band 9 Models).</p>
           </div>
 
           <!-- Interview Progress Stepper -->
@@ -330,17 +625,33 @@
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
               <div>
                 <label for="speakingExamSetSelect" style="font-weight: 600; font-size: 0.9rem; margin-right: 8px;">Official Exam Topic:</label>
-                <select id="speakingExamSetSelect" class="form-select" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--surface-secondary); color: var(--text-primary); font-size: 0.9rem;">
+                <select id="speakingExamSetSelect" class="form-select" onchange="onSpeakingSetChanged(this.value)">
                   <option value="0">Exam Set 1: Career, Goals & Ambition</option>
                   <option value="1">Exam Set 2: Sustainable Living & Urban Heritage</option>
                   <option value="2">Exam Set 3: Artificial Intelligence & Automation</option>
+                  <option value="3">Exam Set 4: International Tourism & Overtourism</option>
+                  <option value="4">Exam Set 5: Modern Education & Practical Skills</option>
+                  <option value="5">Exam Set 6: Public Health & Fast-Paced Lifestyles</option>
                 </select>
               </div>
               <div style="display: flex; gap: 8px;">
                 <button id="startInterviewBtn" class="btn btn-primary btn-sm">▶️ Begin Official Interview</button>
+                <button id="viewBand9SpeakingBtn" class="btn btn-outline btn-sm" onclick="toggleBand9SpeakingModel()">💡 View Band 9 Model</button>
                 <button id="resetInterviewBtn" class="btn btn-outline btn-sm">🔄 Reset</button>
               </div>
             </div>
+
+            <!-- Band 9 Speaking Model (Toggleable) -->
+            <div id="speakingBand9ModelBox" class="mt-3 p-3 callout-card" style="display: none;">
+              <h4>Band 9 Model Cue Card Answer:</h4>
+              <p id="speakingBand9CueModel" class="mt-1" style="font-style: italic;"></p>
+            </div>
+          </div>
+
+          <!-- IELTS Advantage 3-Step Strategy Helper Pill -->
+          <div class="advantage-pill-banner mb-3" id="speakingAdvantagePill">
+            <span class="icon">🧭</span>
+            <span><strong>IELTS Advantage 3-Step Strategy:</strong> 1. Direct Answer ➔ 2. Reason (Why) ➔ 3. Concrete Example or Anecdote</span>
           </div>
 
           <!-- Stage 1 & 3: Interactive Interview Room -->
@@ -364,7 +675,7 @@
                 <div class="prep-countdown" id="prepCountdownText">01:00</div>
               </div>
               <div id="part2CueCardText" class="mt-2" style="font-size: 0.95rem; line-height: 1.5;"></div>
-              <textarea id="part2NotesInput" class="mt-2" rows="2" placeholder="Scratchpad: jot bullet points or lexical keywords here during your 1-minute prep..." style="width: 100%; font-size: 0.85rem; border-radius: 6px;"></textarea>
+              <textarea id="part2NotesInput" class="mt-2" rows="2" placeholder="Scratchpad: jot 4 bullet points or lexical collocations here during your 1-minute prep..." style="width: 100%; font-size: 0.85rem; border-radius: 6px;"></textarea>
               <div class="mt-2">
                 <button id="skipPrepBtn" class="btn btn-sm btn-outline">Skip Prep & Start Speaking Now</button>
               </div>
@@ -396,11 +707,11 @@
           </div>
         </section>
 
-        <!-- 10. Mistake Book Tab -->
+        <!-- 11. Mistake Book Tab -->
         <section id="tab-mistakes" class="tab-pane">
           <div class="pane-header">
             <h2>Personalized Mistake Book</h2>
-            <p class="subtitle">Track recurring errors across grammar, vocabulary, and exam tasks.</p>
+            <p class="subtitle">Track recurring errors across grammar, vocabulary, and exam tasks with one-click resolution.</p>
           </div>
 
           <div class="card">
@@ -409,7 +720,7 @@
           </div>
         </section>
 
-        <!-- 11. Settings & Data Tab -->
+        <!-- 12. Settings & Data Tab -->
         <section id="tab-settings" class="tab-pane">
           <div class="pane-header">
             <h2>Settings & Data Privacy</h2>
@@ -463,12 +774,12 @@
                   <span class="tag-pill">Hybrid AI</span>
                   <span class="tag-pill">Offline-First</span>
                   <span class="tag-pill">IELTS Mastery</span>
-                  <span class="tag-pill">Adaptive RAG</span>
+                  <span class="tag-pill">IELTS Advantage Method</span>
                 </div>
                 <div class="developer-specs-grid">
                   <div class="spec-cell">
                     <span class="spec-label">Version</span>
-                    <strong class="spec-value">v1.2.0 Production</strong>
+                    <strong class="spec-value">v1.3.0 Production</strong>
                   </div>
                   <div class="spec-cell">
                     <span class="spec-label">Engine</span>

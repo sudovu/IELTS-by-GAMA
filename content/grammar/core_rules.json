@@ -2,41 +2,81 @@
   {
     "topic": "Articles",
     "subtopic": "Uncountable Nouns",
-    "query_trigger": "articles uncountable nouns advice information",
-    "compact_knowledge": "Uncountable nouns in English (e.g. information, advice, research, equipment, luggage) never take the indefinite article 'a' or 'an' and never take a plural '-s'. Use 'a piece of advice' or zero article: 'She gave me valuable advice'.",
+    "query_trigger": "articles uncountable nouns advice information research",
+    "compact_knowledge": "Uncountable nouns in English (e.g. information, advice, research, equipment, luggage, accommodation) never take the indefinite article 'a' or 'an' and never take a plural '-s'. Use 'a piece of advice' or zero article: 'She gave me valuable advice'.",
     "source": "curated",
     "confidence": 0.98
   },
   {
     "topic": "Subject-Verb Agreement",
-    "subtopic": "Collective and Quantified Subjects",
-    "query_trigger": "subject verb agreement collective each every",
-    "compact_knowledge": "Phrases beginning with 'each of', 'every one of', or 'neither of' require a singular verb in formal academic English: 'Each of the participants was interviewed.' Do not let intervening plural nouns mislead you.",
+    "subtopic": "Intervening Prepositional Phrases & Quantifiers",
+    "query_trigger": "subject verb agreement collective each every intervening phrases",
+    "compact_knowledge": "Intervening prepositional phrases do not alter subject plurality: 'The quality of the essays is exceptional' (not 'are'). Phrases beginning with 'each of', 'every one of', or 'neither of' require a singular verb: 'Each of the participants was interviewed.'",
     "source": "curated",
     "confidence": 0.98
   },
   {
     "topic": "Conditionals",
-    "subtopic": "Unreal Past (Third Conditional)",
-    "query_trigger": "third conditional unreal past would have had",
-    "compact_knowledge": "Third conditional describes hypothetical past situations and their outcomes: 'If + past perfect, would have + past participle'. Example: 'If governments had invested earlier in renewables, emissions would have declined faster.'",
+    "subtopic": "First, Second, Third & Mixed Conditionals",
+    "query_trigger": "conditionals first second third mixed if were had would",
+    "compact_knowledge": "Conditionals demonstrate Band 7+ grammatical range. First: 'If governments subsidize renewables, emissions will decline.' Second (Hypothetical): 'If the policy were implemented, costs would drop.' Third (Past Unreal): 'If authorities had invested earlier, the crisis would have been averted.' Mixed: 'If he had completed his degree, he would have better career prospects now.'",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Inversion",
+    "subtopic": "Negative Adverbials for Band 8+",
+    "query_trigger": "inversion negative adverbials seldom rarely not only",
+    "compact_knowledge": "Fronting negative or restrictive adverbials triggers auxiliary-subject inversion: 'Not only does automation increase productivity, but it also minimizes human error.' 'Seldom do educationalists agree on uniform curricula.' 'Under no circumstances should public safety be compromised.'",
     "source": "curated",
     "confidence": 0.97
   },
   {
-    "topic": "Inversion",
-    "subtopic": "Negative Adverbials for IELTS Band 8+",
-    "query_trigger": "inversion negative adverbials seldom rarely",
-    "compact_knowledge": "Negative or restrictive adverbials placed at the start of a sentence require subject-auxiliary inversion: 'Seldom do we witness such rapid technological transformation.' 'Not only did the project reduce costs, but it also improved safety.'",
+    "topic": "Passive Voice & Impersonal Structures",
+    "subtopic": "Academic Register & Objective Reporting",
+    "query_trigger": "passive voice impersonal reporting it is argued believed that",
+    "compact_knowledge": "In IELTS Academic Writing, maintain objectivity using impersonal passive reporting: 'It is widely contended that...', 'Steps have been taken to mitigate urban heat islands.', 'The data is believed to have been influenced by external variables.'",
     "source": "curated",
-    "confidence": 0.96
+    "confidence": 0.98
+  },
+  {
+    "topic": "Relative & Participle Clauses",
+    "subtopic": "Complex Sentence Synthesis",
+    "query_trigger": "relative clauses participle clauses having which whereby",
+    "compact_knowledge": "Elevate sentence complexity by combining ideas with non-defining relative clauses ('...which subsequently precipitated a financial crisis') or participle clauses: 'Having evaluated multiple alternatives, the committee adopted the green energy initiative.'",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Concession & Contrast",
+    "subtopic": "Nuanced Argumentation",
+    "query_trigger": "concession contrast although whereas despite notwithstanding",
+    "compact_knowledge": "Express balanced viewpoints using sophisticated concession markers: 'Although renewable technology demands substantial upfront expenditure, its long-term benefits are indisputable.' 'Notwithstanding the economic headwinds, tourism experienced steady growth.'",
+    "source": "curated",
+    "confidence": 0.98
+  },
+  {
+    "topic": "Hedging & Modality",
+    "subtopic": "Avoiding Over-generalization in Writing Task 2",
+    "query_trigger": "hedging modality over-generalization tend to could potentially",
+    "compact_knowledge": "IELTS examiners penalize sweeping claims like 'Smartphones make everyone lazy.' Use cautious hedging: 'Excessive smartphone usage appears to diminish focus among certain demographics.' 'The evidence tends to indicate that...', 'This could potentially lead to...'",
+    "source": "curated",
+    "confidence": 0.99
   },
   {
     "topic": "Affect vs Effect",
-    "subtopic": "Confused Words",
+    "subtopic": "Common Confused Words",
     "query_trigger": "difference between affect and effect explain affect and effect",
-    "compact_knowledge": "Affect is predominantly a verb meaning to influence or impact ('Rising inflation affects household savings'). Effect is predominantly a noun meaning the result or consequence ('The policy had an immediate effect'). Remember RAVEN: Remember Affect Verb, Effect Noun.",
+    "compact_knowledge": "Affect is predominantly a verb meaning to influence: 'Climate shifts directly affect agriculture.' Effect is predominantly a noun meaning result: 'The policy had an immediate effect.' (Memory rule RAVEN: Remember Affect Verb, Effect Noun).",
     "source": "curated",
     "confidence": 0.99
+  },
+  {
+    "topic": "Punctuation & Sentence Boundaries",
+    "subtopic": "Avoiding Comma Splices and Run-on Sentences",
+    "query_trigger": "comma splices run-on sentences semi-colon sentence boundary",
+    "compact_knowledge": "Do not join two independent clauses with just a comma. Incorrect: 'The population expanded rapidly, this caused housing shortages.' Correct: 'The population expanded rapidly; this caused housing shortages.' OR 'The population expanded rapidly, which caused housing shortages.'",
+    "source": "curated",
+    "confidence": 0.98
   }
 ]

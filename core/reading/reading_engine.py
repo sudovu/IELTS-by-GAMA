@@ -2,6 +2,7 @@
 Reading Engine for IELTS by GAMA.
 Delivers 100% original, copyright-compliant IELTS-style reading passages and exercises.
 Analyzes skimming, scanning, distractor traps, and keyword matching.
+Includes IELTS Advantage Keyword & Synonym Mapping Tables for Band 8+ reading strategy.
 """
 
 from typing import Dict, Any, List, Optional
@@ -71,9 +72,162 @@ class ReadingEngine:
                     "evidence": "This reaction constructs towering mineralized chimneys colloquially known as 'black smokers'.",
                     "explanation": "The text explicitly names the chimneys 'black smokers'."
                 }
+            ],
+            "synonym_table": [
+                {"question_keyword": "solar radiation", "passage_synonym": "sunlight / solar photosynthesis"},
+                {"question_keyword": "fundamental nutrients", "passage_synonym": "organic nourishment"},
+                {"question_keyword": "absorb nourishment", "passage_synonym": "synthesize organic nourishment for the host"},
+                {"question_keyword": "continuously active", "passage_synonym": "ephemeral / shut down within a matter of decades"}
+            ]
+        },
+        "acad_p2": {
+            "id": "acad_p2",
+            "track": "Academic",
+            "title": "The Cognitive Architecture of Bilingualism & Executive Function",
+            "text": (
+                "For much of the twentieth century, clinical educators cautioned parents against raising children in "
+                "bilingual households, asserting that juggling two grammatical systems would cause cognitive confusion "
+                "and impede linguistic development. However, modern neuroimaging and psycholinguistic experiments have thoroughly "
+                "debunked this deficit hypothesis. Far from hindering intellect, acquiring multiple languages reshapes neural "
+                "pathways and fortifies the brain's executive control center.\n\n"
+                "Executive function refers to a constellation of higher-order cognitive operations overseen predominantly "
+                "by the prefrontal cortex. These include cognitive flexibility, inhibitory control, working memory, and selective "
+                "attention. When a bilingual individual communicates, both language systems remain perpetually active in the brain. "
+                "Even when conducting a conversation entirely in Spanish, the English lexical network is primed and competes for "
+                "activation. To prevent interference, the brain must continuously exert inhibitory control to suppress the "
+                "irrelevant language while maintaining attentional focus on the target vernacular.\n\n"
+                "This relentless neural workout produces measurable neuroplastic advantages across the lifespan. In laboratory "
+                "experiments such as the Simon task and the Stroop color-word test, bilingual participants consistently outperform "
+                "monolingual peers in resolving conflicting stimuli and executing rapid task-switching protocols. Crucially, this "
+                "advantage is not restricted to linguistic tasks; it manifests robustly across spatial reasoning and abstract problem-solving.\n\n"
+                "Perhaps the most profound implication of bilingualism is its neuroprotective capacity against age-related cognitive "
+                "decline. Longitudinal epidemiological studies led by cognitive neuroscientists demonstrate that lifelong bilinguals "
+                "manifest symptoms of neurodegenerative disorders, such as Alzheimer's disease, an average of four to five years "
+                "later than monolingual cohorts with equivalent neuropathological brain damage. This phenomenon is known as "
+                "'cognitive reserve'—the brain's enhanced resilience and capability to improvise alternative neural routes around damaged areas."
+            ),
+            "questions": [
+                {
+                    "num": 1,
+                    "type": "TFNG",
+                    "prompt": "Early twentieth-century educators encouraged families to raise multilingual children.",
+                    "correct": "False",
+                    "evidence": "clinical educators cautioned parents against raising children in bilingual households, asserting that juggling two grammatical systems would cause cognitive confusion",
+                    "explanation": "The text confirms early educators warned AGAINST bilingualism, not encouraged it."
+                },
+                {
+                    "num": 2,
+                    "type": "TFNG",
+                    "prompt": "When a bilingual speaks one language, their other language system is entirely shut down.",
+                    "correct": "False",
+                    "evidence": "both language systems remain perpetually active in the brain... the English lexical network is primed and competes for activation.",
+                    "explanation": "Both languages remain perpetually active and compete for activation."
+                },
+                {
+                    "num": 3,
+                    "type": "TFNG",
+                    "prompt": "The cognitive benefits of bilingualism are strictly confined to verbal and language-based tests.",
+                    "correct": "False",
+                    "evidence": "this advantage is not restricted to linguistic tasks; it manifests robustly across spatial reasoning and abstract problem-solving.",
+                    "explanation": "The text directly states the benefits extend to spatial reasoning and abstract tasks."
+                },
+                {
+                    "num": 4,
+                    "type": "Completion",
+                    "max_words": 2,
+                    "prompt": "The brain's ability to resist neurodegenerative symptoms by finding alternate neural circuits is termed _____.",
+                    "acceptable": ["cognitive reserve"],
+                    "evidence": "This phenomenon is known as 'cognitive reserve'—the brain's enhanced resilience and capability to improvise alternative neural routes",
+                    "explanation": "The passage terms this resilience 'cognitive reserve'."
+                }
+            ],
+            "synonym_table": [
+                {"question_keyword": "encouraged families", "passage_synonym": "cautioned parents against"},
+                {"question_keyword": "entirely shut down", "passage_synonym": "perpetually active / competes for activation"},
+                {"question_keyword": "strictly confined to verbal", "passage_synonym": "not restricted to linguistic tasks"},
+                {"question_keyword": "alternate neural circuits", "passage_synonym": "improvise alternative neural routes"}
+            ]
+        },
+        "acad_p3": {
+            "id": "acad_p3",
+            "track": "Academic",
+            "title": "Urban Heat Islands and Microclimate Architecture",
+            "text": (
+                "Urban Heat Islands (UHIs) represent a pronounced meteorological phenomenon whereby metropolitan centers "
+                "experience surface and ambient air temperatures substantially higher than their surrounding rural peripheries. "
+                "This thermal discrepancy, which can reach up to 10 degrees Celsius in densely populated capitals during nighttime hours, "
+                "is primarily driven by the extensive replacement of vegetative terrain with impermeable artificial surfaces such "
+                "as asphalt, concrete, and masonry. These materials possess high thermal mass and low albedo, enabling them to absorb "
+                "copious solar irradiance during daytime hours and reradiate it as sensible heat after dusk.\n\n"
+                "Furthermore, urban canyons formed by towering high-rise developments impede natural wind ventilation, trapping "
+                "anthropogenic heat generated by industrial machinery, vehicular exhausts, and air-conditioning refrigeration units. "
+                "The consequences of unmitigated UHIs are severe, exacerbating heat-related cardiovascular mortality, amplifying "
+                "smog photochemistry, and triggering immense spikes in electrical energy consumption for cooling systems.\n\n"
+                "To counter these escalating urban microclimates, contemporary municipal architects and urban planners are implementing "
+                "multi-layered passive cooling strategies. Central to these interventions is the widespread integration of living architecture, "
+                "such as vegetative green roofs and extensive vertical facade gardens. Vegetative surfaces cool the ambient microclimate "
+                "through evapotranspiration—a biophysical process where plants transpire moisture while solar energy evaporates water "
+                "from soil matrices, thereby dissipating latent heat without raising temperature.\n\n"
+                "Concurrently, civil engineers are retrofitting road networks with permeable, high-albedo cool pavements. By reflecting "
+                "upwards of 40% of incident solar radiation compared to the standard 10% reflected by aged asphalt, cool pavements prevent "
+                "initial thermal absorption. When combined with strategic urban forestry corridors that channel prevailing oceanic breezes, "
+                "these sustainable architectural interventions can suppress peak localized temperatures by several critical degrees."
+            ),
+            "questions": [
+                {
+                    "num": 1,
+                    "type": "TFNG",
+                    "prompt": "Rural peripheral regions typically experience higher temperatures than city centers.",
+                    "correct": "False",
+                    "evidence": "metropolitan centers experience surface and ambient air temperatures substantially higher than their surrounding rural peripheries",
+                    "explanation": "City centers are hotter than rural peripheries, so the statement is False."
+                },
+                {
+                    "num": 2,
+                    "type": "TFNG",
+                    "prompt": "Urban canyon high-rises can hinder atmospheric airflow and trap heat.",
+                    "correct": "True",
+                    "evidence": "urban canyons formed by towering high-rise developments impede natural wind ventilation, trapping anthropogenic heat",
+                    "explanation": "The text confirms high-rise canyons impede ventilation and trap heat."
+                },
+                {
+                    "num": 3,
+                    "type": "TFNG",
+                    "prompt": "Standard aged asphalt reflects over 40% of incoming solar radiation.",
+                    "correct": "False",
+                    "evidence": "compared to the standard 10% reflected by aged asphalt",
+                    "explanation": "Aged asphalt reflects only about 10%, whereas cool pavements reflect 40%."
+                },
+                {
+                    "num": 4,
+                    "type": "Completion",
+                    "max_words": 1,
+                    "prompt": "Plants lower ambient air temperatures without heating through the process of _____.",
+                    "acceptable": ["evapotranspiration"],
+                    "evidence": "Vegetative surfaces cool the ambient microclimate through evapotranspiration",
+                    "explanation": "The biophysical cooling process specified is evapotranspiration."
+                }
+            ],
+            "synonym_table": [
+                {"question_keyword": "higher temperatures than city centers", "passage_synonym": "metropolitan centers substantially higher than rural peripheries"},
+                {"question_keyword": "hinder atmospheric airflow", "passage_synonym": "impede natural wind ventilation"},
+                {"question_keyword": "incoming solar radiation", "passage_synonym": "incident solar radiation / solar irradiance"},
+                {"question_keyword": "cooling process", "passage_synonym": "evapotranspiration / dissipating latent heat"}
             ]
         }
     }
+
+    @classmethod
+    def list_passages(cls) -> List[Dict[str, Any]]:
+        return [
+            {
+                "id": p["id"],
+                "track": p["track"],
+                "title": p["title"],
+                "question_count": len(p["questions"])
+            }
+            for p in cls.ORIGINAL_PASSAGES.values()
+        ]
 
     @classmethod
     def get_passage(cls, passage_id: str = "acad_p1") -> Optional[Dict[str, Any]]:
@@ -139,10 +293,12 @@ class ReadingEngine:
             "total_questions": total,
             "estimated_band": band,
             "results": detailed_eval,
+            "synonym_table": passage.get("synonym_table", []),
             "reading_strategy_tips": [
-                "Scan specifically for proper nouns, numbers, and technical terms (e.g. 'trophosome', '1977').",
-                "Watch out for absolute qualifiers ('all', 'exclusively') which frequently flag 'False' statements."
+                "IELTS Advantage Keyword Strategy: Locate keywords in questions, then scan for paraphrases/synonyms in the text.",
+                "True/False/Not Given Decision Matrix: True = same meaning; False = opposite/contradicts; Not Given = no proof either way.",
+                "Watch out for qualifying adverbs ('predominantly', 'solely', 'temporarily') which determine the boundary of truth."
             ],
             "disclaimer": BandCalculator.DISCLAIMER,
-            "copyright_notice": "AI-generated original IELTS-style practice passage."
+            "copyright_notice": "Original IELTS-style practice passage architected for GAMA."
         }

@@ -26,6 +26,7 @@ from core.progress.srs import SpacedRepetitionSystem
 from core.progress.study_planner import StudyPlanner
 from core.progress.analytics import LearningAnalytics
 from core.grammar.adaptive_grammar import AdaptiveGrammar
+from core.grammar.grammar_engine import GrammarEngine
 from core.scoring.cefr_diagnostic import CEFRDiagnostic
 from core.sync.connectivity import ConnectivityManager
 from core.device.profile_manager import ProfileManager
@@ -104,8 +105,15 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             due = self.srs.get_due_deck("default_learner")
             self._send_json({"items": due})
 
+        elif path == "/api/reading/passages":
+            passages = self.reading.list_passages()
+            self._send_json({"passages": passages})
+
         elif path == "/api/reading":
-            passage = self.reading.get_passage("acad_p1")
+            pid = "acad_p1"
+            if "passage_id=" in parsed.query:
+                pid = parsed.query.replace("passage_id=", "").split("&")[0].strip()
+            passage = self.reading.get_passage(pid) or self.reading.get_passage("acad_p1")
             self._send_json(passage)
 
         elif path == "/api/listening":
@@ -121,15 +129,26 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             card_idx = 0
             if "card_idx=" in parsed.query:
                 try:
-                    card_idx = int(parsed.query.replace("card_idx=", "").strip())
+                    card_idx = int(parsed.query.replace("card_idx=", "").split("&")[0].strip())
                 except ValueError:
                     card_idx = 0
             prompts = self.speaking.get_test_prompts(card_idx)
             self._send_json(prompts)
 
+        elif path == "/api/writing/prompts":
+            prompts = self.writing.list_prompts()
+            self._send_json({"prompts": prompts})
+
         elif path == "/api/grammar/adaptive":
             session = self.adaptive_grammar.generate_adaptive_session("default_learner")
             self._send_json(session)
+
+        elif path == "/api/grammar/fillups":
+            category = None
+            if "category=" in parsed.query:
+                category = parsed.query.replace("category=", "").split("&")[0].strip()
+            drills = GrammarEngine.get_fill_up_drills(category)
+            self._send_json({"drills": drills})
 
         elif path == "/api/diagnostic/questions":
             self._send_json({"questions": CEFRDiagnostic.DIAGNOSTIC_QUESTIONS})
@@ -175,9 +194,10 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             self._send_json(updated)
 
         elif path == "/api/reading/submit":
+            pid = body.get("passage_id", "acad_p1")
             answers_raw = body.get("answers", {})
             user_answers = {int(k): v for k, v in answers_raw.items()}
-            res = self.reading.evaluate_test("acad_p1", user_answers)
+            res = self.reading.evaluate_test(pid, user_answers)
             self._send_json(res)
 
         elif path == "/api/listening/submit":
@@ -193,6 +213,12 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             res = self.writing.evaluate_essay(prompt_id, essay_text)
             self._send_json(res)
 
+        elif path == "/api/grammar/fillups/submit":
+            drill_id = body.get("drill_id", "")
+            user_answer = body.get("user_answer", "")
+            res = GrammarEngine.evaluate_fill_up(drill_id, user_answer)
+            self._send_json(res)
+
         elif path == "/api/speaking/evaluate":
             transcript = body.get("transcript", "")
             duration = float(body.get("duration_seconds", 60.0))
@@ -202,61 +228,49 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
         elif path == "/api/diagnostic/submit":
             answers = body.get("answers", {})
             res = CEFRDiagnostic.grade_diagnostic(answers)
-            # Update learner bands
-            self.learner_repo.update_profile("default_learner", {
-                "current_band": res["estimated_band"],
-                "cefr_level": res["estimated_cefr"]
-            })
-            self._send_json(res)
-
-        elif path == "/api/export":
-            data = self.analytics.export_learner_data_json("default_learner")
-            self._send_json({"data": data})
-
-        elif path == "/api/import":
-            raw_json = body.get("data", "{}")
-            res = self.analytics.import_learner_data_json("default_learner", raw_json)
             self._send_json(res)
 
         else:
-            self._send_json({"error": "Endpoint not found"}, status=404)
+            self._send_json({"error": "Unknown API route"}, status=404)
 
     def _serve_static(self, path: str):
-        if path in ["", "/"]:
+        if path in ("/", ""):
             path = "/index.html"
 
         # Sanitize path
-        rel_path = path.lstrip("/")
-        static_dir = os.path.join(BASE_DIR, "ui", "static")
-        safe_path = os.path.normpath(os.path.join(static_dir, rel_path))
+        clean_rel = os.path.normpath(path.lstrip("/"))
+        file_path = os.path.join(BASE_DIR, "ui", "static", clean_rel)
 
-        if not safe_path.startswith(static_dir) or not os.path.exists(safe_path) or os.path.isdir(safe_path):
-            self.send_error(404, "File Not Found")
+        if not os.path.exists(file_path) or not os.path.isfile(file_path):
+            self.send_error(404, f"File Not Found: {clean_rel}")
             return
 
-        mime_type, _ = mimetypes.guess_type(safe_path)
-        mime_type = mime_type or "application/octet-stream"
+        content_type, _ = mimetypes.guess_type(file_path)
+        content_type = content_type or "application/octet-stream"
 
-        with open(safe_path, "rb") as f:
-            content = f.read()
-
-        self.send_response(200)
-        self.send_header("Content-Type", mime_type)
-        self.send_header("Content-Length", str(len(content)))
-        self.end_headers()
-        self.wfile.write(content)
+        try:
+            with open(file_path, "rb") as f:
+                content = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(content)))
+            self.end_headers()
+            self.wfile.write(content)
+        except Exception as e:
+            self.send_error(500, f"Internal Server Error: {e}")
 
 
 def run_server(port: int = 8080):
     server_address = ("127.0.0.1", port)
     httpd = ThreadingHTTPServer(server_address, GAMAHTTPRequestHandler)
-    print(f"[OK] IELTS by GAMA UI Server running at http://127.0.0.1:{port}")
+    print(f"GAMA Hybrid Local Server active at http://127.0.0.1:{port}")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print("\nStopping server...")
+        print("\nShutting down GAMA server.")
         httpd.server_close()
 
 
 if __name__ == "__main__":
-    run_server()
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
+    run_server(port)

@@ -1,6 +1,7 @@
 """
 Initial CEFR Diagnostic & English Assessment Engine for IELTS by GAMA.
 Delivers comprehensive baseline assessment across skills and establishes personalized learning targets.
+Expanded to 12 diagnostic assessment questions incorporating IELTS Advantage question analysis principles.
 """
 
 from typing import Dict, Any, List
@@ -30,6 +31,24 @@ class CEFRDiagnostic:
             "explanation": "The subject is the singular collective noun 'The collection', so singular verb 'has' is required."
         },
         {
+            "id": "diag_g3",
+            "skill": "grammar",
+            "category": "Inversion for Band 8+",
+            "prompt": "Not only _____ the new policy reduce carbon emissions, but it also stimulated clean tech employment.",
+            "options": ["did", "does", "had", "will"],
+            "correct": "did",
+            "explanation": "Past tense negative adverbial inversion: 'Not only did the new policy reduce...' requires auxiliary 'did' before the subject."
+        },
+        {
+            "id": "diag_g4",
+            "skill": "grammar",
+            "category": "Articles & Countability",
+            "prompt": "The academic supervisor offered invaluable _____ regarding the thesis methodology.",
+            "options": ["advice", "an advice", "advices", "a piece of advices"],
+            "correct": "advice",
+            "explanation": "'Advice' is an uncountable noun that takes zero article in general reference and never adds '-s'."
+        },
+        {
             "id": "diag_v1",
             "skill": "vocabulary",
             "category": "Academic Collocations",
@@ -48,6 +67,24 @@ class CEFRDiagnostic:
             "explanation": "'Carry out' means to execute or implement a plan/policy."
         },
         {
+            "id": "diag_v3",
+            "skill": "vocabulary",
+            "category": "Lexical Upgrades (Band 8+)",
+            "prompt": "Which phrasing represents a Band 8+ academic upgrade for 'a big change' in IELTS Writing?",
+            "options": ["a substantial transformation", "a huge difference", "a super big shift", "a massive modification"],
+            "correct": "a substantial transformation",
+            "explanation": "'Substantial transformation' or 'marked disparity' is precise formal academic register."
+        },
+        {
+            "id": "diag_v4",
+            "skill": "vocabulary",
+            "category": "Academic Verb Collocations",
+            "prompt": "Wind and solar energy now _____ for approximately 28% of national electrical capacity.",
+            "options": ["account", "amount", "constitute for", "represent of"],
+            "correct": "account",
+            "explanation": "'Account for' is the established academic collocation meaning 'to make up or constitute a proportion'."
+        },
+        {
             "id": "diag_r1",
             "skill": "reading",
             "category": "Inference & Skimming",
@@ -57,6 +94,15 @@ class CEFRDiagnostic:
             "explanation": "The passage explicitly states rural electrification still predominantly relies on biomass, contradicting the statement."
         },
         {
+            "id": "diag_r2",
+            "skill": "reading",
+            "category": "TFNG Distractor Traps",
+            "prompt": "Passage: 'The high-speed rail line opened in 2021 and carries 50,000 commuters daily.' True, False, or Not Given: The high-speed rail line is faster than previous diesel engines.",
+            "options": ["Not Given", "True", "False"],
+            "correct": "Not Given",
+            "explanation": "Although likely true in real life, the passage mentions opening date and passenger volume, with NO comparison to diesel engines."
+        },
+        {
             "id": "diag_l1",
             "skill": "listening",
             "category": "Form Completion & Spelling",
@@ -64,6 +110,20 @@ class CEFRDiagnostic:
             "options": ["Auditorium", "Hall", "Library", "Center"],
             "correct": "Auditorium",
             "explanation": "The speaker identified the venue as the Henderson Auditorium."
+        },
+        {
+            "id": "diag_m1",
+            "skill": "methodology",
+            "category": "IELTS Advantage Question Analysis",
+            "prompt": "According to the IELTS Advantage methodology, what is the crucial first step before writing any Task 2 essay?",
+            "options": [
+                "Analyze the general topic, micro-topic, and task instruction words",
+                "Immediately start writing introductory sentences to save time",
+                "Memorize 10 complicated idioms to impress the examiner",
+                "Write down as many synonyms as possible"
+            ],
+            "correct": "Analyze the general topic, micro-topic, and task instruction words",
+            "explanation": "IELTS Advantage emphasizes that 50% of Task Response success lies in analyzing the precise micro-topic and task instruction words."
         }
     ]
 
@@ -101,52 +161,58 @@ class CEFRDiagnostic:
                     "explanation": q["explanation"]
                 })
 
-        accuracy = correct_count / max(1, total)
+        accuracy_pct = (correct_count / total) * 100.0 if total > 0 else 0.0
 
-        # CEFR Mapping
-        if accuracy >= 0.85:
+        # Map accuracy percentage to CEFR and IELTS baseline
+        if accuracy_pct >= 90.0:
             cefr = "C1"
-            ielts_range = "7.0 - 7.5"
-            est_band = 7.0
-        elif accuracy >= 0.65:
+            estimated_band = 7.5
+            range_str = "7.5 - 8.5"
+        elif accuracy_pct >= 75.0:
             cefr = "B2"
-            ielts_range = "6.0 - 6.5"
-            est_band = 6.0
-        elif accuracy >= 0.45:
+            estimated_band = 6.5
+            range_str = "6.5 - 7.5"
+        elif accuracy_pct >= 55.0:
             cefr = "B1"
-            ielts_range = "5.0 - 5.5"
-            est_band = 5.0
-        elif accuracy >= 0.25:
+            estimated_band = 5.5
+            range_str = "5.5 - 6.5"
+        elif accuracy_pct >= 35.0:
             cefr = "A2"
-            ielts_range = "4.0 - 4.5"
-            est_band = 4.0
+            estimated_band = 4.5
+            range_str = "4.5 - 5.5"
         else:
             cefr = "A1"
-            ielts_range = "3.0 - 3.5"
-            est_band = 3.5
+            estimated_band = 3.5
+            range_str = "3.5 - 4.5"
 
+        # Identify strengths and priorities
         strengths = []
-        weaknesses = []
-        for s, stats in skill_scores.items():
-            rate = stats["correct"] / max(1, stats["total"])
-            if rate >= 0.75:
-                strengths.append(s.capitalize())
+        priorities = []
+        for sk, sc in skill_scores.items():
+            rate = sc["correct"] / sc["total"] if sc["total"] > 0 else 0.0
+            capitalized_skill = sk.capitalize()
+            if rate >= 0.7:
+                strengths.append(capitalized_skill)
             else:
-                weaknesses.append(s.capitalize())
+                priorities.append(capitalized_skill)
 
-        priority = weaknesses[0] if weaknesses else "Academic Vocabulary & Writing Task 2"
+        if not priorities:
+            priorities = ["Band 8+ Rhetorical Inversion", "Advanced Lexical Collocations"]
 
         return {
+            "accuracy_percent": round(accuracy_pct, 1),
             "correct_count": correct_count,
             "total_questions": total,
-            "accuracy_percent": round(accuracy * 100, 1),
             "estimated_cefr": cefr,
-            "estimated_ielts_range": ielts_range,
-            "estimated_band": est_band,
-            "strengths": strengths or ["General Comprehension"],
-            "weaknesses": weaknesses or ["None identified in preliminary screen"],
-            "priority_skills": [priority],
-            "recommended_study_plan": f"Daily 30-minute focus on {priority}, followed by Spaced Repetition vocabulary and Writing Task 2 practice.",
+            "estimated_ielts_range": range_str,
+            "estimated_band": estimated_band,
+            "skill_breakdown": skill_scores,
+            "strengths": strengths,
+            "priority_skills": priorities,
             "mistakes_to_record": mistakes,
+            "recommended_study_plan": (
+                f"Based on your {cefr} baseline (Band ~{estimated_band}), prioritize {', '.join(priorities)}. "
+                "Leverage the IELTS Advantage Question Analysis Questionnaire and daily SRS vocabulary flashcards."
+            ),
             "disclaimer": BandCalculator.DISCLAIMER
         }
