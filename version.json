@@ -1,17 +1,17 @@
 {
-  "version": "1.4.0",
-  "versionCode": 4,
-  "releaseName": "Category Progress Mastery Dashboard, Live Dynamic Band Score & Daily Mission Achiever",
+  "version": "1.5.0",
+  "versionCode": 5,
+  "releaseName": "Multi-Platform Compatibility (Tablet, iOS, Windows) & Crystal Clear Light Mode Redesign",
   "releaseDate": "2026-10-04",
   "type": "minor",
   "changelog": {
     "highlights": [
-      "Daily Mission & Goal Achiever System: 'What do you want to achieve today?' on-startup interactive modal, 1-click goal selector chips, live progress tracker, and direct routing helper",
-      "Category Progress & Mastery Tracking: 4 dedicated live competency cards (Strategy & Core, Cambridge 4-Skills, Methodology & Drills, Tracking & System) with dynamic percentage meters and item-level completion ledgers",
-      "Live Dynamic Band Score Engine: Recalculates overall band score in real time whenever user submits Reading, Listening, Writing, Speaking, Grammar clozes, or SRS flashcards, including CEFR level mapping",
-      "Animated Band Score Toast: Real-time celebratory HUD feedback showcasing updated overall band score, CEFR progression, and practice bonuses",
-      "Refined Mobile Navigation Filter: Clean 3-tier mobile filter strip removing redundant 'All (12)' for faster touch navigation on smartphones and tablets",
-      "Full synchronization to Android APK (versionCode 4), Offline Local Engine, and website deployment"
+      "Crystal Clear High-Contrast Light Mode: Complete UI redesign for light theme with calibrated typography, snowy cards, high-contrast borders, refined categorical pastels, and zero dark artifacts",
+      "Automatic Screen Size & Device Adaptation: Real-time detection across Mobile, Tablet, Desktop, and Ultrawide displays with dynamic CSS custom properties (--app-width, --app-height, --vh)",
+      "Tablet Split-View Enhancements: Optimized dual-pane layouts for iPads & Android tablets across Reading Passages, Writing Studio, and 2x2 Category Progress Grid",
+      "iOS Safe Area & WebKit Compatibility: Viewport-fit=cover, environment insets (notch/home indicator safe padding), momentum touch scrolling, and speech synthesis user gesture unlock",
+      "Windows Fluent Desktop Integration: Custom slim acrylic scrollbars, high-DPI scaling, and keyboard shortcuts (Alt+1..5 navigation, Alt+T theme toggle, Escape modal dismiss)",
+      "System Color Scheme Sync: Automatically aligns with OS light/dark mode preference with persistent manual override in local storage"
     ]
   }
 }

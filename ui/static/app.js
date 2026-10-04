@@ -6,7 +6,7 @@
  */
 
 const API_BASE = "";
-const APP_VERSION = "1.4.0";
+const APP_VERSION = "1.5.0";
 
 // Global State
 let appState = {
@@ -1144,23 +1144,164 @@ function stopAudioSpeech(btnElement) {
 }
 
 // -------------------------------------------------------------
-// Screen Dimension & Responsive Tablet Detection
+// Screen Dimension & Multi-Platform Adaptive Engine (v1.5.0)
 // -------------------------------------------------------------
 function updateScreenDimensions() {
   const w = window.innerWidth;
   const h = window.innerHeight;
-  const isTablet = w >= 768;
+  const dpr = window.devicePixelRatio || 1;
+
+  // Set CSS custom properties for pixel-perfect dynamic layouts
+  document.documentElement.style.setProperty("--app-width", `${w}px`);
+  document.documentElement.style.setProperty("--app-height", `${h}px`);
+  document.documentElement.style.setProperty("--vh", `${h * 0.01}px`);
+
+  // Detect Device Category
+  const isCompactMobile = w < 480;
+  const isMobile = w < 768;
+  const isTablet = w >= 768 && w <= 1180;
+  const isDesktop = w > 1180 && w <= 1600;
+  const isUltrawide = w > 1600;
+  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+
+  // Detect Platform & OS
+  const ua = navigator.userAgent || "";
+  const platform = navigator.platform || "";
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isWindows = /Win/i.test(ua) || /Win/i.test(platform);
+  const isAndroid = /Android/i.test(ua);
+  const isMac = /Mac/i.test(ua) && !isIOS;
+
+  // Sync classes on body
+  document.body.classList.toggle("device-compact", isCompactMobile);
+  document.body.classList.toggle("device-mobile", isMobile);
+  document.body.classList.toggle("device-tablet", isTablet);
+  document.body.classList.toggle("device-desktop", isDesktop);
+  document.body.classList.toggle("device-ultrawide", isUltrawide);
+  document.body.classList.toggle("orientation-landscape", isLandscape);
+  document.body.classList.toggle("orientation-portrait", !isLandscape);
+  document.body.classList.toggle("platform-ios", isIOS);
+  document.body.classList.toggle("platform-windows", isWindows);
+  document.body.classList.toggle("platform-android", isAndroid);
+  document.body.classList.toggle("platform-mac", isMac);
+
+  // Determine user-friendly profile label
+  let osLabel = "Windows";
+  if (isIOS) osLabel = isTablet ? "iPadOS" : "iOS";
+  else if (isAndroid) osLabel = isTablet ? "Android Tablet" : "Android Phone";
+  else if (isWindows) osLabel = "Windows";
+  else if (isMac) osLabel = "macOS";
+
+  let devLabel = "Mobile";
+  if (isTablet) devLabel = "Tablet";
+  else if (isDesktop) devLabel = "Desktop";
+  else if (isUltrawide) devLabel = "Ultrawide PC";
+
   const badge = document.getElementById("screenDimensionBadge");
   const devScreen = document.getElementById("devScreenSpec");
   const deviceLabel = document.getElementById("deviceProfileLabel");
 
-  const txt = `${w}×${h} (${isTablet ? "Tablet / Large Screen" : "Mobile Phone"})`;
-  if (badge) badge.innerText = txt;
-  if (devScreen) devScreen.innerText = txt;
-  if (deviceLabel) deviceLabel.innerText = isTablet ? "TABLET (Responsive)" : "MOBILE PHONE";
+  const badgeText = `${osLabel} • ${w}×${h} (${devLabel})`;
+  if (badge) badge.innerHTML = `${badgeText} • <span class="version-tag" id="headerVersionBadge">v1.5.0</span>`;
+  if (devScreen) devScreen.innerText = `${badgeText} @ ${dpr.toFixed(1)}x DPR`;
+  if (deviceLabel) deviceLabel.innerText = `${devLabel.toUpperCase()} (${osLabel})`;
 }
 
 window.addEventListener("resize", updateScreenDimensions);
+window.addEventListener("orientationchange", () => {
+  setTimeout(updateScreenDimensions, 100);
+});
+
+// iOS Audio Unlock on first user gesture
+function initIOSAudioUnlock() {
+  const unlockAudio = () => {
+    if (window.speechSynthesis) {
+      const silent = new SpeechSynthesisUtterance("");
+      silent.volume = 0;
+      window.speechSynthesis.speak(silent);
+    }
+    window.removeEventListener("touchstart", unlockAudio);
+    window.removeEventListener("click", unlockAudio);
+  };
+  window.addEventListener("touchstart", unlockAudio, { passive: true, once: true });
+  window.addEventListener("click", unlockAudio, { passive: true, once: true });
+}
+
+// Windows Keyboard Shortcuts
+function initWindowsShortcuts() {
+  window.addEventListener("keydown", (e) => {
+    // Alt + 1..6 navigation
+    if (e.altKey && !e.ctrlKey && !e.shiftKey) {
+      if (e.key === "1") { e.preventDefault(); navigateToTab("dashboard"); }
+      else if (e.key === "2") { e.preventDefault(); navigateToTab("reading"); }
+      else if (e.key === "3") { e.preventDefault(); navigateToTab("writing"); }
+      else if (e.key === "4") { e.preventDefault(); navigateToTab("speaking"); }
+      else if (e.key === "5") { e.preventDefault(); navigateToTab("listening"); }
+      else if (e.key.toLowerCase() === "t") { e.preventDefault(); toggleTheme(); }
+    }
+    // Escape closes modals
+    if (e.key === "Escape") {
+      const modal = document.getElementById("goalWelcomeModal");
+      if (modal && modal.classList.contains("open")) {
+        modal.classList.remove("open");
+      }
+    }
+  });
+}
+
+// -------------------------------------------------------------
+// Light / Dark Theme Manager with System Preference Sync
+// -------------------------------------------------------------
+function initTheme() {
+  const savedTheme = localStorage.getItem("ielts_theme");
+  const systemPrefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+  const isLight = savedTheme === "light" || (!savedTheme && systemPrefersLight);
+
+  if (isLight) {
+    document.body.classList.add("light-theme");
+  } else {
+    document.body.classList.remove("light-theme");
+  }
+  updateThemeUI();
+
+  // Listen to OS system theme changes if not manually locked
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
+      if (!localStorage.getItem("ielts_theme")) {
+        if (e.matches) {
+          document.body.classList.add("light-theme");
+        } else {
+          document.body.classList.remove("light-theme");
+        }
+        updateThemeUI();
+      }
+    });
+  }
+}
+
+function updateThemeUI() {
+  const isLight = document.body.classList.contains("light-theme");
+  const btn = document.getElementById("themeToggleBtn");
+  const metaThemeColor = document.getElementById("metaThemeColor");
+
+  if (btn) {
+    btn.innerHTML = isLight ? "🌞" : "🌙";
+    btn.title = isLight ? "Switch to Dark AMOLED Theme (Alt+T)" : "Switch to Crisp Light Theme (Alt+T)";
+  }
+  if (metaThemeColor) {
+    metaThemeColor.setAttribute("content", isLight ? "#f8fafc" : "#0f141c");
+  }
+}
+
+function toggleTheme() {
+  const isLight = document.body.classList.toggle("light-theme");
+  localStorage.setItem("ielts_theme", isLight ? "light" : "dark");
+  updateThemeUI();
+  showBandToast(
+    isLight ? "☀️ Crisp Light Mode Active" : "🌙 AMOLED Dark Mode Active",
+    isLight ? "High-contrast daylight theme enabled" : "Deep contrast night theme enabled"
+  );
+}
 
 // -------------------------------------------------------------
 // Navigation Tabs & Categorization
@@ -1202,10 +1343,11 @@ function initNavigation() {
     loadDashboard();
   });
 
-  // Theme toggle
-  document.getElementById("themeToggleBtn").addEventListener("click", () => {
-    document.body.classList.toggle("light-theme");
-  });
+  // Theme toggle button click
+  const themeBtn = document.getElementById("themeToggleBtn");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", toggleTheme);
+  }
 }
 
 function initMobileCategoryFilter() {
@@ -3018,7 +3160,10 @@ async function resolveMistake(id) {
 // Initialization on DOM Ready
 // -------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
   updateScreenDimensions();
+  initIOSAudioUnlock();
+  initWindowsShortcuts();
   initNavigation();
   initChat();
   initDiagnostic();

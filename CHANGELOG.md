@@ -9,6 +9,25 @@ The versioning follows the convention:
 
 ---
 
+## [v1.5.0] - 2026-10-04 (Big Changes: Multi-Platform Tablet/iOS/Windows & Light Mode Overhaul)
+
+### Added
+- **Crystal Clear Light Mode Redesign**:
+  - Complete aesthetic and ergonomic redesign of the light theme.
+  - High-contrast typography with deep slate headings (`#0f172a`), readable body text (`#334155`), and crystal-clear secondary text (`#64748b`).
+  - Pure white elevated cards (`#ffffff`) with subtle, refined border definitions (`#e2e8f0`) and soft depth shadows.
+  - Recalibrated categorical pastel palette (Core Indigo, Exam Blue, Advantage Amber, System Slate) engineered specifically for high readability on light backgrounds.
+  - Elimination of all dark artifacts: form inputs, active goal boxes, subcategory toolbars, chat chips, cloze fill-ups, and modals now render with crisp daylight styling.
+  - Instant theme toggle button with animated confirmation toast (`☀️ Crisp Light Mode Active` / `🌙 AMOLED Dark Mode Active`).
+  - Automatic synchronization with operating system color scheme preference (`prefers-color-scheme`) with persistent local storage manual override.
+- **Multi-Platform Compatibility (Tablet, iOS, Windows, Android)**:
+  - **Automatic Screen Size & Device Adapter**: Dynamic JavaScript dimension detector setting CSS custom properties (`--app-width`, `--app-height`, `--vh`) and device classes (`device-mobile`, `device-tablet`, `device-desktop`, `device-ultrawide`, `platform-ios`, `platform-windows`, `platform-android`).
+  - **Tablet Layouts (iPads & Android Tablets)**: Optimized split-pane dual-column views for Reading Passages (passage left, questions right) and Writing Studio (prompts left, editor right) across 768px – 1180px viewports.
+  - **iOS Compatibility**: Safe area insets (`env(safe-area-inset-*)`), WebKit momentum touch scrolling, Web Audio API / SpeechSynthesis user gesture unlock for Dr. Harrison's speaking examiner voice, and Apple standalone PWA meta tags.
+  - **Windows Desktop Integration**: Slim acrylic scrollbars adapting to both Dark and Light themes, high-DPI scaling, and desktop keyboard shortcuts (`Alt+1..5` navigation, `Alt+T` theme toggle, `Escape` modal dismiss).
+
+---
+
 ## [v1.4.0] - 2026-10-04 (Big Changes: Category Progress Mastery, Live Band Score & Daily Mission Achiever)
 
 ### Added
