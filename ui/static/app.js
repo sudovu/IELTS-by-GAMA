@@ -6,7 +6,7 @@
  */
 
 const API_BASE = "";
-const APP_VERSION = "1.5.2";
+const APP_VERSION = "1.5.3";
 
 // Global State
 let appState = {
@@ -3178,11 +3178,96 @@ async function resolveMistake(id) {
 }
 
 // -------------------------------------------------------------
+// Screen Setting Analysis & Proactive Permission Calibration (v1.5.3)
+// -------------------------------------------------------------
+function analyzeScreenAndPermissions() {
+  const innerW = window.innerWidth;
+  const innerH = window.innerHeight;
+  const dpr = window.devicePixelRatio || 1;
+  const deviceType = innerW >= 1024 ? "Desktop/Tablet" : (innerW >= 600 ? "Large Phone/Foldable" : "Compact Mobile");
+
+  console.log(`[Screen Analysis] Viewport: ${innerW}x${innerH}, DPR: ${dpr.toFixed(2)}, Type: ${deviceType}`);
+
+  // Proactively check Microphone Permission for Cambridge Speaking Test
+  const hasAndroidSTT = !!(window.AndroidSTT && typeof window.AndroidSTT.hasPermission === 'function');
+  const hasGrantedMic = hasAndroidSTT ? window.AndroidSTT.hasPermission() : true;
+
+  if (hasAndroidSTT && !hasGrantedMic) {
+    showScreenSetupModal(innerW, innerH, dpr, deviceType);
+  } else {
+    // Show brief toast on first cold start per session
+    if (!sessionStorage.getItem("ielts_screen_calibrated")) {
+      sessionStorage.setItem("ielts_screen_calibrated", "true");
+      showBandUpdateToast(`🎯 Screen Calibrated: ${innerW}x${innerH} (${dpr.toFixed(1)}x) Auto-Fit Active`);
+    }
+  }
+
+  // Hook Android permission callback
+  window.onMicPermissionResult = function(granted) {
+    const modal = document.getElementById("screenSetupModal");
+    if (modal) modal.remove();
+    if (granted) {
+      showBandUpdateToast("🎤 Microphone access enabled for Examiner Speaking practice!");
+    } else {
+      showBandUpdateToast("ℹ️ Audio practice available via Text-to-Speech.");
+    }
+  };
+}
+
+function showScreenSetupModal(w, h, dpr, deviceType) {
+  if (document.getElementById("screenSetupModal")) return;
+
+  const overlay = document.createElement("div");
+  overlay.id = "screenSetupModal";
+  overlay.className = "goal-modal-overlay open";
+  overlay.style.zIndex = "99999";
+  overlay.innerHTML = `
+    <div class="goal-modal-card" style="max-width: 440px; text-align: center; border-radius: 18px; padding: 24px;">
+      <div style="font-size: 2.2rem; margin-bottom: 8px;">🎯</div>
+      <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">System & Screen Calibrated</h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 14px;">
+        Layout automatically fitted for <strong>${w}x${h}</strong> (${dpr.toFixed(1)}x density • ${deviceType}).
+      </p>
+      <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 12px; padding: 12px; text-align: left; margin-bottom: 16px;">
+        <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary-accent); margin-bottom: 4px;">
+          🎙️ IELTS Speaking Examiner Setup
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+          Enable microphone permission to practice Cambridge Part 1, 2 & 3 speaking simulations with Dr. Harrison using offline voice recognition.
+        </p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button id="btnGrantMicSetup" class="btn btn-primary" style="width: 100%; padding: 12px; font-weight: 700; border-radius: 10px;">
+          Allow Microphone & Continue
+        </button>
+        <button id="btnSkipMicSetup" class="btn btn-secondary" style="width: 100%; padding: 10px; font-size: 0.82rem; border-radius: 10px;">
+          Continue without Microphone
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  document.getElementById("btnGrantMicSetup").addEventListener("click", () => {
+    if (window.AndroidSTT && typeof window.AndroidSTT.requestPermission === 'function') {
+      window.AndroidSTT.requestPermission();
+    } else {
+      overlay.remove();
+    }
+  });
+
+  document.getElementById("btnSkipMicSetup").addEventListener("click", () => {
+    overlay.remove();
+  });
+}
+
+// -------------------------------------------------------------
 // Initialization on DOM Ready
 // -------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   updateScreenDimensions();
+  analyzeScreenAndPermissions();
   initIOSAudioUnlock();
   initWindowsShortcuts();
   initNavigation();

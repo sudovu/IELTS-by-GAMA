@@ -1,15 +1,15 @@
 {
-  "version": "1.5.2",
-  "versionCode": 7,
-  "releaseName": "Zero Top Gap & Seamless System Bar Auto-Fit",
+  "version": "1.5.3",
+  "versionCode": 8,
+  "releaseName": "Pixel-Perfect Auto Screen Calibration & Seamless Snug System Fit",
   "releaseDate": "2026-10-04",
   "type": "patch",
   "changelog": {
     "highlights": [
-      "Zero Top Gap Auto-Fit: Removed duplicate native FrameLayout and CSS body insets, allowing WebView and header to sit completely flush with the system status bar with zero blank gap",
-      "Native Android Dynamic Theme Bridge: Injected AndroidTheme bridge synchronizing Android OS status bar and navigation bar colors seamlessly between dark (#161e2b) and light (#f8fafc)",
-      "Automatic Screen Fitting: Eliminated manual adjustment requirements; app fills display naturally and immobiled on all mobile, tablet, and desktop form factors",
-      "Developments Hub & Projects Sync: Synchronized website documentation and software version references to v1.5.2 across all development cards and tables"
+      "Zero Excess Gap & Auto Snug Header: Eliminated status bar collision and forehead gap with native root insets and snug 52px app header",
+      "Screen Setting Analysis Engine: Automatically analyzes display dimensions, DPI scale, aspect ratio, and device category on launch",
+      "Proactive Microphone Permission Setup: On-startup calibration card requests microphone permissions cleanly for Cambridge IELTS speaking tests",
+      "Multi-Theme Solid Status Bar: Seamless status bar background matching dark (#161e2b) and light (#ffffff) themes with dynamic light/dark system icons"
     ]
   }
 }

@@ -9,6 +9,24 @@ The versioning follows the convention:
 
 ---
 
+## [v1.5.3] - 2026-10-04 (Small Changes: Pixel-Perfect Auto Screen Calibration & Seamless Snug System Fit)
+
+### Fixed & Improved
+- **Zero Excess Gap & Auto Snug Header**:
+  - Eliminated both status bar collision and forehead gap by wrapping the WebView in a native `rootContainer` (`FrameLayout`) that applies exact WindowInsets (`WindowInsetsCompat.Type.statusBars()` and `Type.navigationBars()`).
+  - Standardized `.app-header` to a snug, compact `52px` on mobile (`56px` on tablet/desktop) with clean vertical centering and zero artificial top padding.
+  - Android status bar renders cleanly above the app header with zero overlap and zero empty space.
+- **Screen Setting Analysis Engine**:
+  - Automatically assesses screen width, height, density pixel ratio (DPR), orientation, and device form factor on launch.
+  - Dynamically fits all categories, dashboard metrics, and controls tailored to the physical screen hardware.
+- **Proactive Microphone Permission Calibration**:
+  - Added on-startup system setup card that detects microphone permission status for Cambridge IELTS Part 1, 2, and 3 AI Speaking practice.
+  - Proactively requests Android runtime `RECORD_AUDIO` permission when needed, with clean fallback for voice synthesis.
+- **Multi-Theme Solid Status Bar**:
+  - Synchronizes native status bar background with dark `#161e2b` and light `#ffffff` themes with dynamic icon contrast.
+
+---
+
 ## [v1.5.2] - 2026-10-04 (Small Changes: Zero Top Gap & Seamless System Bar Auto-Fit)
 
 ### Fixed & Improved

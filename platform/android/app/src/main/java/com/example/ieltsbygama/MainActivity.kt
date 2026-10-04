@@ -34,6 +34,7 @@ import java.util.Locale
 class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var webView: WebView
+    private lateinit var rootContainer: FrameLayout
     private var textToSpeech: TextToSpeech? = null
     private var isTtsReady = false
     private var speechRecognizer: SpeechRecognizer? = null
@@ -78,11 +79,6 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     return false
                 }
-
-                override fun onPageFinished(view: WebView?, url: String?) {
-                    super.onPageFinished(view, url)
-                    applyWindowInsetsToJs()
-                }
             }
 
             webChromeClient = object : WebChromeClient() {
@@ -97,29 +93,37 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
             addJavascriptInterface(AndroidThemeBridge(), "AndroidTheme")
         }
 
-        // Set edge-to-edge system bars so header seamlessly fills status bar area
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = Color.TRANSPARENT
+        // Create Root Container to manage system insets with zero gap
+        rootContainer = FrameLayout(this).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(Color.parseColor("#161e2b"))
+        }
+        rootContainer.addView(webView, ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        ))
+
+        // Set status bar and navigation bar with automatic fitting
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        window.statusBarColor = Color.parseColor("#161e2b")
         window.navigationBarColor = Color.parseColor("#0f141c")
         val insetsController = WindowCompat.getInsetsController(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = false
         insetsController.isAppearanceLightNavigationBars = false
 
-        // Listen for Window Insets and inject dynamic status bar and nav bar heights into CSS
-        ViewCompat.setOnApplyWindowInsetsListener(webView) { _, insets ->
+        // Listen for Window Insets and pad rootContainer exactly to system bars (zero gap, zero overlap)
+        ViewCompat.setOnApplyWindowInsetsListener(rootContainer) { v, insets ->
             val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars())
             val navBar = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-            val density = resources.displayMetrics.density
-            val statusBarDp = (statusBar.top / density).toInt()
-            val navBarDp = (navBar.bottom / density).toInt()
-            if (statusBarDp > 0 || navBarDp > 0) {
-                evaluateJs("document.documentElement.style.setProperty('--sat', '${statusBarDp}px'); document.documentElement.style.setProperty('--sab', '${navBarDp}px');")
-            }
+            v.setPadding(0, statusBar.top, 0, navBar.bottom)
             insets
         }
 
-        // Mount WebView directly so screen fits automatically with zero gap
-        setContentView(webView)
+        // Mount rootContainer directly so screen fits automatically with zero gap
+        setContentView(rootContainer)
 
         // Handle Back button navigation inside WebView
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -353,6 +357,25 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
         fun isAvailable(): Boolean {
             return SpeechRecognizer.isRecognitionAvailable(this@MainActivity)
         }
+
+        @JavascriptInterface
+        fun hasPermission(): Boolean {
+            return ContextCompat.checkSelfPermission(
+                this@MainActivity,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
+        @JavascriptInterface
+        fun requestPermission() {
+            mainHandler.post {
+                ActivityCompat.requestPermissions(
+                    this@MainActivity,
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    PERMISSION_REQUEST_RECORD_AUDIO
+                )
+            }
+        }
     }
 
     // Native Dynamic Theme JavaScript Interface
@@ -361,13 +384,16 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
         fun setDarkMode(isDark: Boolean) {
             mainHandler.post {
                 val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-                window.statusBarColor = Color.TRANSPARENT
                 if (isDark) {
+                    window.statusBarColor = Color.parseColor("#161e2b")
                     window.navigationBarColor = Color.parseColor("#0f141c")
+                    rootContainer.setBackgroundColor(Color.parseColor("#161e2b"))
                     insetsController.isAppearanceLightStatusBars = false
                     insetsController.isAppearanceLightNavigationBars = false
                 } else {
+                    window.statusBarColor = Color.parseColor("#ffffff")
                     window.navigationBarColor = Color.parseColor("#ffffff")
+                    rootContainer.setBackgroundColor(Color.parseColor("#ffffff"))
                     insetsController.isAppearanceLightStatusBars = true
                     insetsController.isAppearanceLightNavigationBars = true
                 }
@@ -375,17 +401,15 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
         }
     }
 
-    private fun applyWindowInsetsToJs() {
-        mainHandler.post {
-            val insets = ViewCompat.getRootWindowInsets(webView) ?: return@post
-            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            val navBar = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-            val density = resources.displayMetrics.density
-            val statusBarDp = (statusBar.top / density).toInt()
-            val navBarDp = (navBar.bottom / density).toInt()
-            if (statusBarDp > 0 || navBarDp > 0) {
-                evaluateJs("document.documentElement.style.setProperty('--sat', '${statusBarDp}px'); document.documentElement.style.setProperty('--sab', '${navBarDp}px');")
-            }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_RECORD_AUDIO) {
+            val granted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            evaluateJs("if (window.onMicPermissionResult) window.onMicPermissionResult($granted);")
         }
     }
 
