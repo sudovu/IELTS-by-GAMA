@@ -1,18 +1,17 @@
 {
-  "version": "1.3.0",
-  "versionCode": 3,
-  "releaseName": "UI Modernization, Distinguishable Button System & Categorized Workspaces",
+  "version": "1.4.0",
+  "versionCode": 4,
+  "releaseName": "Category Progress Mastery Dashboard, Live Dynamic Band Score & Daily Mission Achiever",
   "releaseDate": "2026-10-04",
   "type": "minor",
   "changelog": {
     "highlights": [
-      "Categorized Sidebar Architecture: 4 distinct groups (Strategy & Core, Cambridge 4-Skills, Methodology & Drills, Tracking & System) with colored category dots and informative badges",
-      "Mobile Horizontal Category Filter: Segmented bar for instant filtering between Exam, Advantage Drills, and Core dashboards on smartphones",
-      "Distinguishable Hero Button Palette: Tactical tactile feedback, deep glowing action buttons (.btn-hero-exam, .btn-hero-advantage, .btn-hero-audio, .btn-pulse, .btn-cat-ghost)",
-      "Interactive Horizontal Chip Selector Bars: Replaced dull dropdown selects with tactile chips for Reading Passages, Listening Sections, Writing Essay Types, Speaking Exam Sets, Grammar Syntax, and Vocab Topics",
-      "Subcategorized Tool Switchers (.btn-sub-tool): Smooth numbered tool navigation across IELTS Advantage Studio, Grammar Coach, and Vocabulary Vault",
-      "AI Tutor Quick Prompt Chips: Instant 1-touch exploration of IELTS Advantage 100% Rule, Band 8 Cue Card openings, and GRA Inversion",
-      "Full synchronization to Android Release APK, standalone Offline Local Engine, and website downloads"
+      "Daily Mission & Goal Achiever System: 'What do you want to achieve today?' on-startup interactive modal, 1-click goal selector chips, live progress tracker, and direct routing helper",
+      "Category Progress & Mastery Tracking: 4 dedicated live competency cards (Strategy & Core, Cambridge 4-Skills, Methodology & Drills, Tracking & System) with dynamic percentage meters and item-level completion ledgers",
+      "Live Dynamic Band Score Engine: Recalculates overall band score in real time whenever user submits Reading, Listening, Writing, Speaking, Grammar clozes, or SRS flashcards, including CEFR level mapping",
+      "Animated Band Score Toast: Real-time celebratory HUD feedback showcasing updated overall band score, CEFR progression, and practice bonuses",
+      "Refined Mobile Navigation Filter: Clean 3-tier mobile filter strip removing redundant 'All (12)' for faster touch navigation on smartphones and tablets",
+      "Full synchronization to Android APK (versionCode 4), Offline Local Engine, and website deployment"
     ]
   }
 }

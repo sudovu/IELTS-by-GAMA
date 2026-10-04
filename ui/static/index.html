@@ -20,7 +20,7 @@
         </div>
         <div class="brand-title">
           <h1>IELTS <span class="brand-accent">by GAMA</span></h1>
-          <span class="subtext" id="screenDimensionBadge">Hybrid Online + Offline AI Tutor • <span class="version-tag" id="headerVersionBadge">v1.3.0</span></span>
+          <span class="subtext" id="screenDimensionBadge">Hybrid Online + Offline AI Tutor • <span class="version-tag" id="headerVersionBadge">v1.4.0</span></span>
         </div>
       </div>
 
@@ -41,10 +41,9 @@
     <div class="app-body">
       <!-- Navigation Sidebar -->
       <nav class="sidebar">
-        <!-- Mobile Category Filter Strip -->
+        <!-- Mobile Category Filter Strip (Clean 3-Category Toggle) -->
         <div class="mobile-cat-filter" id="mobileCatFilter">
-          <button class="cat-filter-btn active" data-filter="all">🌐 All (12)</button>
-          <button class="cat-filter-btn" data-filter="exam">🎓 4-Skills Exam</button>
+          <button class="cat-filter-btn active" data-filter="exam">🎓 4-Skills Exam</button>
           <button class="cat-filter-btn" data-filter="advantage">🧭 Advantage & Drills</button>
           <button class="cat-filter-btn" data-filter="core">📊 Strategy & System</button>
         </div>
@@ -150,7 +149,7 @@
           </div>
           <div class="version-pill" style="margin-top: 8px; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 6px;">
             <span>Build:</span>
-            <strong style="color: var(--accent);" id="appVersionBadge">v1.2.0</strong>
+            <strong style="color: var(--accent);" id="appVersionBadge">v1.4.0</strong>
           </div>
         </div>
       </nav>
@@ -164,10 +163,62 @@
             <p class="subtitle" id="dailyGreetingText">Welcome back! Loading study recommendations...</p>
           </div>
 
+          <!-- 1A. Daily Mission & Goal Achiever Card (v1.4.0) -->
+          <div class="daily-goal-card mb-4" id="dailyGoalAchieverCard">
+            <div class="goal-header-row">
+              <div class="goal-title-wrap">
+                <div class="goal-icon-badge">🎯</div>
+                <div>
+                  <h3 style="margin: 0; font-size: 1.15rem; color: var(--text-primary);">What do you want to achieve today?</h3>
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);" id="todayDateLabel">Daily IELTS Target • 30 Mins Planned</span>
+                </div>
+              </div>
+              <button class="btn btn-cat-ghost btn-sm" onclick="openGoalSelectorModal()">⚙️ Change Today's Goal</button>
+            </div>
+
+            <!-- Quick Goal Selector Chips -->
+            <div class="goal-chips-row" id="dashboardGoalChips">
+              <button class="goal-chip active" id="chip_goal_speaking" onclick="setDailyGoal('speaking', this)">🎙️ Speaking Interview (Band 7.5+)</button>
+              <button class="goal-chip" id="chip_goal_reading" onclick="setDailyGoal('reading', this)">📑 Master Reading Passage (80%+)</button>
+              <button class="goal-chip" id="chip_goal_writing" onclick="setDailyGoal('writing', this)">✍️ Write & Audit Task 2 PEEL Essay</button>
+              <button class="goal-chip" id="chip_goal_grammar" onclick="setDailyGoal('grammar', this)">✏️ Solve 5 Grammar Clozes</button>
+              <button class="goal-chip" id="chip_goal_vocab" onclick="setDailyGoal('vocab', this)">🧠 Master 10 SRS Flashcards</button>
+              <button class="goal-chip" id="chip_goal_diagnostic" onclick="setDailyGoal('diagnostic', this)">🎯 Take 12-Q Diagnostic</button>
+            </div>
+
+            <!-- Active Goal State & Immediate Guidance -->
+            <div class="goal-active-box" id="goalActiveBox">
+              <div class="goal-target-details">
+                <div class="goal-target-title">
+                  <span id="activeGoalIcon">🎙️</span> <span id="activeGoalTitle">Complete 1 Official Speaking Interview</span>
+                  <span class="badge-role" id="goalStatusBadge" style="font-size: 0.72rem;">IN PROGRESS</span>
+                </div>
+                <div class="goal-target-desc" id="activeGoalDescription">
+                  Practice with Dr. Harrison in the 3-Part Examiner Room using the 3-Step Strategy (Direct Answer &rarr; Reason &rarr; Concrete Example).
+                </div>
+                <div class="goal-progress-bar-wrap">
+                  <div class="goal-progress-track">
+                    <div class="goal-progress-fill" id="goalProgressFill" style="width: 25%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="goal-actions-group">
+                <button class="btn-achieve-goal btn-pulse" id="achieveGoalBtn" onclick="helpAchieveGoal()">
+                  <span>🚀</span> Help Me Achieve This Goal
+                </button>
+                <button class="btn btn-outline btn-sm" id="completeGoalBtn" onclick="markGoalAchieved()">
+                  ✓ Mark Achieved
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1B. Key Performance Metrics -->
           <div class="grid-cards">
             <div class="card stat-card primary">
               <span class="card-label">Current Estimated Band</span>
-              <div class="big-metric" id="currentBandMetric">5.5</div>
+              <div class="big-metric" id="currentBandMetric">6.0</div>
               <span class="metric-sub" id="cefrMetric">CEFR Level: B2</span>
             </div>
 
@@ -190,6 +241,154 @@
             </div>
           </div>
 
+          <!-- 1C. Category Progress & Mastery Tracking (NEW v1.4.0) -->
+          <div class="mt-4">
+            <div class="section-title-row">
+              <h3>Category Progress & Mastery Tracking</h3>
+              <span class="badge-role">Live Competency Ledger</span>
+            </div>
+            <p class="subtitle" style="margin-top: 4px;">Real-time competency, completion rates, and practice tracking across all 4 preparation categories.</p>
+
+            <div class="category-progress-grid" id="categoryProgressGrid">
+              <!-- Category 1: Strategy & Core -->
+              <div class="cat-progress-card" data-cat="core">
+                <div>
+                  <div class="cat-card-header">
+                    <div class="cat-badge-title">
+                      <span class="cat-dot dot-core"></span>
+                      <span>Strategy & Core</span>
+                    </div>
+                    <span class="cat-progress-percent" id="catProgressPct_core">65%</span>
+                  </div>
+                  <div class="cat-progress-track mt-2">
+                    <div class="cat-progress-bar bar-core" id="catProgressBar_core" style="width: 65%;"></div>
+                  </div>
+                  <div class="cat-metrics-list mt-3">
+                    <div class="cat-metric-item">
+                      <span>CEFR Diagnostic:</span>
+                      <strong id="catMetricDiag">Completed (Band 6.0)</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>Baseline CEFR:</span>
+                      <strong id="catMetricCefr">B2 Independent</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>AI Tutor Queries:</span>
+                      <strong id="catMetricTutor">12 Dialogues</strong>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-outline mt-2" onclick="navigateToTab('diagnostic')">🎯 Open Diagnostic / Tutor</button>
+              </div>
+
+              <!-- Category 2: Cambridge 4-Skills Suite -->
+              <div class="cat-progress-card" data-cat="exam">
+                <div>
+                  <div class="cat-card-header">
+                    <div class="cat-badge-title">
+                      <span class="cat-dot dot-exam"></span>
+                      <span>Cambridge 4-Skills</span>
+                    </div>
+                    <span class="cat-progress-percent" id="catProgressPct_exam">72%</span>
+                  </div>
+                  <div class="cat-progress-track mt-2">
+                    <div class="cat-progress-bar bar-exam" id="catProgressBar_exam" style="width: 72%;"></div>
+                  </div>
+                  <div class="cat-metrics-list mt-3">
+                    <div class="cat-metric-item">
+                      <span>Speaking Examiner:</span>
+                      <strong id="catMetricSpeaking">Set 1 Done (Band 6.5)</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>Writing Studio:</span>
+                      <strong id="catMetricWriting">1 Essay Evaluated (Band 7.0)</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>Academic Reading:</span>
+                      <strong id="catMetricReading">Passage 1 (8.5 Band)</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>Listening Simulation:</span>
+                      <strong id="catMetricListening">Sec 1 Done (7.5 Band)</strong>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-hero-exam mt-2" onclick="navigateToTab('speaking')">🎙️ Practice Exam Suite</button>
+              </div>
+
+              <!-- Category 3: Methodology & Drills -->
+              <div class="cat-progress-card" data-cat="advantage">
+                <div>
+                  <div class="cat-card-header">
+                    <div class="cat-badge-title">
+                      <span class="cat-dot dot-advantage"></span>
+                      <span>Methodology & Drills</span>
+                    </div>
+                    <span class="cat-progress-percent" id="catProgressPct_advantage">80%</span>
+                  </div>
+                  <div class="cat-progress-track mt-2">
+                    <div class="cat-progress-bar bar-advantage" id="catProgressBar_advantage" style="width: 80%;"></div>
+                  </div>
+                  <div class="cat-metrics-list mt-3">
+                    <div class="cat-metric-item">
+                      <span>Advantage 100% Rule:</span>
+                      <strong id="catMetricAdvantage">4 Prompts Analyzed</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>10-Point Essay Audit:</span>
+                      <strong id="catMetricChecklist">Verified 10/10</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>Grammar Clozes:</span>
+                      <strong id="catMetricGrammar">12 Drills Solved (Streak: 4)</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>SRS Vocab Deck:</span>
+                      <strong id="catMetricVocab">24 Cards Retained</strong>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-hero-advantage mt-2" onclick="navigateToTab('advantage')">🧭 Open Advantage Studio</button>
+              </div>
+
+              <!-- Category 4: Tracking & System -->
+              <div class="cat-progress-card" data-cat="system">
+                <div>
+                  <div class="cat-card-header">
+                    <div class="cat-badge-title">
+                      <span class="cat-dot dot-system"></span>
+                      <span>Tracking & System</span>
+                    </div>
+                    <span class="cat-progress-percent" id="catProgressPct_system">85%</span>
+                  </div>
+                  <div class="cat-progress-track mt-2">
+                    <div class="cat-progress-bar bar-system" id="catProgressBar_system" style="width: 85%;"></div>
+                  </div>
+                  <div class="cat-metrics-list mt-3">
+                    <div class="cat-metric-item">
+                      <span>Mistake Book:</span>
+                      <strong id="catMetricMistakes">0 Active / 1 Mastered</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>Accuracy Ratio:</span>
+                      <strong id="catMetricAccuracy">100% Clean</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>Daily Study Target:</span>
+                      <strong id="catMetricStudyTime">30 Min Target Active</strong>
+                    </div>
+                    <div class="cat-metric-item">
+                      <span>Offline Engine:</span>
+                      <strong id="catMetricStorage">Local RAG Synced</strong>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-cat-ghost mt-2" onclick="navigateToTab('mistakes')">📖 Review Mistake Ledger</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1D. Study Plan & Skills Radar -->
           <div class="split-view mt-4">
             <div class="card flex-1">
               <h3>Today's Structured Study Plan</h3>
@@ -920,7 +1119,7 @@
                 <div class="developer-specs-grid">
                   <div class="spec-cell">
                     <span class="spec-label">Version</span>
-                    <strong class="spec-value" id="settingsVersionValue">v1.3.0 Production</strong>
+                    <strong class="spec-value" id="settingsVersionValue">v1.4.0 Production</strong>
                   </div>
                   <div class="spec-cell">
                     <span class="spec-label">Engine</span>
@@ -940,6 +1139,78 @@
           </div>
         </section>
       </main>
+    </div>
+  </div>
+
+  <!-- Live Band Score Update Toast -->
+  <div id="bandUpdateToast" class="band-update-toast" aria-live="polite">
+    <div class="toast-icon">🎯</div>
+    <div class="toast-content">
+      <div class="toast-title" id="toastTitle">Band Score Updated!</div>
+      <div class="toast-subtitle" id="toastSubtitle">New Overall Band: 7.0 (C1) • +0.25 bonus</div>
+    </div>
+  </div>
+
+  <!-- Daily Mission Welcome Modal (What do you want to achieve today?) -->
+  <div id="goalWelcomeModal" class="goal-modal-overlay">
+    <div class="goal-modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 12px;">
+        <div style="display:flex; align-items:center; gap: 10px;">
+          <span style="font-size: 1.8rem;">🎯</span>
+          <div>
+            <h3 style="margin:0; font-size: 1.25rem;">What do you want to achieve today?</h3>
+            <p style="margin:2px 0 0 0; font-size:0.85rem; color:var(--text-secondary);">Set your daily target to focus your IELTS preparation and boost your band score.</p>
+          </div>
+        </div>
+        <button id="closeGoalModalBtn" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.9rem; border-radius: 8px;">✕</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
+        <button class="goal-chip modal-goal-opt" data-goal="reading" style="display:flex; justify-content:space-between; padding:12px 16px; border-radius:10px; text-align:left;">
+          <div>
+            <strong>📖 Cambridge Reading Drill</strong>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Complete Academic Reading Passage with Skimming & Scanning</div>
+          </div>
+          <span style="color:#60a5fa; font-weight:700;">+0.25 Band</span>
+        </button>
+
+        <button class="goal-chip modal-goal-opt" data-goal="listening" style="display:flex; justify-content:space-between; padding:12px 16px; border-radius:10px; text-align:left;">
+          <div>
+            <strong>🎧 Section 3/4 Audio Practice</strong>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Complete 10 Cambridge listening items with live voice simulator</div>
+          </div>
+          <span style="color:#34d399; font-weight:700;">+0.25 Band</span>
+        </button>
+
+        <button class="goal-chip modal-goal-opt" data-goal="writing" style="display:flex; justify-content:space-between; padding:12px 16px; border-radius:10px; text-align:left;">
+          <div>
+            <strong>✍️ Task 2 PEEL Essay Mastery</strong>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Write or evaluate an essay against IELTS Advantage 4-criteria rubric</div>
+          </div>
+          <span style="color:#f59e0b; font-weight:700;">+0.5 Band</span>
+        </button>
+
+        <button class="goal-chip modal-goal-opt" data-goal="speaking" style="display:flex; justify-content:space-between; padding:12px 16px; border-radius:10px; text-align:left;">
+          <div>
+            <strong>🗣️ Part 2/3 Speech Simulation</strong>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Voice cue-card speech turn with real-time fluency scoring</div>
+          </div>
+          <span style="color:#ec4899; font-weight:700;">+0.5 Band</span>
+        </button>
+
+        <button class="goal-chip modal-goal-opt" data-goal="grammar" style="display:flex; justify-content:space-between; padding:12px 16px; border-radius:10px; text-align:left;">
+          <div>
+            <strong>🧩 5 Grammar Clozes / Vocabulary SRS</strong>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Zero grammar penalties and active collocation mastery</div>
+          </div>
+          <span style="color:#a855f7; font-weight:700;">+0.2 Band</span>
+        </button>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+        <span style="font-size:0.8rem; color:var(--text-secondary);">You can change your target at any time in Dashboard.</span>
+        <button id="btnSkipGoalModal" class="btn btn-secondary" style="padding:6px 16px;">Maybe Later</button>
+      </div>
     </div>
   </div>
 

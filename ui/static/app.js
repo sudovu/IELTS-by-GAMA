@@ -6,7 +6,7 @@
  */
 
 const API_BASE = "";
-const APP_VERSION = "1.3.0";
+const APP_VERSION = "1.4.0";
 
 // Global State
 let appState = {
@@ -1338,6 +1338,435 @@ function updateConnectivityStatus() {
 }
 
 // -------------------------------------------------------------
+// Daily Goal & Category Progress Mastery System (v1.4.0)
+// -------------------------------------------------------------
+const GOAL_DEFINITIONS = {
+  speaking: {
+    icon: "🎙️",
+    title: "Complete 1 Official Speaking Interview",
+    desc: "Practice with Dr. Harrison in the 3-Part Examiner Room using the 3-Step Strategy (Direct Answer -> Reason -> Concrete Example).",
+    targetTab: "speaking",
+    targetCount: 1,
+    unit: "interview",
+    buttonLabel: "Start Speaking Interview",
+    category: "exam"
+  },
+  reading: {
+    icon: "📑",
+    title: "Master 1 Academic Reading Passage",
+    desc: "Complete 4 reading questions using Cambridge Skimming & Scanning keyword paraphrase mapping.",
+    targetTab: "reading",
+    targetCount: 1,
+    unit: "passage",
+    buttonLabel: "Open Reading Passage",
+    category: "exam"
+  },
+  writing: {
+    icon: "✍️",
+    title: "Write & Audit Task 2 PEEL Essay",
+    desc: "Draft or evaluate a 250+ word essay and run the 10-Point IELTS Advantage Self-Assessment Checklist.",
+    targetTab: "writing",
+    targetCount: 1,
+    unit: "essay",
+    buttonLabel: "Open Writing Studio",
+    category: "exam"
+  },
+  grammar: {
+    icon: "✏️",
+    title: "Solve 5 Grammar Fill-Up Clozes",
+    desc: "Target high-yield conditionals, inversion, and impersonal passives to eliminate band penalties.",
+    targetTab: "grammar",
+    targetCount: 5,
+    unit: "clozes",
+    buttonLabel: "Practice Grammar Clozes",
+    category: "core"
+  },
+  vocab: {
+    icon: "🧠",
+    title: "Review 10 SRS Vocabulary Cards",
+    desc: "Master Band 8+ academic collocations and lexical upgrades with SuperMemo SM-2 spaced repetition.",
+    targetTab: "vocab",
+    targetCount: 10,
+    unit: "cards",
+    buttonLabel: "Open SRS Flashcards",
+    category: "core"
+  },
+  diagnostic: {
+    icon: "🎯",
+    title: "Take 12-Question Diagnostic Test",
+    desc: "Assess baseline grammar, vocabulary, reading, listening, and IELTS Advantage methodology in under 5 minutes.",
+    targetTab: "diagnostic",
+    targetCount: 1,
+    unit: "test",
+    buttonLabel: "Start Diagnostic Test",
+    category: "core"
+  },
+  listening: {
+    icon: "🎧",
+    title: "Complete Section 3/4 Audio Listening Practice",
+    desc: "Listen to the Cambridge dialogue script and answer 4 questions with zero replay cheats.",
+    targetTab: "listening",
+    targetCount: 1,
+    unit: "section",
+    buttonLabel: "Start Listening Audio",
+    category: "exam"
+  }
+};
+
+window.navigateToTab = function(tabId) {
+  const cleanId = tabId.replace("tab-", "");
+  const navItem = document.querySelector(`.nav-item[data-tab="${cleanId}"]`);
+  if (navItem) {
+    navItem.click();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+    document.querySelectorAll(".tab-pane").forEach(pane => pane.classList.remove("active"));
+    const pane = document.getElementById("tab-" + cleanId);
+    if (pane) pane.classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
+
+function getDailyGoal() {
+  const today = new Date().toDateString();
+  const raw = localStorage.getItem("gama_daily_goal");
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed.date === today) return parsed;
+    } catch (e) {}
+  }
+  return {
+    key: "speaking",
+    date: today,
+    progress: 0,
+    target: 1,
+    achieved: false
+  };
+}
+
+function saveDailyGoal(goal) {
+  localStorage.setItem("gama_daily_goal", JSON.stringify(goal));
+}
+
+window.setDailyGoal = function(goalKey, btn) {
+  if (!GOAL_DEFINITIONS[goalKey]) return;
+  const today = new Date().toDateString();
+  const currentGoal = getDailyGoal();
+  const updated = {
+    key: goalKey,
+    date: today,
+    progress: (currentGoal.key === goalKey && currentGoal.date === today) ? currentGoal.progress : 0,
+    target: GOAL_DEFINITIONS[goalKey].targetCount,
+    achieved: false
+  };
+  saveDailyGoal(updated);
+
+  const chipContainer = document.getElementById("dashboardGoalChips");
+  if (chipContainer) {
+    chipContainer.querySelectorAll(".goal-chip").forEach(c => c.classList.remove("active"));
+  }
+  const activeChip = btn || document.getElementById("chip_goal_" + goalKey);
+  if (activeChip) activeChip.classList.add("active");
+
+  renderDailyGoal();
+};
+
+function renderDailyGoal() {
+  const goal = getDailyGoal();
+  const config = GOAL_DEFINITIONS[goal.key] || GOAL_DEFINITIONS["speaking"];
+
+  const iconEl = document.getElementById("activeGoalIcon");
+  const titleEl = document.getElementById("activeGoalTitle");
+  const descEl = document.getElementById("activeGoalDescription");
+  const badgeEl = document.getElementById("goalStatusBadge");
+  const fillEl = document.getElementById("goalProgressFill");
+  const achieveBtn = document.getElementById("achieveGoalBtn");
+  const completeBtn = document.getElementById("completeGoalBtn");
+
+  if (iconEl) iconEl.innerText = config.icon;
+  if (titleEl) titleEl.innerText = config.title;
+  if (descEl) descEl.innerText = config.desc;
+
+  const pct = Math.min(100, Math.round(((goal.progress || 0) / config.targetCount) * 100));
+  if (fillEl) fillEl.style.width = (goal.achieved ? 100 : Math.max(10, pct)) + "%";
+
+  if (badgeEl) {
+    if (goal.achieved) {
+      badgeEl.innerText = "ACHIEVED 🎉";
+      badgeEl.style.background = "#10b981";
+      badgeEl.style.color = "#ffffff";
+    } else {
+      badgeEl.innerText = `${goal.progress || 0}/${config.targetCount} ${config.unit.toUpperCase()} (${pct}%)`;
+      badgeEl.style.background = "rgba(99, 102, 241, 0.2)";
+      badgeEl.style.color = "#818cf8";
+    }
+  }
+
+  if (achieveBtn) {
+    achieveBtn.innerHTML = `<span>🚀</span> ${config.buttonLabel}`;
+  }
+
+  if (completeBtn) {
+    completeBtn.innerText = goal.achieved ? "✓ Completed Today" : "✓ Mark Achieved";
+    completeBtn.disabled = !!goal.achieved;
+  }
+
+  const chip = document.getElementById("chip_goal_" + goal.key);
+  if (chip) {
+    const chipContainer = document.getElementById("dashboardGoalChips");
+    if (chipContainer) chipContainer.querySelectorAll(".goal-chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+  }
+}
+
+window.helpAchieveGoal = function() {
+  const goal = getDailyGoal();
+  const config = GOAL_DEFINITIONS[goal.key] || GOAL_DEFINITIONS["speaking"];
+  showBandToast("🎯 Daily Mission Navigation", `Opening ${config.title}... Let's hit your goal!`);
+  navigateToTab(config.targetTab);
+};
+
+window.markGoalAchieved = function() {
+  const goal = getDailyGoal();
+  const config = GOAL_DEFINITIONS[goal.key] || GOAL_DEFINITIONS["speaking"];
+  goal.achieved = true;
+  goal.progress = config.targetCount;
+  saveDailyGoal(goal);
+
+  const prof = OfflineLocalEngine.getProfile();
+  prof.current_band = Math.min(9.0, Math.round((prof.current_band + 0.25) * 2) / 2);
+  OfflineLocalEngine.saveProfile(prof);
+
+  const currEl = document.getElementById("currentBandMetric");
+  if (currEl) currEl.innerText = prof.current_band.toFixed(1);
+
+  showBandToast("🏆 Daily Goal Achieved!", `Outstanding work! You earned a +0.25 Band Boost. New Band: ${prof.current_band.toFixed(1)}`);
+  renderDailyGoal();
+  renderCategoryProgress();
+};
+
+function initDailyGoalModal() {
+  const modal = document.getElementById("goalWelcomeModal");
+  if (!modal) return;
+
+  const closeBtn = document.getElementById("closeGoalModalBtn");
+  const skipBtn = document.getElementById("btnSkipGoalModal");
+
+  function closeModal() {
+    modal.classList.remove("open");
+    sessionStorage.setItem("gama_goal_prompted", "true");
+  }
+
+  if (closeBtn) closeBtn.onclick = closeModal;
+  if (skipBtn) skipBtn.onclick = closeModal;
+
+  modal.querySelectorAll(".modal-goal-opt").forEach(btn => {
+    btn.onclick = () => {
+      const goalKey = btn.getAttribute("data-goal");
+      if (goalKey) {
+        setDailyGoal(goalKey);
+        closeModal();
+      }
+    };
+  });
+
+  if (!sessionStorage.getItem("gama_goal_prompted")) {
+    setTimeout(() => {
+      modal.classList.add("open");
+    }, 600);
+  }
+}
+
+function getCategoryStats() {
+  const raw = localStorage.getItem("gama_category_stats");
+  if (raw) {
+    try {
+      return JSON.parse(raw);
+    } catch (e) {}
+  }
+  return {
+    core: { grammarDone: 2, vocabReviewed: 6, diagTaken: 1 },
+    exam: { readingDone: 1, listeningDone: 1, writingDone: 1, speakingDone: 1 },
+    advantage: { analysisDone: 1, peelDone: 1, coffeeDone: 1, checklistDone: 4 },
+    system: { mistakesResolved: 1, srsReviewed: 6, backupsDone: 1 }
+  };
+}
+
+function saveCategoryStats(stats) {
+  localStorage.setItem("gama_category_stats", JSON.stringify(stats));
+}
+
+function renderCategoryProgress() {
+  const stats = getCategoryStats();
+  const prof = OfflineLocalEngine.getProfile();
+
+  // 1. Core
+  const corePct = Math.min(100, Math.round(((stats.core.grammarDone / 12) * 45) + ((stats.core.vocabReviewed / 20) * 35) + (stats.core.diagTaken ? 20 : 10)));
+  const corePctEl = document.getElementById("catProgressPct_core");
+  const coreBarEl = document.getElementById("catProgressBar_core");
+  if (corePctEl) corePctEl.innerText = corePct + "%";
+  if (coreBarEl) coreBarEl.style.width = corePct + "%";
+  const diagMetric = document.getElementById("catMetricDiag");
+  if (diagMetric) diagMetric.innerText = stats.core.diagTaken ? `Completed (Band ${prof.current_band.toFixed(1)})` : "Pending";
+  const cefrMetric = document.getElementById("catMetricCefr");
+  if (cefrMetric) cefrMetric.innerText = `${prof.cefr_level} Independent`;
+  const tutorMetric = document.getElementById("catMetricTutor");
+  if (tutorMetric) tutorMetric.innerText = `${stats.core.grammarDone + stats.core.vocabReviewed} Items Practiced`;
+
+  // 2. Exam
+  const examItems = stats.exam.speakingDone + stats.exam.writingDone + stats.exam.readingDone + stats.exam.listeningDone;
+  const examPct = Math.min(100, Math.max(25, Math.round((examItems / 8) * 100)));
+  const examPctEl = document.getElementById("catProgressPct_exam");
+  const examBarEl = document.getElementById("catProgressBar_exam");
+  if (examPctEl) examPctEl.innerText = examPct + "%";
+  if (examBarEl) examBarEl.style.width = examPct + "%";
+  const spkMetric = document.getElementById("catMetricSpeaking");
+  if (spkMetric) spkMetric.innerText = stats.exam.speakingDone > 0 ? `${stats.exam.speakingDone} Mock(s) Completed` : "Set 1 Ready (Band 6.5)";
+  const wrtMetric = document.getElementById("catMetricWriting");
+  if (wrtMetric) wrtMetric.innerText = stats.exam.writingDone > 0 ? `${stats.exam.writingDone} Essay(s) Evaluated` : "Task 2 PEEL Ready";
+  const rdMetric = document.getElementById("catMetricReading");
+  if (rdMetric) rdMetric.innerText = stats.exam.readingDone > 0 ? `${stats.exam.readingDone} Passage(s) Done` : "Passage 1 Ready";
+  const lsMetric = document.getElementById("catMetricListening");
+  if (lsMetric) lsMetric.innerText = stats.exam.listeningDone > 0 ? `${stats.exam.listeningDone} Section(s) Done` : "Sec 1 Ready";
+
+  // 3. Advantage
+  const advPct = Math.min(100, Math.max(30, Math.round(((stats.advantage.analysisDone + stats.advantage.peelDone + stats.advantage.coffeeDone) / 6) * 100)));
+  const advPctEl = document.getElementById("catProgressPct_advantage");
+  const advBarEl = document.getElementById("catProgressBar_advantage");
+  if (advPctEl) advPctEl.innerText = advPct + "%";
+  if (advBarEl) advBarEl.style.width = advPct + "%";
+  const advMetric = document.getElementById("catMetricAdvantage");
+  if (advMetric) advMetric.innerText = `${stats.advantage.analysisDone} Prompts Analyzed`;
+  const chkMetric = document.getElementById("catMetricChecklist");
+  if (chkMetric) chkMetric.innerText = `${stats.advantage.checklistDone} Verified / 10`;
+  const grmMetric = document.getElementById("catMetricGrammar");
+  if (grmMetric) grmMetric.innerText = `${stats.core.grammarDone} Drills Solved (Streak: ${appState.fillupStreak})`;
+  const vcbMetric = document.getElementById("catMetricVocab");
+  if (vcbMetric) vcbMetric.innerText = `${stats.core.vocabReviewed} Cards Retained`;
+
+  // 4. System
+  const mistakes = OfflineLocalEngine.getMistakes();
+  const activeMistakes = mistakes.filter(m => m.status !== "mastered");
+  const sysPct = Math.min(100, Math.max(40, Math.round(((stats.system.srsReviewed / 12) * 50) + (activeMistakes.length === 0 ? 50 : 30))));
+  const sysPctEl = document.getElementById("catProgressPct_system");
+  const sysBarEl = document.getElementById("catProgressBar_system");
+  if (sysPctEl) sysPctEl.innerText = sysPct + "%";
+  if (sysBarEl) sysBarEl.style.width = sysPct + "%";
+  const mstMetric = document.getElementById("catMetricMistakes");
+  if (mstMetric) mstMetric.innerText = `${activeMistakes.length} Active / ${mistakes.length - activeMistakes.length} Mastered`;
+  const accMetric = document.getElementById("catMetricAccuracy");
+  const accRate = mistakes.length ? Math.round(((mistakes.length - activeMistakes.length) / mistakes.length) * 100) : 100;
+  if (accMetric) accMetric.innerText = `${accRate}% Clean`;
+  const timeMetric = document.getElementById("catMetricStudyTime");
+  if (timeMetric) timeMetric.innerText = `${prof.daily_minutes} Min Target Active`;
+  const storMetric = document.getElementById("catMetricStorage");
+  if (storMetric) storMetric.innerText = "Local RAG Synced";
+}
+
+let toastTimeout = null;
+function showBandToast(title, subtitle) {
+  const toast = document.getElementById("bandUpdateToast");
+  const tTitle = document.getElementById("toastTitle");
+  const tSub = document.getElementById("toastSubtitle");
+  if (!toast) return;
+
+  if (tTitle) tTitle.innerText = title;
+  if (tSub) tSub.innerText = subtitle;
+
+  toast.classList.add("show");
+
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 4500);
+}
+
+function recordPracticeActivity(skill, scoreOrBand, details) {
+  const stats = getCategoryStats();
+  const goal = getDailyGoal();
+
+  if (skill === "reading") stats.exam.readingDone++;
+  else if (skill === "listening") stats.exam.listeningDone++;
+  else if (skill === "writing") stats.exam.writingDone++;
+  else if (skill === "speaking") stats.exam.speakingDone++;
+  else if (skill === "grammar") stats.core.grammarDone++;
+  else if (skill === "vocab") stats.core.vocabReviewed++;
+  else if (skill === "srs") stats.system.srsReviewed++;
+  else if (skill === "advantage") {
+    stats.advantage.analysisDone++;
+    stats.advantage.peelDone++;
+  }
+  saveCategoryStats(stats);
+
+  if (!goal.achieved) {
+    if (
+      (goal.key === "reading" && skill === "reading") ||
+      (goal.key === "listening" && skill === "listening") ||
+      (goal.key === "writing" && skill === "writing") ||
+      (goal.key === "speaking" && skill === "speaking") ||
+      (goal.key === "grammar" && skill === "grammar") ||
+      (goal.key === "vocab" && (skill === "vocab" || skill === "srs"))
+    ) {
+      goal.progress = (goal.progress || 0) + 1;
+      if (goal.progress >= (goal.target || 1)) {
+        goal.achieved = true;
+      }
+      saveDailyGoal(goal);
+    }
+  }
+
+  const prof = OfflineLocalEngine.getProfile();
+  prof.skills_bands = prof.skills_bands || {
+    reading: 6.5,
+    listening: 7.0,
+    writing: 6.0,
+    speaking: 6.5,
+    grammar: 7.0,
+    vocab: 7.0
+  };
+
+  const parsedScore = parseFloat(scoreOrBand);
+  if (!isNaN(parsedScore) && parsedScore > 0) {
+    if (skill === "reading") prof.skills_bands.reading = Math.max(prof.skills_bands.reading, parsedScore);
+    if (skill === "listening") prof.skills_bands.listening = Math.max(prof.skills_bands.listening, parsedScore);
+    if (skill === "writing") prof.skills_bands.writing = Math.max(prof.skills_bands.writing, parsedScore);
+    if (skill === "speaking") prof.skills_bands.speaking = Math.max(prof.skills_bands.speaking, parsedScore);
+    if (skill === "grammar") prof.skills_bands.grammar = Math.min(9.0, prof.skills_bands.grammar + 0.1);
+    if (skill === "vocab" || skill === "srs") prof.skills_bands.vocab = Math.min(9.0, prof.skills_bands.vocab + 0.1);
+  }
+
+  const baseAvg = (prof.skills_bands.reading + prof.skills_bands.listening + prof.skills_bands.writing + prof.skills_bands.speaking) / 4.0;
+  const masteryBonus = Math.min(0.25, (stats.core.grammarDone * 0.02) + (stats.system.srsReviewed * 0.01));
+  const newOverallBand = Math.min(9.0, Math.round((baseAvg + masteryBonus) * 2) / 2);
+
+  prof.current_band = newOverallBand;
+  let newCefr = "B2";
+  if (newOverallBand >= 8.5) newCefr = "C2";
+  else if (newOverallBand >= 7.0) newCefr = "C1";
+  else if (newOverallBand >= 5.5) newCefr = "B2";
+  else if (newOverallBand >= 4.0) newCefr = "B1";
+  else newCefr = "A2";
+  prof.cefr_level = newCefr;
+  OfflineLocalEngine.saveProfile(prof);
+
+  const currEl = document.getElementById("currentBandMetric");
+  if (currEl) currEl.innerText = newOverallBand.toFixed(1);
+  const cefrEl = document.getElementById("cefrMetric");
+  if (cefrEl) cefrEl.innerText = `CEFR Level: ${newCefr}`;
+
+  const skillLabel = skill.charAt(0).toUpperCase() + skill.slice(1);
+  showBandToast(
+    `🎯 ${skillLabel} Practiced! Band Score Updated`,
+    `Current Overall Band: ${newOverallBand.toFixed(1)} (${newCefr}) • ${details || '+0.25 practice progress'}`
+  );
+
+  renderCategoryProgress();
+  renderDailyGoal();
+}
+
+// -------------------------------------------------------------
 // 1. Dashboard Module
 // -------------------------------------------------------------
 async function loadDashboard() {
@@ -1378,6 +1807,10 @@ async function loadDashboard() {
     `;
     radarBox.appendChild(row);
   }
+
+  // Render Daily Goal & Category Progress
+  renderDailyGoal();
+  renderCategoryProgress();
 }
 
 // -------------------------------------------------------------
@@ -1471,6 +1904,10 @@ async function initDiagnostic() {
           <p>${report.recommended_study_plan}</p>
         </div>
       `;
+      const stats = getCategoryStats();
+      stats.core.diagTaken = 1;
+      saveCategoryStats(stats);
+      recordPracticeActivity("diagnostic", report.estimated_band, `${report.correct_count}/12 diagnostic accuracy`);
       loadDashboard();
     }
   });
@@ -1585,6 +2022,14 @@ function updateChecklistProgress() {
   const pct = Math.round((passed / checks.length) * 100);
   document.getElementById("checklistProgressBar").style.width = pct + "%";
   document.getElementById("checklistScoreText").innerText = `${passed} of ${checks.length} checks verified (${pct}%)`;
+
+  const stats = getCategoryStats();
+  stats.advantage.checklistDone = Math.max(stats.advantage.checklistDone, passed);
+  saveCategoryStats(stats);
+  renderCategoryProgress();
+  if (passed >= 5) {
+    showBandToast("✅ IELTS Advantage Audit", `${passed}/10 pre-submission criteria verified! Band 7+ coherence.`);
+  }
 }
 
 // -------------------------------------------------------------
@@ -1670,6 +2115,8 @@ async function submitClozeAnswer(drillId) {
 
   document.getElementById("fillupScore").innerText = appState.fillupScore;
   document.getElementById("fillupStreak").innerText = appState.fillupStreak;
+
+  recordPracticeActivity("grammar", res.is_correct ? 7.5 : 6.0, res.is_correct ? "Cloze answered correctly" : "Cloze logged to Mistake Book");
 }
 
 async function loadAdaptiveGrammar() {
@@ -1923,6 +2370,8 @@ async function gradeCard(grade) {
 
   await callApi("/api/srs/review", "POST", { item_id: curr.id, grade: grade });
 
+  recordPracticeActivity("vocab", grade >= 3 ? 7.5 : 6.0, `SRS Card graded: ${grade}/5`);
+
   appState.currentCardIdx++;
   if (appState.currentCardIdx < appState.srsDeck.length) {
     displayCard(appState.srsDeck[appState.currentCardIdx]);
@@ -2024,6 +2473,7 @@ document.getElementById("submitReadingBtn").addEventListener("click", async () =
       </div>
       <p class="mt-2"><em>${rep.disclaimer}</em></p>
     `;
+    recordPracticeActivity("reading", rep.estimated_band, `${rep.correct_answers}/${rep.total_questions} correct`);
   }
 });
 
@@ -2085,6 +2535,7 @@ document.getElementById("submitListeningBtn").addEventListener("click", async ()
       <p>Score: <strong>${rep.correct_answers}</strong> of <strong>${rep.total_questions}</strong> correct.</p>
       <p class="mt-2"><em>${rep.disclaimer}</em></p>
     `;
+    recordPracticeActivity("listening", rep.estimated_band, `${rep.correct_answers}/${rep.total_questions} correct`);
   }
 });
 
@@ -2233,6 +2684,7 @@ function initWriting() {
         ${formativeHtml}
         <p class='mt-2'><em>${rep.disclaimer}</em></p>
       `;
+      recordPracticeActivity("writing", rep.estimated_band, `${rep.word_count} words evaluated`);
     }
   });
 }
@@ -2465,6 +2917,7 @@ function initSpeaking() {
               ${upHtml}
             </div>
           `;
+          recordPracticeActivity("speaking", rep.estimated_band, "Full speaking mock completed");
           evalReportEl.scrollIntoView({ behavior: "smooth" });
         }
       }
@@ -2573,6 +3026,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSpeaking();
   updateConnectivityStatus();
   loadDashboard();
+  initDailyGoalModal();
   onSpeakingSetChanged(0);
 
   const verBadge = document.getElementById("appVersionBadge");

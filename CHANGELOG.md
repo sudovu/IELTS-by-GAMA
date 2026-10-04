@@ -9,6 +9,28 @@ The versioning follows the convention:
 
 ---
 
+## [v1.4.0] - 2026-10-04 (Big Changes: Category Progress Mastery, Live Band Score & Daily Mission Achiever)
+
+### Added
+- **Daily Mission & Goal Achiever System**:
+  - Interactive "What do you want to achieve today?" on-startup welcome modal with 1-click goal options (Reading, Listening, Writing, Speaking, Grammar/SRS).
+  - Prominent Daily Mission HUD card on Dashboard with active target details, live progress bar, direct routing helper (`helpAchieveGoal()`), and 1-click manual completion.
+  - Session-aware startup prompt remembering user preferences.
+- **Category Progress & Mastery Tracking Grid**:
+  - 4 live competency cards for each preparation pillar: *Strategy & Core*, *Cambridge 4-Skills Suite*, *Methodology & Drills*, and *Tracking & System*.
+  - Real-time percentage progress meters (`#catProgressBar_*`) and granular item-level tracking (Diagnostic completion, Reading passages, Listening sections, Writing essays, Speaking mocks, Advantage audits, and SRS mastery).
+  - Direct 1-click launch shortcuts into each category workspace.
+- **Live Dynamic Band Score Recalculation Engine**:
+  - Real-time recalculation of overall IELTS Band Score whenever the user practices Reading, Listening, Writing, Speaking, Grammar clozes, or SRS flashcards.
+  - Formula strictly follows official IELTS rounding rules to the nearest half-band with performance-based grammar/lexis bonuses.
+  - Automatic CEFR progression mapping (C2, C1, B2, B1, A2) updated live in the UI.
+- **Animated Band Score Update Toast**:
+  - High-visibility celebratory floating notification (`#bandUpdateToast`) on practice submission displaying the newly achieved band score, CEFR level, and practice bonus.
+- **Streamlined Navigation & Filter**:
+  - Removed redundant "All (12)" filter from the mobile navigation bar, providing a clean 3-category switcher (*4-Skills Exam*, *Advantage & Drills*, *Strategy & System*) for seamless ergonomics.
+
+---
+
 ## [v1.3.0] - 2026-10-04 (Big Changes: UI Modernization, Button System & Categorization)
 
 ### Added
