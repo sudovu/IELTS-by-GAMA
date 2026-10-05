@@ -22,7 +22,7 @@
   <div class="app-container">
     <!-- Top Header -->
     <header class="app-header">
-      <div class="header-brand">
+      <div class="header-brand" onclick="navigateToTab('dashboard')" style="cursor: pointer;" title="Back to Dashboard">
         <div class="brand-logo">
           <img src="images/logo.png" alt="IELTS by GAMA Logo" class="brand-logo-img">
         </div>
@@ -49,11 +49,12 @@
     <div class="app-body">
       <!-- Navigation Sidebar -->
       <nav class="sidebar">
-        <!-- Mobile Category Filter Strip (Clean 3-Category Toggle) -->
+        <!-- Mobile Category Filter Strip (All 4 Distinct Categories) -->
         <div class="mobile-cat-filter" id="mobileCatFilter">
-          <button class="cat-filter-btn active" data-filter="exam">🎓 4-Skills Exam</button>
-          <button class="cat-filter-btn" data-filter="advantage">🧭 Advantage & Drills</button>
-          <button class="cat-filter-btn" data-filter="core">📊 Strategy & System</button>
+          <button class="cat-filter-btn active" data-filter="core">🎯 Strategy</button>
+          <button class="cat-filter-btn" data-filter="exam">🎓 4-Skills</button>
+          <button class="cat-filter-btn" data-filter="advantage">🧭 Advantage</button>
+          <button class="cat-filter-btn" data-filter="system">⚙️ System</button>
         </div>
 
         <div class="sidebar-scrollable-content">
@@ -128,17 +129,17 @@
           </div>
 
           <!-- Category 4: Tracking & System -->
-          <div class="nav-category-group" data-group="core">
+          <div class="nav-category-group" data-group="system">
             <div class="nav-category-header">
               <span class="cat-dot dot-system"></span>
               <span class="cat-title">Tracking & System</span>
             </div>
             <ul class="nav-links">
-              <li class="nav-item" data-tab="mistakes" data-cat="core">
+              <li class="nav-item" data-tab="mistakes" data-cat="system">
                 <span class="nav-icon">📕</span> <span class="nav-label">Mistake Book</span>
                 <span class="nav-badge badge-system">Errors</span>
               </li>
-              <li class="nav-item" data-tab="settings" data-cat="core">
+              <li class="nav-item" data-tab="settings" data-cat="system">
                 <span class="nav-icon">⚙️</span> <span class="nav-label">Settings & Data</span>
                 <span class="nav-badge badge-system">Privacy</span>
               </li>
@@ -659,8 +660,7 @@
                 <div style="flex: 1;">
                   <span style="font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 6px; display: block;">Drill Categories & Syntax:</span>
                   <div class="chip-selector-bar" id="grammarCategoryChips">
-                    <button class="chip-btn active" onclick="selectGrammarFilter('all', this)">🌟 All (12 Drills)</button>
-                    <button class="chip-btn" onclick="selectGrammarFilter('Conditionals', this)">⚡ Conditionals</button>
+                    <button class="chip-btn active" onclick="selectGrammarFilter('Conditionals', this)">⚡ Conditionals</button>
                     <button class="chip-btn" onclick="selectGrammarFilter('Inversion', this)">🔄 Inversion (Band 8+)</button>
                     <button class="chip-btn" onclick="selectGrammarFilter('Passive Voice & Impersonal Structures', this)">🛡️ Passive & Impersonal</button>
                     <button class="chip-btn" onclick="selectGrammarFilter('Relative & Participle Clauses', this)">🧩 Participle Clauses</button>
@@ -669,8 +669,7 @@
                     <button class="chip-btn" onclick="selectGrammarFilter('Articles & Countability', this)">🔤 Articles</button>
                   </div>
                   <select id="grammarCategorySelect" class="form-select mt-1" style="display: none;" onchange="filterFillupDrills(this.value)">
-                    <option value="all">All Categories (12 Clozes)</option>
-                    <option value="Conditionals">Conditionals (Band 7-9)</option>
+                    <option value="Conditionals" selected>Conditionals (Band 7-9)</option>
                     <option value="Passive Voice & Impersonal Structures">Passive Voice & Impersonal</option>
                     <option value="Subject-Verb Agreement">Subject-Verb Agreement</option>
                     <option value="Inversion">Inversion (Band 8+)</option>

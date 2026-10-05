@@ -1322,24 +1322,10 @@ function initNavigation() {
   const navItems = document.querySelectorAll(".nav-item");
   navItems.forEach(item => {
     item.addEventListener("click", () => {
-      navItems.forEach(n => n.classList.remove("active"));
-      item.classList.add("active");
-
       const tabId = item.getAttribute("data-tab");
-      appState.currentTab = tabId;
-
-      document.querySelectorAll(".tab-pane").forEach(pane => pane.classList.remove("active"));
-      const target = document.getElementById("tab-" + tabId);
-      if (target) target.classList.add("active");
-
-      // Auto-trigger tab data initialization
-      if (tabId === "dashboard") loadDashboard();
-      if (tabId === "grammar") initGrammar();
-      if (tabId === "vocab") initVocabulary();
-      if (tabId === "reading") loadReading();
-      if (tabId === "listening") loadListening();
-      if (tabId === "mistakes") loadMistakes();
-      if (tabId === "advantage") loadAdvantagePrompt("stem");
+      if (tabId) {
+        navigateToTab(tabId);
+      }
     });
   });
 
@@ -1348,12 +1334,14 @@ function initNavigation() {
 
   // Connectivity toggle
   const toggleBtn = document.getElementById("toggleOfflineBtn");
-  toggleBtn.addEventListener("click", () => {
-    appState.forcedOffline = !appState.forcedOffline;
-    toggleBtn.innerText = `Force Offline: ${appState.forcedOffline ? "ON" : "OFF"}`;
-    updateConnectivityStatus();
-    loadDashboard();
-  });
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      appState.forcedOffline = !appState.forcedOffline;
+      toggleBtn.innerText = `Force Offline: ${appState.forcedOffline ? "ON" : "OFF"}`;
+      updateConnectivityStatus();
+      loadDashboard();
+    });
+  }
 
   // Theme toggle button click
   const themeBtn = document.getElementById("themeToggleBtn");
@@ -1362,30 +1350,57 @@ function initNavigation() {
   }
 }
 
-function initMobileCategoryFilter() {
+function applyCategoryFilter(filterKey) {
   const filterBtns = document.querySelectorAll(".cat-filter-btn");
   const navGroups = document.querySelectorAll(".nav-category-group");
+
+  filterBtns.forEach(btn => {
+    const bFilter = btn.getAttribute("data-filter");
+    if (bFilter === filterKey) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+
+  navGroups.forEach(group => {
+    const groupCat = group.getAttribute("data-group");
+    if (filterKey === "all") {
+      group.style.display = "";
+    } else {
+      group.style.display = groupCat === filterKey ? "" : "none";
+    }
+  });
+}
+
+function initMobileCategoryFilter() {
+  const filterBtns = document.querySelectorAll(".cat-filter-btn");
   filterBtns.forEach(btn => {
     btn.addEventListener("click", () => {
-      filterBtns.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
       const filter = btn.getAttribute("data-filter");
-      navGroups.forEach(group => {
-        const groupCat = group.getAttribute("data-group");
-        if (filter === "all") {
-          group.style.display = "";
-        } else if (filter === "exam") {
-          group.style.display = groupCat === "exam" ? "" : "none";
+      applyCategoryFilter(filter);
+
+      // If current tab is not in the clicked category, switch directly to that category's primary tab
+      const currentTab = appState.currentTab || "dashboard";
+      const currentNavItem = document.querySelector(`.nav-item[data-tab="${currentTab}"]`);
+      const currentCat = currentNavItem ? (currentNavItem.getAttribute("data-cat") || "core") : "core";
+
+      if (currentCat !== filter) {
+        if (filter === "exam") {
+          navigateToTab("speaking");
         } else if (filter === "advantage") {
-          group.style.display = groupCat === "advantage" ? "" : "none";
+          navigateToTab("advantage");
         } else if (filter === "core") {
-          group.style.display = (groupCat === "core" || groupCat === "system") ? "" : "none";
-        } else {
-          group.style.display = groupCat === filter ? "" : "none";
+          navigateToTab("dashboard");
+        } else if (filter === "system") {
+          navigateToTab("mistakes");
         }
-      });
+      }
     });
   });
+
+  // Apply initial filter matching starting tab (core for dashboard)
+  applyCategoryFilter("core");
 }
 
 // Quick AI Tutor Chat Prompt helper
@@ -1400,29 +1415,29 @@ window.sendQuickPrompt = function(promptText) {
 
 // Chip Selector Bridge Functions
 window.selectAdvantageChip = function(promptKey, btn) {
-  const container = document.getElementById("advantagePromptChips");
+  const container = document.getElementById("advPromptChips") || document.getElementById("advantagePromptChips");
   if (container) {
     container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
   }
   if (btn) btn.classList.add("active");
-  const sel = document.getElementById("advantagePromptSelect");
+  const sel = document.getElementById("advPromptSelect") || document.getElementById("advantagePromptSelect");
   if (sel) sel.value = promptKey;
   loadAdvantagePrompt(promptKey);
 };
 
 window.selectGrammarFilter = function(category, btn) {
-  const container = document.getElementById("grammarClozeFilterChips");
+  const container = document.getElementById("grammarCategoryChips") || document.getElementById("grammarClozeFilterChips");
   if (container) {
     container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
   }
   if (btn) btn.classList.add("active");
-  const sel = document.getElementById("clozeCategorySelect");
+  const sel = document.getElementById("grammarCategorySelect") || document.getElementById("clozeCategorySelect");
   if (sel) sel.value = category;
   filterFillupDrills(category);
 };
 
 window.selectVocabTopicChip = function(topicKey, btn) {
-  const container = document.getElementById("vocabTopicFilterChips");
+  const container = document.getElementById("vocabTopicChips") || document.getElementById("vocabTopicFilterChips");
   if (container) {
     container.querySelectorAll(".chip-btn").forEach(b => b.classList.remove("active"));
   }
@@ -1577,17 +1592,69 @@ const GOAL_DEFINITIONS = {
 };
 
 window.navigateToTab = function(tabId) {
+  if (!tabId) return;
   const cleanId = tabId.replace("tab-", "");
+
+  // 1. Switch active content pane
+  document.querySelectorAll(".tab-pane").forEach(pane => pane.classList.remove("active"));
+  const targetPane = document.getElementById("tab-" + cleanId);
+  if (targetPane) {
+    targetPane.classList.add("active");
+  }
+  appState.currentTab = cleanId;
+
+  // 2. Switch active nav item in sidebar & sync category filter
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   const navItem = document.querySelector(`.nav-item[data-tab="${cleanId}"]`);
   if (navItem) {
-    navItem.click();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    navItem.classList.add("active");
+
+    const cat = navItem.getAttribute("data-cat") || "core";
+    applyCategoryFilter(cat);
+
+    try {
+      navItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    } catch (e) {}
+  }
+
+  // 3. Tab-specific data initializers
+  try {
+    if (cleanId === "dashboard") loadDashboard();
+    if (cleanId === "diagnostic") initDiagnostic();
+    if (cleanId === "grammar") initGrammar();
+    if (cleanId === "vocab") initVocabulary();
+    if (cleanId === "reading") loadReading();
+    if (cleanId === "listening") loadListening();
+    if (cleanId === "writing") initWriting();
+    if (cleanId === "speaking") {
+      if (typeof onSpeakingSetChanged === "function") {
+        onSpeakingSetChanged(appState.currentSpeakingSetIdx || 0);
+      }
+    }
+    if (cleanId === "mistakes") loadMistakes();
+    if (cleanId === "advantage") loadAdvantagePrompt("stem");
+  } catch (err) {
+    console.warn(`[Tab Nav Data Init Warning]:`, err);
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+window.openGoalSelectorModal = function() {
+  const modal = document.getElementById("goalWelcomeModal");
+  if (modal) modal.classList.add("open");
+};
+
+window.toggleBand9SpeakingModel = function() {
+  const box = document.getElementById("speakingBand9ModelBox");
+  const btn = document.getElementById("viewBand9SpeakingBtn");
+  if (!box) return;
+  if (box.style.display === "none" || !box.style.display) {
+    box.style.display = "block";
+    if (btn) btn.innerText = "Hide Model";
   } else {
-    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-    document.querySelectorAll(".tab-pane").forEach(pane => pane.classList.remove("active"));
-    const pane = document.getElementById("tab-" + cleanId);
-    if (pane) pane.classList.add("active");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    box.style.display = "none";
+    if (btn) btn.innerText = "💡 Band 9 Model";
   }
 };
 
@@ -1835,8 +1902,8 @@ function showBandToast(title, subtitle) {
   const tSub = document.getElementById("toastSubtitle");
   if (!toast) return;
 
-  if (tTitle) tTitle.innerText = title;
-  if (tSub) tSub.innerText = subtitle;
+  if (tTitle) tTitle.innerText = title || "Band Score Updated!";
+  if (tSub) tSub.innerText = subtitle || "";
 
   toast.classList.add("show");
 
@@ -1845,6 +1912,10 @@ function showBandToast(title, subtitle) {
     toast.classList.remove("show");
   }, 4500);
 }
+window.showBandToast = showBandToast;
+window.showBandUpdateToast = function(title, subtitle) {
+  showBandToast(title, subtitle || "");
+};
 
 function recordPracticeActivity(skill, scoreOrBand, details) {
   const stats = getCategoryStats();
@@ -2006,10 +2077,36 @@ function initChat() {
     msgBox.scrollTop = msgBox.scrollHeight;
   }
 
-  sendBtn.addEventListener("click", send);
-  chatInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") send();
-  });
+  if (sendBtn) sendBtn.addEventListener("click", send);
+  if (chatInput) {
+    chatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") send();
+    });
+  }
+
+  const voiceBtn = document.getElementById("voiceInputBtn");
+  if (voiceBtn) {
+    voiceBtn.addEventListener("click", () => {
+      if (window.AndroidSTT && typeof window.AndroidSTT.startListening === "function") {
+        showBandToast("🎙️ Speech Recognition", "Listening to your voice input...");
+        window.onAndroidSpeechResult = (text) => {
+          if (chatInput) chatInput.value = text;
+        };
+        window.AndroidSTT.startListening();
+      } else if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const rec = new SpeechRec();
+        rec.lang = "en-GB";
+        rec.onresult = (e) => {
+          if (chatInput) chatInput.value = e.results[0][0].transcript;
+        };
+        rec.start();
+        showBandToast("🎙️ Speech Recognition", "Speak now...");
+      } else {
+        showBandToast("🎙️ Voice Assistant", "Please type your question into the input box.");
+      }
+    });
+  }
 }
 
 // -------------------------------------------------------------
@@ -2045,7 +2142,8 @@ async function initDiagnostic() {
     container.appendChild(qDiv);
   });
 
-  document.getElementById("submitDiagnosticBtn").addEventListener("click", async () => {
+  const subBtn = document.getElementById("submitDiagnosticBtn");
+  if (subBtn) subBtn.onclick = async () => {
     const answers = {};
     data.questions.forEach(q => {
       const selected = document.querySelector(`input[name="diag_${q.id}"]:checked`);
@@ -2073,7 +2171,7 @@ async function initDiagnostic() {
       recordPracticeActivity("diagnostic", report.estimated_band, `${report.correct_count}/12 diagnostic accuracy`);
       loadDashboard();
     }
-  });
+  };
 }
 
 // -------------------------------------------------------------
@@ -2214,7 +2312,7 @@ function switchGrammarMode(mode) {
 }
 
 async function initGrammar() {
-  await filterFillupDrills("all");
+  await filterFillupDrills("Conditionals");
 }
 
 async function filterFillupDrills(category) {
@@ -3176,42 +3274,107 @@ async function resolveMistake(id) {
   loadMistakes();
   loadDashboard();
 }
+window.resolveMistake = resolveMistake;
+window.toggleTheme = toggleTheme;
+window.switchAdvantageSubTab = switchAdvantageSubTab;
+window.loadAdvantagePrompt = loadAdvantagePrompt;
+window.updateChecklistProgress = updateChecklistProgress;
+window.switchGrammarMode = switchGrammarMode;
+window.filterFillupDrills = filterFillupDrills;
+window.submitClozeAnswer = submitClozeAnswer;
+window.switchVocabMode = switchVocabMode;
+window.renderVocabTopic = renderVocabTopic;
+window.gradeCard = gradeCard;
+window.toggleSynonymTable = toggleSynonymTable;
+window.switchReadingPassage = switchReadingPassage;
+window.switchListeningSection = switchListeningSection;
+window.toggleModelEssay = toggleModelEssay;
+window.switchWritingPrompt = switchWritingPrompt;
+
+function initSettings() {
+  const exportBtn = document.getElementById("exportDataBtn");
+  const importBtn = document.getElementById("importDataBtn");
+  const dataArea = document.getElementById("dataTransferArea");
+  const forceOffCheck = document.getElementById("settingForcedOffline");
+
+  if (forceOffCheck) {
+    forceOffCheck.checked = !!appState.forcedOffline;
+    forceOffCheck.addEventListener("change", () => {
+      appState.forcedOffline = forceOffCheck.checked;
+      updateConnectivityStatus();
+    });
+  }
+
+  if (exportBtn && dataArea) {
+    exportBtn.addEventListener("click", () => {
+      const exportPayload = {
+        profile: OfflineLocalEngine.getProfile(),
+        daily_goal: getDailyGoal(),
+        category_stats: getCategoryStats(),
+        mistakes: OfflineLocalEngine.getMistakes(),
+        exported_at: new Date().toISOString()
+      };
+      dataArea.value = JSON.stringify(exportPayload, null, 2);
+      showBandToast("💾 Learning Data Exported", "Copy the JSON text to backup or transfer.");
+    });
+  }
+
+  if (importBtn && dataArea) {
+    importBtn.addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(dataArea.value.trim());
+        if (parsed.profile) OfflineLocalEngine.saveProfile(parsed.profile);
+        if (parsed.daily_goal) saveDailyGoal(parsed.daily_goal);
+        if (parsed.category_stats) saveCategoryStats(parsed.category_stats);
+        if (parsed.mistakes) localStorage.setItem("gama_mistakes", JSON.stringify(parsed.mistakes));
+        loadDashboard();
+        showBandToast("✅ Data Restored", "Your learning history and band stats were successfully loaded!");
+      } catch (err) {
+        showBandToast("⚠️ Import Failed", "Invalid JSON format. Please verify the copied text.");
+      }
+    });
+  }
+}
 
 // -------------------------------------------------------------
 // Screen Setting Analysis & Proactive Permission Calibration (v1.5.3)
 // -------------------------------------------------------------
 function analyzeScreenAndPermissions() {
-  const innerW = window.innerWidth;
-  const innerH = window.innerHeight;
-  const dpr = window.devicePixelRatio || 1;
-  const deviceType = innerW >= 1024 ? "Desktop/Tablet" : (innerW >= 600 ? "Large Phone/Foldable" : "Compact Mobile");
+  try {
+    const innerW = window.innerWidth;
+    const innerH = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    const deviceType = innerW >= 1024 ? "Desktop/Tablet" : (innerW >= 600 ? "Large Phone/Foldable" : "Compact Mobile");
 
-  console.log(`[Screen Analysis] Viewport: ${innerW}x${innerH}, DPR: ${dpr.toFixed(2)}, Type: ${deviceType}`);
+    console.log(`[Screen Analysis] Viewport: ${innerW}x${innerH}, DPR: ${dpr.toFixed(2)}, Type: ${deviceType}`);
 
-  // Proactively check Microphone Permission for Cambridge Speaking Test
-  const hasAndroidSTT = !!(window.AndroidSTT && typeof window.AndroidSTT.hasPermission === 'function');
-  const hasGrantedMic = hasAndroidSTT ? window.AndroidSTT.hasPermission() : true;
+    // Proactively check Microphone Permission for Cambridge Speaking Test
+    const hasAndroidSTT = !!(window.AndroidSTT && typeof window.AndroidSTT.hasPermission === 'function');
+    const hasGrantedMic = hasAndroidSTT ? window.AndroidSTT.hasPermission() : true;
 
-  if (hasAndroidSTT && !hasGrantedMic) {
-    showScreenSetupModal(innerW, innerH, dpr, deviceType);
-  } else {
-    // Show brief toast on first cold start per session
-    if (!sessionStorage.getItem("ielts_screen_calibrated")) {
-      sessionStorage.setItem("ielts_screen_calibrated", "true");
-      showBandUpdateToast(`🎯 Screen Calibrated: ${innerW}x${innerH} (${dpr.toFixed(1)}x) Auto-Fit Active`);
-    }
-  }
-
-  // Hook Android permission callback
-  window.onMicPermissionResult = function(granted) {
-    const modal = document.getElementById("screenSetupModal");
-    if (modal) modal.remove();
-    if (granted) {
-      showBandUpdateToast("🎤 Microphone access enabled for Examiner Speaking practice!");
+    if (hasAndroidSTT && !hasGrantedMic) {
+      showScreenSetupModal(innerW, innerH, dpr, deviceType);
     } else {
-      showBandUpdateToast("ℹ️ Audio practice available via Text-to-Speech.");
+      // Show brief toast on first cold start per session
+      if (!sessionStorage.getItem("ielts_screen_calibrated")) {
+        sessionStorage.setItem("ielts_screen_calibrated", "true");
+        showBandToast("🎯 Screen Calibrated", `${innerW}x${innerH} (${dpr.toFixed(1)}x) Auto-Fit Active`);
+      }
     }
-  };
+
+    // Hook Android permission callback
+    window.onMicPermissionResult = function(granted) {
+      const modal = document.getElementById("screenSetupModal");
+      if (modal) modal.remove();
+      if (granted) {
+        showBandToast("🎤 Microphone Enabled", "Voice recognition ready for Examiner Speaking practice!");
+      } else {
+        showBandToast("ℹ️ Audio Practice", "Practice available via Text-to-Speech.");
+      }
+    };
+  } catch (err) {
+    console.warn("[Screen Analysis Warning]:", err);
+  }
 }
 
 function showScreenSetupModal(w, h, dpr, deviceType) {
@@ -3265,20 +3428,29 @@ function showScreenSetupModal(w, h, dpr, deviceType) {
 // Initialization on DOM Ready
 // -------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
-  initTheme();
-  updateScreenDimensions();
-  analyzeScreenAndPermissions();
-  initIOSAudioUnlock();
-  initWindowsShortcuts();
-  initNavigation();
-  initChat();
-  initDiagnostic();
-  initWriting();
-  initSpeaking();
-  updateConnectivityStatus();
-  loadDashboard();
-  initDailyGoalModal();
-  onSpeakingSetChanged(0);
+  const safeInit = (fnName, fn) => {
+    try {
+      fn();
+    } catch (e) {
+      console.error(`[Init Error in ${fnName}]:`, e);
+    }
+  };
+
+  safeInit("initTheme", initTheme);
+  safeInit("updateScreenDimensions", updateScreenDimensions);
+  safeInit("analyzeScreenAndPermissions", analyzeScreenAndPermissions);
+  safeInit("initIOSAudioUnlock", initIOSAudioUnlock);
+  safeInit("initWindowsShortcuts", initWindowsShortcuts);
+  safeInit("initNavigation", initNavigation);
+  safeInit("initChat", initChat);
+  safeInit("initDiagnostic", initDiagnostic);
+  safeInit("initWriting", initWriting);
+  safeInit("initSpeaking", initSpeaking);
+  safeInit("initSettings", initSettings);
+  safeInit("updateConnectivityStatus", updateConnectivityStatus);
+  safeInit("loadDashboard", loadDashboard);
+  safeInit("initDailyGoalModal", initDailyGoalModal);
+  safeInit("onSpeakingSetChanged", () => onSpeakingSetChanged(0));
 
   const verBadge = document.getElementById("appVersionBadge");
   if (verBadge) verBadge.textContent = "v" + APP_VERSION;

@@ -13,6 +13,7 @@ import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
+import android.webkit.ConsoleMessage
 import android.webkit.JavascriptInterface
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
@@ -85,7 +86,14 @@ class MainActivity : ComponentActivity(), TextToSpeech.OnInitListener {
                 override fun onPermissionRequest(request: PermissionRequest?) {
                     request?.grant(request.resources)
                 }
+
+                override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+                    Log.d("IELTS_JS", "${consoleMessage?.sourceId()}:${consoleMessage?.lineNumber()} [${consoleMessage?.messageLevel()}] ${consoleMessage?.message()}")
+                    return true
+                }
             }
+
+            WebView.setWebContentsDebuggingEnabled(true)
 
             // Expose native Android audio capabilities to JavaScript
             addJavascriptInterface(AndroidTTSBridge(), "AndroidTTS")

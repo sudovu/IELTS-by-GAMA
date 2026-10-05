@@ -1207,21 +1207,23 @@ body {
   }
   .mobile-cat-filter {
     display: flex;
-    gap: 5px;
+    gap: 4px;
     padding: 3px;
     background: rgba(0, 0, 0, 0.35);
     border-radius: 8px;
     margin-bottom: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   .mobile-cat-filter::-webkit-scrollbar {
     display: none;
   }
   .cat-filter-btn {
-    padding: 4px 10px;
-    font-size: 0.72rem;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 6px 3px;
+    font-size: 0.70rem;
     font-weight: 700;
     border-radius: 6px;
     border: 1px solid transparent;
@@ -1229,6 +1231,9 @@ body {
     color: var(--text-secondary);
     cursor: pointer;
     white-space: nowrap;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
     transition: all 0.15s ease;
   }
   .cat-filter-btn.active {
@@ -2485,10 +2490,15 @@ body.light-theme .btn-success {
 }
 
 /* Filter & Chips in Light Mode */
+body.light-theme .mobile-cat-filter {
+  background: #e2e8f0;
+  border: 1px solid #cbd5e1;
+}
+
 body.light-theme .cat-filter-btn {
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
 }
 
 body.light-theme .cat-filter-btn:hover {
