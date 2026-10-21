@@ -8,7 +8,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="IELTS by GAMA">
-  <link rel="apple-touch-icon" href="images/logo.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/icon-180.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="images/icon-152.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="images/icon-120.png">
+  <link rel="apple-touch-icon" href="images/icon-180.png">
   <meta name="theme-color" content="#0f141c" id="metaThemeColor">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-TileColor" content="#0f141c">
@@ -38,6 +42,9 @@
         </div>
         <button id="toggleOfflineBtn" class="btn btn-secondary btn-sm" title="Toggle forced offline mode for complete privacy">
           Offline: OFF
+        </button>
+        <button id="iosInstallHeaderBtn" class="btn btn-secondary btn-sm" onclick="openIosInstallModal()" title="Install or Download IELTS by GAMA on iOS (iPhone & iPad)" style="display:inline-flex; align-items:center; gap:5px; border-color:rgba(59,130,246,0.5); color:var(--accent-primary);">
+          <span>📲</span> <span>iOS App</span>
         </button>
         <button id="themeToggleBtn" class="btn btn-icon btn-sm" title="Toggle Light/Dark Theme (Alt+T)">
           🌓
@@ -1217,6 +1224,103 @@
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
         <span style="font-size:0.8rem; color:var(--text-secondary);">You can change your target at any time in Dashboard.</span>
         <button id="btnSkipGoalModal" class="btn btn-secondary" style="padding:6px 16px;">Maybe Later</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS Direct Download & Installation Modal -->
+  <div id="iosInstallModal" class="modal-overlay" style="display:none; z-index:99999;">
+    <div class="modal-content" style="max-width:620px; width:92%; max-height:90vh; overflow-y:auto; border-radius:18px; padding:24px; box-shadow:0 25px 60px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:14px; margin-bottom:18px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg, #2563eb, #1d4ed8); display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+            🍎
+          </div>
+          <div>
+            <h3 style="margin:0; font-size:1.2rem; font-weight:700;">Install IELTS by GAMA on iOS</h3>
+            <span style="font-size:0.82rem; color:var(--text-secondary);">Direct download & install for iPhone & iPad (No Mac or App Store needed)</span>
+          </div>
+        </div>
+        <button onclick="closeIosInstallModal()" class="btn btn-icon btn-sm" style="font-size:1.1rem; border-radius:50%;" title="Close">✕</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <!-- Option 1: 1-Click Apple Profile -->
+        <div style="background:var(--bg-secondary); border:1.5px solid var(--accent-primary); border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <span style="font-size:1.4rem;">⚡</span>
+              <div>
+                <strong style="font-size:0.98rem; color:var(--text-primary);">Method 1: 1-Click Apple Profile (Recommended)</strong>
+                <div style="font-size:0.82rem; color:var(--text-secondary);">Adds the native app icon to Home Screen with full-screen standalone windowing.</div>
+              </div>
+            </div>
+            <span style="font-size:0.75rem; font-weight:700; background:rgba(37,99,235,0.2); color:#60a5fa; padding:3px 8px; border-radius:6px; white-space:nowrap;">1-Click</span>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.2); border-radius:8px; padding:10px 14px; font-size:0.82rem; color:var(--text-secondary); margin-bottom:12px; line-height:1.5;">
+            <strong>Quick 3-Step Setup:</strong><br>
+            1. Tap <strong>Download Profile</strong> below and select <strong>"Allow"</strong>.<br>
+            2. Open your iPhone/iPad <strong>Settings</strong> &rarr; tap <strong>"Profile Downloaded"</strong> at the top.<br>
+            3. Tap <strong>"Install"</strong> in the top-right corner and enter your passcode.
+          </div>
+
+          <a href="https://gautambhuwan.com.np/downloads/ielts-by-gama/ielts-by-gama.mobileconfig" download class="btn btn-primary" style="width:100%; text-decoration:none; justify-content:center; padding:10px; font-weight:600; display:inline-flex; align-items:center; gap:8px;">
+            <span>📥</span> Download iOS Profile (.mobileconfig)
+          </a>
+        </div>
+
+        <!-- Option 2: Safari Web App (PWA) -->
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <span style="font-size:1.4rem;">📲</span>
+              <div>
+                <strong style="font-size:0.98rem; color:var(--text-primary);">Method 2: Safari Add to Home Screen (PWA)</strong>
+                <div style="font-size:0.82rem; color:var(--text-secondary);">Direct offline web app cached by Service Worker with zero downloads.</div>
+              </div>
+            </div>
+            <span style="font-size:0.75rem; font-weight:700; background:rgba(16,185,129,0.2); color:#34d399; padding:3px 8px; border-radius:6px; white-space:nowrap;">Instant</span>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.2); border-radius:8px; padding:10px 14px; font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">
+            In Apple Safari, tap the <strong>Share</strong> button (<strong>⎋</strong> box with arrow up) at the bottom or top bar &rarr; scroll down &rarr; tap <strong>"Add to Home Screen" (➕)</strong> &rarr; tap <strong>"Add"</strong>.
+          </div>
+        </div>
+
+        <!-- Option 3: Sideload Native .IPA & Wireless OTA -->
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <div style="display:flex; gap:10px; align-items:center;">
+              <span style="font-size:1.4rem;">📦</span>
+              <div>
+                <strong style="font-size:0.98rem; color:var(--text-primary);">Method 3: Native iOS Binary (.IPA) Sideloading</strong>
+                <div style="font-size:0.82rem; color:var(--text-secondary);">Universal 64-bit iOS package for AltStore, Sideloadly, Scarlet, TrollStore, or Xcode.</div>
+              </div>
+            </div>
+            <span style="font-size:0.75rem; font-weight:700; background:rgba(245,158,11,0.2); color:#fbbf24; padding:3px 8px; border-radius:6px; white-space:nowrap;">AltStore / Sideload</span>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <a href="https://gautambhuwan.com.np/downloads/ielts-by-gama/ielts-by-gama.ipa" download class="btn btn-secondary" style="flex:1; min-width:200px; text-decoration:none; justify-content:center; padding:10px; font-weight:600; display:inline-flex; align-items:center; gap:8px;">
+              <span>💾</span> Download .IPA (3.7 MB)
+            </a>
+            <a href="itms-services://?action=download-manifest&url=https://gautambhuwan.com.np/downloads/ielts-by-gama/manifest.plist" class="btn btn-secondary" style="flex:1; min-width:200px; text-decoration:none; justify-content:center; padding:10px; font-weight:600; display:inline-flex; align-items:center; gap:8px;" title="Wireless Over-The-Air install (Requires enterprise/ad-hoc certificate matching device UDID)">
+              <span>📡</span> Wireless OTA Install
+            </a>
+          </div>
+
+          <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:8px;">
+            💡 Sideload with 1-click via <strong>AltStore</strong>, <strong>Sideloadly</strong>, or <strong>TrollStore</strong> on iOS 15.0 through 18+.
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; border-top:1px solid var(--border-color); pt:14px; padding-top:14px;">
+        <a href="https://github.com/sudovu/IELTS-by-GAMA/releases" target="_blank" rel="noopener noreferrer" style="font-size:0.82rem; color:var(--accent-primary); text-decoration:none;">
+          🐙 View GitHub Releases & Source &rarr;
+        </a>
+        <button onclick="closeIosInstallModal()" class="btn btn-secondary" style="padding:6px 16px;">Close</button>
       </div>
     </div>
   </div>

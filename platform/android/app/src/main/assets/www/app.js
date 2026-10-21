@@ -3425,6 +3425,61 @@ function showScreenSetupModal(w, h, dpr, deviceType) {
 }
 
 // -------------------------------------------------------------
+// iOS & Progressive Web App (PWA) Distribution & Install Helpers
+// -------------------------------------------------------------
+function isIOSDevice() {
+  const ua = window.navigator.userAgent || "";
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isIPadOS = navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+  return isIOS || isIPadOS;
+}
+
+function isStandaloneApp() {
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+
+function openIosInstallModal() {
+  const modal = document.getElementById("iosInstallModal");
+  if (modal) {
+    modal.style.display = "flex";
+  }
+}
+window.openIosInstallModal = openIosInstallModal;
+
+function closeIosInstallModal() {
+  const modal = document.getElementById("iosInstallModal");
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+window.closeIosInstallModal = closeIosInstallModal;
+
+function initServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js")
+        .then((reg) => {
+          console.log("[PWA Service Worker] Registered with scope:", reg.scope);
+        })
+        .catch((err) => {
+          console.warn("[PWA Service Worker] Registration failed:", err);
+        });
+    });
+  }
+}
+
+function initIOSInstallPrompt() {
+  const btn = document.getElementById("iosInstallHeaderBtn");
+  if (!btn) return;
+
+  // If user is on an iOS device and not running standalone, highlight the button
+  if (isIOSDevice() && !isStandaloneApp()) {
+    btn.style.borderColor = "#3b82f6";
+    btn.style.boxShadow = "0 0 10px rgba(59,130,246,0.5)";
+  }
+}
+
+// -------------------------------------------------------------
 // Initialization on DOM Ready
 // -------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
@@ -3436,6 +3491,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  safeInit("initServiceWorker", initServiceWorker);
+  safeInit("initIOSInstallPrompt", initIOSInstallPrompt);
   safeInit("initTheme", initTheme);
   safeInit("updateScreenDimensions", updateScreenDimensions);
   safeInit("analyzeScreenAndPermissions", analyzeScreenAndPermissions);

@@ -122,6 +122,43 @@ The project includes an Android APK built for **Android 11+ (API 30+)** optimize
 
 ---
 
+
+
+---
+
+## 🍎 iOS App (iPhone & iPad Direct Installation)
+
+IELTS by GAMA is engineered for direct distribution and installation on iOS devices (iPhone & iPad) **without requiring Mac App Store submission**:
+
+### 1. 1-Click Apple Configuration Profile (.mobileconfig) — Recommended
+Installs the official IELTS by GAMA application directly to your iOS Home Screen with custom icon, full-screen standalone windowing, and zero App Store restrictions.
+- **Download Profile**: [platform/ios/dist/ielts-by-gama.mobileconfig](platform/ios/dist/ielts-by-gama.mobileconfig)
+- **Direct Web Link**: [https://gautambhuwan.com.np/downloads/ielts-by-gama/ielts-by-gama.mobileconfig](https://gautambhuwan.com.np/downloads/ielts-by-gama/ielts-by-gama.mobileconfig)
+- **Installation Steps**:
+  1. Open the download link on your iPhone/iPad in Safari and tap **Allow**.
+  2. Open iOS **Settings** -> tap **Profile Downloaded** at the top.
+  3. Tap **Install** in the top-right corner, enter your passcode, and confirm.
+
+### 2. Apple Safari Progressive Web App (PWA)
+Full-featured offline-first web application powered by Service Worker caching:
+- **Live URL**: [https://gautambhuwan.com.np/ielts/](https://gautambhuwan.com.np/ielts/)
+- **Installation**: In Safari, tap the **Share** button -> scroll down -> tap **Add to Home Screen**.
+- Operates 100% offline with speech synthesis and local storage caching.
+
+### 3. Native iOS Binary (.IPA) Sideloading
+Universal 64-bit iOS application package for sideloading or enterprise distribution:
+- **Direct IPA Download**: [platform/ios/dist/ielts-by-gama.ipa](platform/ios/dist/ielts-by-gama.ipa) (3.7 MB)
+- **Direct Web Link**: [https://gautambhuwan.com.np/downloads/ielts-by-gama/ielts-by-gama.ipa](https://gautambhuwan.com.np/downloads/ielts-by-gama/ielts-by-gama.ipa)
+- **Sideloading Tools**: Compatible with **AltStore**, **Sideloadly**, **Scarlet**, **TrollStore**, and **Xcode**.
+- **Wireless Over-The-Air (OTA)**: itms-services://?action=download-manifest&url=https://gautambhuwan.com.np/downloads/ielts-by-gama/manifest.plist
+
+### 4. Build iOS Distribution Packages
+`ash
+python scripts/build_ios_distribution.py
+`
+
+---
+
 ## 🚀 Quick Start
 
 ### 1. Initialize Database & Seed Content

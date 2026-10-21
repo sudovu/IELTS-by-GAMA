@@ -25,6 +25,7 @@ venv/
 ENV/
 
 # Android build outputs and caches
+dist/app-release.apk
 .gradle/
 .kotlin/
 platform/android/.gradle/
@@ -36,3 +37,8 @@ platform/android/local.properties
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# Node and bot subprojects
+node_modules/
+messenger-bot/
+
