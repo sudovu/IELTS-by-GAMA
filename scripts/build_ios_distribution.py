@@ -568,35 +568,10 @@ def safe_copy(src, dst):
         except Exception as e:
             print(f"  [Warning] Could not copy {src} to {dst}: {e}")
 
-def deploy_web_app():
-    print("[7/7] Deploying live web app and offline assets to website & archives...")
-    # Copy www assets to website /ielts/
-    for item in os.listdir(UI_DIR):
-        s = os.path.join(UI_DIR, item)
-        d = os.path.join(WEBSITE_IELTS_WEB, item)
-        if os.path.isdir(s):
-            if os.path.exists(d):
-                try:
-                    shutil.rmtree(d)
-                except Exception:
-                    pass
-            try:
-                shutil.copytree(s, d, dirs_exist_ok=True)
-            except Exception:
-                pass
-        else:
-            safe_copy(s, d)
+def deploy_web_app(deploy_external: bool = False):
+    print("[7/7] Synchronizing internal web app and offline assets...")
     
-    # Update ielts-by-gama-web-app.zip
-    zip_path = os.path.join(WEBSITE_DOWNLOADS, "ielts-by-gama-web-app.zip")
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
-        for root, dirs, files in os.walk(UI_DIR):
-            for file in files:
-                full_path = os.path.join(root, file)
-                rel_path = os.path.relpath(full_path, UI_DIR)
-                zipf.write(full_path, rel_path)
-    
-    # Also sync to platform/android assets
+    # Sync to platform/android assets (Internal Staging)
     android_www = os.path.join(BASE_DIR, "platform", "android", "app", "src", "main", "assets", "www")
     if os.path.exists(android_www):
         for item in os.listdir(UI_DIR):
@@ -609,11 +584,42 @@ def deploy_web_app():
                     pass
             else:
                 safe_copy(s, d)
+        print(f"  Internal Android assets synced to {android_www}")
 
-    print(f"  Live web app deployed to {WEBSITE_IELTS_WEB}")
-    print(f"  Web App archive updated at {zip_path}")
+    # Gated External Website Deployment (Disabled by default during security audits)
+    if deploy_external and os.path.exists(os.path.dirname(WEBSITE_IELTS_WEB)):
+        print(f"  [External Deployment Flag Active] Copying static assets to {WEBSITE_IELTS_WEB}...")
+        for item in os.listdir(UI_DIR):
+            s = os.path.join(UI_DIR, item)
+            d = os.path.join(WEBSITE_IELTS_WEB, item)
+            if os.path.isdir(s):
+                if os.path.exists(d):
+                    try:
+                        shutil.rmtree(d)
+                    except Exception:
+                        pass
+                try:
+                    shutil.copytree(s, d, dirs_exist_ok=True)
+                except Exception:
+                    pass
+            else:
+                safe_copy(s, d)
+        
+        # Update ielts-by-gama-web-app.zip
+        zip_path = os.path.join(WEBSITE_DOWNLOADS, "ielts-by-gama-web-app.zip")
+        if os.path.exists(os.path.dirname(zip_path)):
+            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+                for root, dirs, files in os.walk(UI_DIR):
+                    for file in files:
+                        full_path = os.path.join(root, file)
+                        rel_path = os.path.relpath(full_path, UI_DIR)
+                        zipf.write(full_path, rel_path)
+            print(f"  Web App archive updated at {zip_path}")
+    else:
+        print("  [Notice] External web deployment bypassed (Security Phase 17 gate active).")
 
 def main():
+    deploy_ext = "--deploy-external" in sys.argv
     print("=" * 60)
     print("  IELTS by GAMA - iOS Package & Distribution Generator")
     print(f"  Version: {APP_VERSION} | Bundle: {APP_BUNDLE_ID}")
@@ -625,7 +631,7 @@ def main():
     generate_mobileconfig()
     generate_ota_manifest()
     generate_ipa()
-    deploy_web_app()
+    deploy_web_app(deploy_external=deploy_ext)
     print("=" * 60)
     print("  ALL iOS ASSETS & BINARIES GENERATED SUCCESSFULLY!")
     print("=" * 60)

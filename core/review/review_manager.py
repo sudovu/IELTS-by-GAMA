@@ -166,13 +166,15 @@ class ReviewManager:
 
         # Check existing evaluation for revision tracking
         existing = self.db.fetchone(
-            "SELECT id, revision FROM human_evaluations WHERE assignment_id = ? AND reviewer_id = ?",
+            "SELECT id, revision, status FROM human_evaluations WHERE assignment_id = ? AND reviewer_id = ?",
             (assignment_id, reviewer_id)
         )
 
         if existing:
-            eval_id = existing[0]
-            new_rev = existing[1] + 1
+            eval_id, old_rev, old_status = existing[0], existing[1], existing[2]
+            if old_status in ("submitted", "reconciled"):
+                return {"success": False, "error": "Evaluation has already been officially submitted and is immutable."}
+            new_rev = old_rev + 1
             self.db.execute(
                 """UPDATE human_evaluations
                    SET overall_band = ?, criteria_scores_json = ?, assessment_mode = ?, criterion_feedback_json = ?, general_comments = ?, status = ?, revision = ?, submitted_at = ?

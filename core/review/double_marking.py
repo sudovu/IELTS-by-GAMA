@@ -185,7 +185,27 @@ class DoubleMarkingManager:
         """
         Records a reconciled final evaluation by a Senior Examiner.
         PRESERVES both Reviewer 1 and Reviewer 2 original evaluations intact.
+        Enforces conflict-of-interest check: Reconciler cannot be one of the original reviewers.
         """
+        # Conflict of interest check: check both human_evaluations and review_assignments
+        prior_reviewers = set()
+        for r in self.db.fetchall(
+            "SELECT reviewer_id FROM human_evaluations WHERE submission_id = ? AND reviewer_role != 'senior_examiner'",
+            (submission_id,)
+        ):
+            prior_reviewers.add(r[0])
+        for r in self.db.fetchall(
+            "SELECT assigned_to FROM review_assignments WHERE submission_id = ?",
+            (submission_id,)
+        ):
+            prior_reviewers.add(r[0])
+
+        if reconciler_id in prior_reviewers:
+            return {
+                "success": False,
+                "error": "Conflict of interest: An examiner who graded or was assigned to this submission cannot act as its Senior Reconciler."
+            }
+
         now = datetime.datetime.now(datetime.timezone.utc).isoformat()
         reconcile_id = f"eval_recon_{uuid.uuid4().hex[:12]}"
 

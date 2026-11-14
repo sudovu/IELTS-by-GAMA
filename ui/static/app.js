@@ -5632,7 +5632,13 @@ function updateAuthPillUI() {
   }
 }
 
-window.quickLogin = async function(username, password) {
+window.loginWithCredentials = async function(username, password) {
+  const errEl = document.getElementById("loginErrorAlert");
+  if (errEl) {
+    errEl.style.display = "none";
+    errEl.textContent = "";
+  }
+
   try {
     const res = await fetch("/api/auth/login", {
       method: "POST",
@@ -5647,15 +5653,26 @@ window.quickLogin = async function(username, password) {
       localStorage.setItem("gama_current_user", JSON.stringify(data.user));
       updateAuthPillUI();
       closeAuthModal();
-      showToastNotification(`Signed in as ${data.user.user_id} (${data.user.role})`);
+      showToastNotification(`Signed in as ${data.user.username} (${data.user.role})`);
       if (appState.currentTab === "teacher") loadTeacherDashboard();
       if (appState.currentTab === "doublemark") loadDoubleMarkingView();
+      if (appState.currentTab === "beta") loadBetaManagement();
     } else {
-      alert("Authentication failed: " + (data.error || "Invalid credentials"));
+      const msg = data.error || data.message || "Invalid username or password.";
+      if (errEl) {
+        errEl.textContent = msg;
+        errEl.style.display = "block";
+      } else {
+        alert("Authentication failed: " + msg);
+      }
     }
   } catch (err) {
-    console.error("Login error:", err);
-    alert("Login failed: " + err.message);
+    if (errEl) {
+      errEl.textContent = "Login request failed. Check server connectivity.";
+      errEl.style.display = "block";
+    } else {
+      alert("Login request failed: " + err.message);
+    }
   }
 };
 
@@ -5663,7 +5680,7 @@ window.handleCustomLogin = async function(e) {
   e.preventDefault();
   const u = document.getElementById("loginUsername").value.trim();
   const p = document.getElementById("loginPassword").value;
-  await quickLogin(u, p);
+  await loginWithCredentials(u, p);
 };
 
 window.logoutCurrentUser = async function() {
@@ -5671,7 +5688,10 @@ window.logoutCurrentUser = async function() {
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Session-Token": appState.sessionToken
+        },
         body: JSON.stringify({ session_token: appState.sessionToken })
       });
     } catch (e) {}
@@ -5684,6 +5704,36 @@ window.logoutCurrentUser = async function() {
   closeAuthModal();
   showToastNotification("Signed out successfully");
 };
+
+async function verifyActiveSession() {
+  if (!appState.sessionToken) {
+    appState.currentUser = { user_id: "anonymous", role: "guest" };
+    updateAuthPillUI();
+    return;
+  }
+  try {
+    const res = await fetch("/api/auth/me", {
+      headers: { "X-Session-Token": appState.sessionToken }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.authenticated && data.user) {
+        appState.currentUser = data.user;
+        updateAuthPillUI();
+        return;
+      }
+    }
+    // Session is invalid or expired
+    appState.sessionToken = null;
+    appState.currentUser = { user_id: "anonymous", role: "guest" };
+    localStorage.removeItem("gama_session_token");
+    localStorage.removeItem("gama_current_user");
+    updateAuthPillUI();
+  } catch (err) {
+    // Network error: maintain cached session in offline mode
+    updateAuthPillUI();
+  }
+}
 
 // =========================================================================
 // PHASE 16: TEACHER REVIEW DASHBOARD & STUDIO
@@ -6261,6 +6311,6 @@ window.handleBetaBugSubmit = async function(e) {
 
 // Initial setup on document load
 document.addEventListener("DOMContentLoaded", () => {
-  updateAuthPillUI();
+  verifyActiveSession();
 });
 

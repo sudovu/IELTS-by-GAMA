@@ -391,27 +391,10 @@ class MigrationManager:
         );
         """)
 
-        # Seed initial RBAC users if table is empty
-        user_count = conn.execute("SELECT COUNT(*) FROM users;").fetchone()[0]
-        if user_count == 0:
-            def hash_pwd(pwd: str, salt: str) -> str:
-                return hashlib.sha256((pwd + salt).encode("utf-8")).hexdigest()
-
-            initial_users = [
-                ("usr_admin", "admin", "admin_secure_pass123", "admin", "System Administrator", "admin@gama.internal"),
-                ("usr_teacher_sarah", "teacher_sarah", "teacher_pass123", "teacher", "Sarah Jenkins (IELTS Lead Teacher)", "sarah@gama.internal"),
-                ("usr_examiner_mark", "examiner_mark", "examiner_pass123", "examiner", "Mark Davies (Cambridge Certified Examiner)", "mark@gama.internal"),
-                ("usr_examiner_clara", "examiner_clara", "examiner_pass123", "examiner", "Clara Oswald (Senior Examiner)", "clara@gama.internal"),
-                ("usr_learner_alice", "learner_alice", "learner_pass123", "learner", "Alice Montgomery", "alice@example.com"),
-                ("usr_learner_bob", "learner_bob", "learner_pass123", "learner", "Bob Henderson", "bob@example.com")
-            ]
-            for uid, uname, pwd, role, fname, email in initial_users:
-                salt = secrets.token_hex(8)
-                phash = hash_pwd(pwd, salt)
-                conn.execute(
-                    "INSERT INTO users (id, username, password_hash, salt, role, full_name, email) VALUES (?, ?, ?, ?, ?, ?, ?);",
-                    (uid, uname, phash, salt, role, fname, email)
-                )
+        # Schema created for users and sessions.
+        # Note (Phase 17 Hardening): Automatic seeding of privileged user accounts
+        # with hardcoded default passwords has been removed from migrations.
+        # Initial administrators must be provisioned via scripts/provision_admin.py.
 
         # Seed initial 4 Beta Cohorts if empty
         cohort_count = conn.execute("SELECT COUNT(*) FROM beta_cohorts;").fetchone()[0]

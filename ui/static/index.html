@@ -2243,23 +2243,10 @@
         <button class="btn btn-icon btn-sm" onclick="closeAuthModal()">✕</button>
       </div>
       <p style="margin:0 0 14px 0; font-size:0.85rem; color:var(--text-secondary);">
-        Switch active identity or login with credentials. Access to Teacher review, Examiner calibration, and Administration is enforced server-side.
+        Sign in with your verified candidate or educator account. Access permissions and roles are securely authenticated server-side.
       </p>
 
-      <!-- Quick Role Selection -->
-      <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:6px;">Quick Switch Seeded User:</label>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('learner_alice', 'learner123')">👤 Learner (Alice)</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('teacher_sarah', 'teacher123')">👩‍🏫 Teacher (Sarah)</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('examiner_mark', 'examiner123')">👨‍⚖️ Examiner (Mark)</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('examiner_clara', 'examiner123')">⚖️ Senior Exam (Clara)</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('admin', 'admin123')" style="grid-column: span 2;">👑 Administrator</button>
-      </div>
-
-      <div style="position:relative; text-align:center; margin:12px 0;">
-        <hr style="border:0; border-top:1px solid var(--border-color);">
-        <span style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--bg-secondary); padding:0 8px; font-size:0.75rem; color:var(--text-muted);">OR LOGIN</span>
-      </div>
+      <div id="loginErrorAlert" style="display:none; padding:8px 12px; border-radius:6px; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; font-size:0.82rem; margin-bottom:12px;"></div>
 
       <form id="customLoginForm" onsubmit="handleCustomLogin(event)">
         <div style="margin-bottom:10px;">

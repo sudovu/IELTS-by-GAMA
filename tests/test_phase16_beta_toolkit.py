@@ -51,19 +51,24 @@ class TestPhase16BetaToolkit(unittest.TestCase):
         # Setup test learner
         cls.learner = cls.learner_repo.create_learner("Test Candidate", target_band=7.0)
 
-        # Authenticate seeded test accounts
+        # Setup test accounts in isolated test database
+        cls.auth_mgr.register_user("admin", "admin_secure_pass123", role="admin")
         cls.admin_user = cls.auth_mgr.authenticate("admin", "admin_secure_pass123")
         cls.admin_token = cls.auth_mgr.create_session(cls.admin_user["id"])
 
+        cls.auth_mgr.register_user("teacher_sarah", "teacher_pass123", role="teacher", authorizing_admin_user_id=cls.admin_user["id"])
         cls.teacher_user = cls.auth_mgr.authenticate("teacher_sarah", "teacher_pass123")
         cls.teacher_token = cls.auth_mgr.create_session(cls.teacher_user["id"])
 
+        cls.auth_mgr.register_user("examiner_mark", "examiner_pass123", role="examiner", authorizing_admin_user_id=cls.admin_user["id"])
         cls.examiner_1 = cls.auth_mgr.authenticate("examiner_mark", "examiner_pass123")
         cls.examiner_1_token = cls.auth_mgr.create_session(cls.examiner_1["id"])
 
+        cls.auth_mgr.register_user("examiner_clara", "examiner_pass123", role="examiner", authorizing_admin_user_id=cls.admin_user["id"])
         cls.examiner_2 = cls.auth_mgr.authenticate("examiner_clara", "examiner_pass123")
         cls.examiner_2_token = cls.auth_mgr.create_session(cls.examiner_2["id"])
 
+        cls.auth_mgr.register_user("learner_alice", "learner_pass123", role="learner")
         cls.learner_user = cls.auth_mgr.authenticate("learner_alice", "learner_pass123")
         cls.learner_token = cls.auth_mgr.create_session(cls.learner_user["id"])
 

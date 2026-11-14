@@ -73,25 +73,34 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
     beta_mgr = BetaManager(db)
 
     def _get_auth_token(self) -> Optional[str]:
+        # Phase 17: Query-string token transport removed to prevent exposure in logs and browser history.
+        # Session tokens must only be passed via secure headers.
         tok = self.headers.get("X-Session-Token")
         if tok:
             return tok.strip()
         auth = self.headers.get("Authorization", "")
         if auth.startswith("Bearer "):
             return auth[7:].strip()
-        parsed = urlparse(self.path)
-        qs = parse_qs(parsed.query)
-        if "token" in qs and qs["token"]:
-            return qs["token"][0].strip()
         return None
+
+    def _send_security_headers(self):
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("X-XSS-Protection", "1; mode=block")
+        self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
+        self.send_header(
+            "Content-Security-Policy",
+            "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' blob:; connect-src 'self';"
+        )
 
     def _send_json(self, data: dict, status: int = 200):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1:8080")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Session-Token, Authorization")
+        self._send_security_headers()
         self.end_headers()
         self.wfile.write(body)
 
@@ -104,9 +113,10 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1:8080")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Session-Token, Authorization")
+        self._send_security_headers()
         self.end_headers()
 
     def do_GET(self):
@@ -372,6 +382,13 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             active_id = self.settings_repo.get("active_learner_id", "default_learner")
             if "learner_id=" in parsed.query:
                 active_id = parsed.query.split("learner_id=")[1].split("&")[0].strip()
+            
+            token = self._get_auth_token()
+            user = self.auth_mgr.validate_session(token)
+            if user and user["role"] == "learner" and active_id not in (user["username"], user["user_id"]):
+                self._send_json({"error": "Access Forbidden: Learners may only access their own examination records."}, status=403)
+                return
+
             active_sess = self.exam_manager.get_active_session(active_id)
             self._send_json({"active_session": active_sess})
 
@@ -382,6 +399,13 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
                 session_id = parsed.query.split("session_id=")[1].split("&")[0].strip()
             if "learner_id=" in parsed.query:
                 active_id = parsed.query.split("learner_id=")[1].split("&")[0].strip()
+
+            token = self._get_auth_token()
+            user = self.auth_mgr.validate_session(token)
+            if user and user["role"] == "learner" and active_id not in (user["username"], user["user_id"]):
+                self._send_json({"error": "Access Forbidden: Learners may only access their own examination records."}, status=403)
+                return
+
             res = self.exam_manager.get_exam_results(session_id, active_id)
             if res:
                 self._send_json(res)
@@ -392,6 +416,13 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             active_id = self.settings_repo.get("active_learner_id", "default_learner")
             if "learner_id=" in parsed.query:
                 active_id = parsed.query.split("learner_id=")[1].split("&")[0].strip()
+
+            token = self._get_auth_token()
+            user = self.auth_mgr.validate_session(token)
+            if user and user["role"] == "learner" and active_id not in (user["username"], user["user_id"]):
+                self._send_json({"error": "Access Forbidden: Learners may only access their own examination records."}, status=403)
+                return
+
             limit = 20
             if "limit=" in parsed.query:
                 try:
@@ -732,23 +763,46 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             self._send_json(res, status=200 if res.get("success") else 400)
 
         # -------------------------------------------------------------
-        # PHASE 16: RBAC, TEACHER TOOLKIT, BENCHMARK & BETA (POST)
+        # PHASE 16 & 17: RBAC, TEACHER TOOLKIT, BENCHMARK & BETA (POST)
         # -------------------------------------------------------------
         elif path == "/api/auth/login":
             uname = body.get("username", "")
             pwd = body.get("password", "")
-            user = self.auth_mgr.authenticate(uname, pwd)
+            client_ip = self.client_address[0] if self.client_address else "127.0.0.1"
+            user, err = self.auth_mgr.authenticate(uname, pwd, client_ip=client_ip)
             if user:
                 token = self.auth_mgr.create_session(user["id"])
-                self._send_json({"success": True, "token": token, "user": user})
+                self._send_json({
+                    "status": "authenticated",
+                    "success": True,
+                    "session_token": token,
+                    "token": token,
+                    "user": user
+                })
             else:
-                self._send_json({"success": False, "error": "Invalid username or password."}, status=401)
+                is_rate_limit = bool(err and ("rate" in err.lower() or "lock" in err.lower()))
+                self._send_json({
+                    "status": "error",
+                    "success": False,
+                    "error": err or "Invalid username or password."
+                }, status=429 if is_rate_limit else 401)
 
         elif path == "/api/auth/logout":
             token = self._get_auth_token()
             if token:
                 self.auth_mgr.revoke_session(token)
             self._send_json({"success": True, "message": "Signed out successfully."})
+
+        elif path == "/api/auth/change_password":
+            token = self._get_auth_token()
+            user = self.auth_mgr.validate_session(token)
+            if not user:
+                self._send_json({"error": "Authentication required."}, status=401)
+            else:
+                old_pwd = body.get("old_password", "")
+                new_pwd = body.get("new_password", "")
+                res = self.auth_mgr.change_password(user["user_id"], old_pwd, new_pwd)
+                self._send_json(res, status=200 if res.get("success") else 400)
 
         elif path == "/api/teacher/review/save":
             token = self._get_auth_token()
@@ -809,7 +863,7 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
 
         elif path == "/api/examiner/reconcile":
             token = self._get_auth_token()
-            ok, user, err = self.auth_mgr.authorize_request(token, ["admin", "senior_examiner", "examiner"])
+            ok, user, err = self.auth_mgr.authorize_request(token, ["admin", "senior_examiner"])
             if not ok:
                 self._send_json({"error": err}, status=403 if user else 401)
             else:
@@ -930,6 +984,7 @@ class GAMAHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-Type", content_type)
             self.send_header("Content-Length", str(len(content)))
+            self._send_security_headers()
             self.end_headers()
             self.wfile.write(content)
         except Exception as e:
