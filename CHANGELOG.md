@@ -9,6 +9,28 @@ The versioning follows the convention:
 
 ---
 
+## [v1.6.0] - 2026-11-15 (Phase 19: Production Release, GitHub Synchronization & Website Deployment)
+
+### Production Launch & Verification
+- **Dual-Release Execution (GitHub & Website)**:
+  - Synchronized canonical `master` branch with remote repository (`https://github.com/sudovu/IELTS-by-GAMA`).
+  - Aligned default `main` branch with `master` via zero-risk fast-forward reconciliation (merge-base `aa2d8b3`).
+  - Deployed verified student-first production build to `https://gautambhuwan.com.np/ielts/` with complete subdirectory isolation.
+- **Security Audit & Secret Clearance**:
+  - Full automated scan of 268 tracked files and Git history: 0 leaked cloud keys, 0 exposed private tokens, 0 committed databases.
+  - Hardened `.gitignore` to prevent any inadvertent staging of database backups (`data/*backup*/`).
+- **Assessment Disclaimers & Public Labeling**:
+  - Removed unsupported statistical confidence intervals in favor of accurate **"Estimated IELTS Band • Automated Feedback"** labels.
+  - Prominent formative practice disclaimers active across all exam results and documentation.
+- **Cross-Platform Distribution & Download Hub**:
+  - Updated website downloads for direct Android APK (23.9 MB), iOS standalone .IPA (3.7 MB), 1-click Apple Configuration Profile (`.mobileconfig`), and enterprise wireless Over-The-Air manifest.
+- **Automated Regression Suite**:
+  - 159 passing tests across 17 test suites (0 failures, 0 errors, 100% pass rate).
+  - Pre-deployment website backup archived to `data/website_ielts_backup_phase19/`.
+  - Authored all 15 required Phase 19 markdown reports in repository root.
+
+---
+
 ## [v1.6.0] - 2026-11-15 (Phase 18: Student-First IELTS Platform, Assessment Accuracy & Result Verification)
 
 ### Added & Hardened

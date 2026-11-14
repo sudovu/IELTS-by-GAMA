@@ -5279,8 +5279,8 @@ function renderExamResults(results) {
   const recContainer = document.getElementById("resultsRecommendationsList");
 
   if (overallEl) overallEl.textContent = Number(results.overall_band || 0.0).toFixed(1);
-  if (confEl && results.confidence_range) {
-    confEl.textContent = `Confidence Range: [${results.confidence_range[0]} – ${results.confidence_range[1]}]`;
+  if (confEl) {
+    confEl.textContent = `Estimated IELTS Band • Automated Feedback`;
   }
   if (timestampEl) timestampEl.textContent = `Completed on ${new Date().toLocaleDateString()}`;
   if (titleEl) titleEl.textContent = `${results.track || 'IELTS'} Practice Examination Results`;

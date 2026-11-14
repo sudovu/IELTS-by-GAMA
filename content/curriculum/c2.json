@@ -1,0 +1,854 @@
+[
+  {
+    "id": "curric_c2_gram_cleft_sentences",
+    "cefr_level": "C2",
+    "module_type": "grammar",
+    "title": "The Mandative Subjunctive, Stylistic Ellipsis & Gapping",
+    "order_index": 1,
+    "prerequisites": [
+      "curric_c1_gram_inversion"
+    ],
+    "estimated_minutes": 55,
+    "objectives": [
+      "Master the formal mandative subjunctive mood in legislative, legal, and academic clauses ('insist that he submit', 'vital that she be informed')",
+      "Deploy syntactic ellipsis and gapping to eliminate redundant verbiage in publication-grade prose",
+      "Command rare stylistic preposing and absolute participial constructions ('The motion having carried, the assembly adjourned')"
+    ],
+    "explanation_markdown": "### 1. The Mandative Subjunctive Mood\nIn high formal register (legal, parliamentary, academic), the mandative subjunctive uses the **base infinitive form of the verb for all persons** (including third-person singular):\n- **Triggers:** Verbs of demand, recommendation, urgency (*insist, recommend, demand, mandate, stipulate, propose*) and adjectives (*essential, vital, imperative, crucial*):\n  * *The tribunal mandated that the corporation **cease** (NOT ceases) industrial extraction immediately.*\n  * *It is imperative that every candidate **be** (NOT is) verified prior to ballot counting.*\n  * *The committee recommends that the director **resign** (NOT resigns).*\n\n### 2. Stylistic Ellipsis & Gapping\nC2 prose achieves conciseness by omitting words that are recoverable from context:\n- **Gapping (Omitting repeated verbs):**\n  * *Oxford produced six prime ministers; Cambridge, four.* (The verb 'produced' is gapped).\n- **Adverbial Ellipsis:**\n  * *When [he was] asked about the deficit, the minister hesitated.*\n\n### 3. Absolute Participial Clauses\nA noun + participle construction having no grammatical attachment to the main clause:\n- *The committee **having adjourned**, delegates departed for the evening reception.*",
+    "examples": [
+      {
+        "text": "The international treaty stipulates that each signatory state submit comprehensive carbon auditing reports annually.",
+        "notes": "Mandative subjunctive: 'stipulate that state submit' (base infinitive)."
+      },
+      {
+        "text": "The senior diplomat advocated caution; the junior attach\u00e9, immediate confrontation.",
+        "notes": "Stylistic gapping omitting the repeated verb 'advocated'."
+      },
+      {
+        "text": "All formalities having been executed, the commercial merger officially closed.",
+        "notes": "Absolute participial clause establishing temporal independence."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_g_ge_1",
+        "prompt": "Apply the mandative subjunctive: 'The judge demanded that the defendant _____ (stand) in the dock.'",
+        "answer": "stand",
+        "explanation": "Mandative subjunctive requires base form 'stand' (NOT 'stands')."
+      },
+      {
+        "id": "c2_g_ge_2",
+        "prompt": "Apply the subjunctive verb 'to be': 'It is essential that she _____ (be) notified of the verdict.'",
+        "answer": "be",
+        "explanation": "The subjunctive form of 'to be' is simply 'be' for all persons."
+      },
+      {
+        "id": "c2_g_ge_3",
+        "prompt": "Complete with gapping: 'The treasury released fiscal reserves; the central bank, monetary liquidity.' What verb is omitted?",
+        "answer": "released",
+        "explanation": "The verb 'released' is elliptically gapped after the semicolon."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_as_1",
+        "question": "Choose the correctly framed it-cleft targeting causation:",
+        "options": [
+          "It was precisely because public transit was privatized that fares skyrocketed.",
+          "It was precisely because public transit was privatized which fares skyrocketed.",
+          "What was precisely because public transit privatized that fares skyrocketed.",
+          "It is because public transit was privatized why fares skyrocketed."
+        ],
+        "correct_index": 0,
+        "explanation": "'It was [prepositional cause] that [consequence]' is the precise grammatical formulation."
+      },
+      {
+        "id": "c2_g_as_2",
+        "question": "What stylistic device is demonstrated in: 'Athens bequeathed philosophy to posterity; Rome, law.'?",
+        "options": [
+          "Tautology",
+          "Gapping (verbal ellipsis)",
+          "Hyperbole",
+          "Malapropism"
+        ],
+        "correct_index": 1,
+        "explanation": "The second clause omits the verb 'bequeathed' via stylistic gapping."
+      },
+      {
+        "id": "c2_g_as_3",
+        "question": "Identify the absolute clause in: 'The weather having deteriorated rapidly, mountaineers abandoned the summit push.'",
+        "options": [
+          "The weather having deteriorated rapidly",
+          "mountaineers abandoned the summit push",
+          "having deteriorated rapidly mountaineers",
+          "the summit push"
+        ],
+        "correct_index": 0,
+        "explanation": "'The weather having deteriorated rapidly' is an independent absolute participial construction."
+      }
+    ],
+    "interactive_practice": [
+      {
+        "id": "c2_ip_1",
+        "question": "Which sentence demonstrates an authentic pseudo-cleft (wh-cleft) construction?",
+        "options": [
+          "What policy makers must recognize is that economic growth cannot occur in ecological isolation.",
+          "Policy makers must recognize what economic growth is.",
+          "It is policy makers that recognize economic growth.",
+          "Why policy makers recognize growth is because of ecology."
+        ],
+        "correct_index": 0,
+        "explanation": "'What [clause] is [focused proposition]' forms a classic wh-cleft."
+      }
+    ]
+  },
+  {
+    "id": "curric_c2_vocab_idiomatic_register",
+    "cefr_level": "C2",
+    "module_type": "vocabulary",
+    "title": "Idiomatic Mastery, Metaphor & Rare Lexis",
+    "order_index": 2,
+    "prerequisites": [
+      "curric_c1_vocab_academic_collocations"
+    ],
+    "estimated_minutes": 55,
+    "objectives": [
+      "Deploy literary and erudite idioms with flawless sociolinguistic register ('Gordian knot', 'Pyrrhic victory', 'Achilles heel')",
+      "Distinguish between subtle connotations of high-tier literary synonyms ('ephemeral' vs 'transitory' vs 'fugacious')",
+      "Deconstruct conceptual metaphors in high-stakes editorial and philosophical essays"
+    ],
+    "explanation_markdown": "### 1. Erudite Classical & Literary Idioms\nAt C2, idiomatic mastery does not mean using overused street slang (*'raining cats and dogs'*). It means deploying erudite idioms that encapsulate complex historical and philosophical concepts:\n- **A Pyrrhic Victory:** A victory achieved at such devastating cost that it is tantamount to defeat.\n- **Cutting the Gordian Knot:** Resolving a seemingly intractable problem through bold, unconventional action.\n- **The Sword of Damocles:** An imminent and pervasive peril hanging over an apparently prosperous situation.\n- **Crossing the Rubicon:** Taking an irrevocable step committing oneself to a hazardous course of action.\n\n### 2. Nuanced Connotative Distinction\nExamine three words meaning 'lasting a short time':\n- **Ephemeral:** Emphasizes transient beauty and delicate fragility (*ephemeral spring blossoms, ephemeral celebrity*).\n- **Transitory:** Emphasizes impermanence and progression through stages (*transitory economic fluctuations*).\n- **Fleeting:** Emphasizes swift, vanishing speed (*a fleeting glimpse of truth*).\n\n### 3. Conceptual Metaphor\nAbstract reasoning is expressed via embodied metaphors:\n- Argument is War (*defend a thesis, shoot down an objection, entrench a position*).\n- Ideas are Commodities (*buy into an ideology, sell an agenda, bankrupt philosophy*).",
+    "examples": [
+      {
+        "text": "The company secured a Pyrrhic victory in the patent lawsuit, bankrupting its reserves on legal retainers.",
+        "notes": "Erudite idiom: Pyrrhic victory."
+      },
+      {
+        "text": "The regulatory agency cut the Gordian knot of cryptocurrency oversight by classifying all tokens as securities.",
+        "notes": "Classical idiom: cutting the Gordian knot."
+      },
+      {
+        "text": "Youth and beauty are proverbially ephemeral; wisdom, enduring.",
+        "notes": "Literary precision with 'ephemeral'."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_v_ge_1",
+        "prompt": "Which idiom describes a success achieved at such catastrophic expense that it amounts to defeat? (Pyrrhic victory / Golden handshake)",
+        "answer": "Pyrrhic victory",
+        "explanation": "A Pyrrhic victory originates from King Pyrrhus, whose victories against Rome cost his entire army."
+      },
+      {
+        "id": "c2_v_ge_2",
+        "prompt": "Insert the adjective meaning 'lasting for only a very brief, beautiful moment': 'The _____ glory of the cherry blossoms.' (ephemeral / durable)",
+        "answer": "ephemeral",
+        "explanation": "'Ephemeral' denotes short-lived, transient beauty."
+      },
+      {
+        "id": "c2_v_ge_3",
+        "prompt": "Complete the historical idiom: 'Once we sign this contract, we have crossed the _____.' (Rubicon / Thames)",
+        "answer": "Rubicon",
+        "explanation": "Crossing the Rubicon (from Julius Caesar) means committing to an irrevocable decision."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_v_as_1",
+        "question": "Select the sentence with impeccable C2 stylistic register:",
+        "options": [
+          "The new law was super good and changed lots of stuff.",
+          "The landmark legislation represented a watershed moment that catalyzed a sea change in consumer privacy protections.",
+          "The law was really cool and made privacy great again.",
+          "Everyone knows the law was the best thing ever done."
+        ],
+        "correct_index": 1,
+        "explanation": "Exemplifies elevated academic and stylistic register with natural high-level idiomatic precision."
+      },
+      {
+        "id": "c2_v_as_2",
+        "question": "Which sentence demonstrates the most authentic, non-clich\u00e9 C2 metaphorical style?",
+        "options": [
+          "It was a piece of cake to pass the examination.",
+          "The minister's aggressive rhetoric was intended to burnish his populist credentials before the general election.",
+          "At the end of the day, it's raining cats and dogs.",
+          "He is the apple of my eye in the office."
+        ],
+        "correct_index": 1,
+        "explanation": "'Burnish populist credentials' is sophisticated, natural contemporary political prose."
+      },
+      {
+        "id": "c2_v_as_3",
+        "question": "What is the subtle difference between 'transitory' and 'ephemeral'?",
+        "options": [
+          "'Transitory' relates to stages of passing change; 'ephemeral' evokes fleeting, delicate short-livedness.",
+          "There is no difference.",
+          "'Ephemeral' is only used for food.",
+          "'Transitory' is informal slang."
+        ],
+        "correct_index": 0,
+        "explanation": "Transitory emphasizes passing states of time; ephemeral captures delicate, short-lived fragility."
+      }
+    ],
+    "interactive_practice": [
+      {
+        "id": "c2_v_ip_1",
+        "question": "Which idiomatic term describes a profound and comprehensive transformation?",
+        "options": [
+          "A lake change",
+          "A sea change",
+          "A river change",
+          "An ocean shift"
+        ],
+        "correct_index": 1,
+        "explanation": "'A sea change' (originating in Shakespeare's The Tempest) denotes an irreversible radical transformation."
+      }
+    ]
+  },
+  {
+    "id": "curric_c2_read_implicit_author_stance",
+    "cefr_level": "C2",
+    "module_type": "reading",
+    "title": "Dissecting Irony, Subtext & Dense Philosophy",
+    "order_index": 3,
+    "prerequisites": [
+      "curric_c1_read_evaluating_arguments",
+      "curric_c2_vocab_idiomatic_register"
+    ],
+    "estimated_minutes": 55,
+    "objectives": [
+      "Decode multi-layered satire, ironic understatement (litotes), and ideological presupposition in dense prose",
+      "Synthesize complex dialectical epistemologies across conflicting philosophical and economic paradigms",
+      "Identify implicit authorial cynicism masked by courteous superficial academic praise"
+    ],
+    "explanation_markdown": "### Hermeneutic Decoding of C2 Subtext\nAt CEFR C2, authors frequently say the opposite of what they mean to execute biting satire or philosophical irony:\n\n#### Literary Excerpt: The Meritocratic Illusion\n```\nHow reassuring it must be for our titan industrialists to contemplate their celestial fortunes \nand reflect that every guinea was acquired through immaculate individual genius. What a fortunate \ncoincidence that merit, in its boundless cosmic wisdom, chose to incarnate exclusively within \nthe sons of hereditary dukes and venture hedge-fund magnates. One can only marvel at the \nmetaphysical harmony that aligns superior intellect so unfailingly with prior capital endowment. \nTo suggest that inherited wealth, private schooling, and familial cronyism might have exerted \nthe slightest nudge upon their ascent would be, of course, the most vulgar variety of envy.\n```\n\n#### Analytical Deconstruction:\n- **Literal Surface:** The author appears to praise industrialists for genius and cosmic merit.\n- **Hermeneutic Subtext (The Real Meaning):** Biting, contemptuous sarcasm. The author is ruthlessly mocking the myth of meritocracy by exposing that wealth is simply inherited privilege and cronyism.\n- **Rhetorical Litotes:** *'the slightest nudge'* (ironic understatement for massive unfair advantage).\n- **Mock Pretentiousness:** *'celestial fortunes'*, *'immaculate individual genius'*, *'boundless cosmic wisdom'*.",
+    "examples": [
+      {
+        "text": "The author ruthlessly satirizes the myth of self-made billionaires as an illusion of inherited privilege.",
+        "notes": "Decoding satirical subtext contrary to literal surface words."
+      },
+      {
+        "text": "The phrase 'most vulgar variety of envy' ironically parodies how the wealthy deflect legitimate systemic critique.",
+        "notes": "Analyzing ideological defense mechanisms."
+      },
+      {
+        "text": "Irony operates through mock flattery: 'celestial fortunes' and 'immaculate genius'.",
+        "notes": "Identifying linguistic markers of satire."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_r_ge_1",
+        "prompt": "Does the author genuinely believe industrialists acquired wealth through 'immaculate individual genius'? (Yes / No)",
+        "answer": "No",
+        "explanation": "The entire passage is ironic sarcasm; the author believes wealth stems from inheritance and cronyism."
+      },
+      {
+        "id": "c2_r_ge_2",
+        "prompt": "What does the author identify as the real causes of their success?",
+        "answer": "inherited wealth, private schooling, and familial cronyism",
+        "explanation": "Explicitly exposed in the penultimate sentence."
+      },
+      {
+        "id": "c2_r_ge_3",
+        "prompt": "What rhetorical device is 'celestial fortunes'? (Hyperbole / Irony / Sarcastic flattery)",
+        "answer": "Sarcastic flattery",
+        "explanation": "Elevating earthly money to 'celestial' heights mocks the arrogance of the wealthy."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_r_as_1",
+        "question": "Sentence: 'The minister's much-vaunted environmental reform proved to be little more than rhetorical window-dressing.' The author's tone is:",
+        "options": [
+          "Enthusiastic and complimentary",
+          "Skeptical and dismissive",
+          "Objective and statistical",
+          "Confused and uncertain"
+        ],
+        "correct_index": 1,
+        "explanation": "'Much-vaunted' and 'rhetorical window-dressing' convey sharp critique and dismissive skepticism."
+      },
+      {
+        "id": "c2_r_as_2",
+        "question": "What does the author satirize when writing: 'What a fortunate coincidence that merit... chose to incarnate exclusively within the sons of hereditary dukes'?",
+        "options": [
+          "The genuine biological superiority of dukes",
+          "The false claim that the existing distribution of wealth is based on natural merit rather than inherited privilege",
+          "The architectural beauty of castles",
+          "The weather in London"
+        ],
+        "correct_index": 1,
+        "explanation": "Highlights the statistical absurdity of claiming that talent conveniently matches inherited nobility."
+      },
+      {
+        "id": "c2_r_as_3",
+        "question": "In literary criticism, what is 'litotes'?",
+        "options": [
+          "A deliberate ironic understatement using double negatives or understated phrasing",
+          "A loud theatrical shout",
+          "A poem written in Latin",
+          "A spelling mistake"
+        ],
+        "correct_index": 0,
+        "explanation": "Litotes is an understatement in which an affirmative is expressed by negating its contrary (e.g. 'not bad' for great)."
+      }
+    ],
+    "interactive_practice": [
+      {
+        "id": "c2_r_ip_1",
+        "question": "Author: 'It is arguably premature to dismantle traditional banking frameworks in favor of volatile cryptographic currencies.' What is the author's stance?",
+        "options": [
+          "Strongly in favor of immediately adopting cryptographic currency.",
+          "Cautious and advising against rapid abandonment of established banking systems.",
+          "Indifferent and refusing to provide an opinion.",
+          "Believes traditional banking has already failed completely."
+        ],
+        "correct_index": 1,
+        "explanation": "'Premature to dismantle' explicitly advocates caution against hasty replacement."
+      }
+    ]
+  },
+  {
+    "id": "curric_c2_listen_rapid_speech",
+    "cefr_level": "C2",
+    "module_type": "listening",
+    "title": "Rapid Colloquial Speech, Jargon & Obscure Accents",
+    "order_index": 4,
+    "prerequisites": [
+      "curric_c1_listen_synthesis"
+    ],
+    "estimated_minutes": 55,
+    "objectives": [
+      "Decipher stream-of-consciousness natural speech delivered at high speed with regional phonological elisions",
+      "Filter dense disciplinary jargon in spontaneous multi-party symposium cross-examinations",
+      "Identify double negatives, ironies, and subtle conversational implicatures in fast dialogue"
+    ],
+    "explanation_markdown": "### Transcript-Based Listening Strategy: High-Speed Dialectal Exchanges\n*(Practice session using authentic fast-paced debate scripts.)*\n\n#### Audio Script: Parliamentary Committee Cross-Examination\n```\nCHAIR: Order! Mr Sterling, let's cut through the procedural obfuscation. You've sat before this committee \nfor three hours waxing lyrical about fiduciary diligence, yet the forensic balance sheet tells an entirely \ndifferent story. A four-million-pound tranche of capital vanished into an offshore shell entity within \ntwelve hours of the bailout confirmation. \nMR STERLING: Look, with all due respect, Mr Chair, the committee's conflating structural liquidity with \nproprietary capital deployment. That capital wasn't 'siphoned'; it was hedged against impending currency volatility \nin our European derivatives portfolio.\nCHAIR: Hedged, you say? Funny how that hedge conveniently vested into your private executive pension trust \nthe very next morning. Do you take this committee for complete fools, or does your corporate chutzpah know no bounds?\n```\n\n#### Decoding High-Speed Dialectal Markers:\n- **Idiomatic Thrusts:** *'cut through the procedural obfuscation'*, *'waxing lyrical'*, *'corporate chutzpah'*.\n- **Euphemistic Camouflage:** *'proprietary capital deployment'* vs the Chair's plain reality: *'vanished into an offshore shell entity'*.\n- **Rhetorical Interrogation:** *'Funny how that hedge conveniently vested...'* (Biting sarcastic dismissal of financial excuses).",
+    "examples": [
+      {
+        "text": "The Chair accuses Sterling of concealing embezzlement behind complex financial jargon.",
+        "notes": "Deconstructing institutional obfuscation."
+      },
+      {
+        "text": "Sterling euphemistically reframes capital flight as 'hedging against currency volatility'.",
+        "notes": "Detecting rhetorical spin in spoken cross-examination."
+      },
+      {
+        "text": "The Chair employs heavy sarcasm: 'Do you take this committee for complete fools...'",
+        "notes": "Interpreting rhetorical indignation."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_l_ge_1",
+        "prompt": "How much capital disappeared into the offshore entity?",
+        "answer": "four million pounds",
+        "explanation": "The Chair cites 'A four-million-pound tranche of capital'."
+      },
+      {
+        "id": "c2_l_ge_2",
+        "prompt": "What euphemistic financial term did Sterling use to explain the transfer?",
+        "answer": "hedging / hedged against currency volatility",
+        "explanation": "Sterling claimed it was 'hedged against impending currency volatility'."
+      },
+      {
+        "id": "c2_l_ge_3",
+        "prompt": "Where did the funds ultimately vest the following morning?",
+        "answer": "his private executive pension trust",
+        "explanation": "The Chair points out it vested into 'your private executive pension trust'."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_l_as_1",
+        "question": "What is the Chair's central accusation against Mr Sterling?",
+        "options": [
+          "He spoke too quietly",
+          "He embezzled four million pounds of bailout money into his private pension while hiding behind financial jargon",
+          "He refused to invest in European currencies",
+          "He forgot to bring his balance sheet"
+        ],
+        "correct_index": 1,
+        "explanation": "The Chair exposes that the so-called 'hedge' conveniently enriched Sterling's private pension trust."
+      },
+      {
+        "id": "c2_l_as_2",
+        "question": "What does the Yiddish-origin word 'chutzpah' mean in modern political English?",
+        "options": [
+          "Supreme modesty and humility",
+          "Shameless audacity, impudence, or nerve",
+          "A legal document",
+          "Financial bankruptcy"
+        ],
+        "correct_index": 1,
+        "explanation": "'Chutzpah' denotes audacious, shameless effrontery or nerve."
+      },
+      {
+        "id": "c2_l_as_3",
+        "question": "What does 'procedural obfuscation' mean in committee hearings?",
+        "options": [
+          "Deliberately complicating legal rules to confuse and conceal the truth",
+          "Arriving early to a meeting",
+          "Providing clear financial evidence",
+          "Speaking French in Parliament"
+        ],
+        "correct_index": 0,
+        "explanation": "Obfuscation is the deliberate act of making something obscure, unclear, or unintelligible."
+      }
+    ],
+    "interactive_practice": []
+  },
+  {
+    "id": "curric_c2_write_mastery",
+    "cefr_level": "C2",
+    "module_type": "writing",
+    "title": "Master Stylistics, Rhetorical Devices & Publication Prose",
+    "order_index": 5,
+    "prerequisites": [
+      "curric_c1_write_counterarguments",
+      "curric_c2_gram_cleft_sentences"
+    ],
+    "estimated_minutes": 60,
+    "objectives": [
+      "Deploy classical rhetorical figures (chiasmus, anaphora, tricolon, periodic sentence structures) with stylistic poise",
+      "Command register modulation across scholarly monograph, legal draftsmanship, and high-literary journalism",
+      "Produce Band 9 publication-grade prose demonstrating effortless syntactic rhythm and cadence"
+    ],
+    "explanation_markdown": "### The Architectural Ornaments of C2 Prose\nTo attain Band 9 in IELTS Task 2 or produce publication-grade writing, a writer commands stylistic figures that create memorable cadences:\n\n#### 1. The Periodic Sentence (Delayed Syntax):\nA periodic sentence withholds its main independent clause until the very end, creating dramatic cognitive suspension:\n- *Standard (Loose):* Democratic institutions falter when citizens succumb to political apathy and polarization.\n- **Periodic (C2 Mastery):** *When citizens succumb to ideological tribalism, when civic institutions are starved of fiscal nourishment, and when truth itself is subordinated to demagoguery\u2014**it is then that democracy falters**.*\n\n#### 2. Classical Figures of Speech:\n- **Chiasmus (Syntactic Inversion):** Crossing sentence elements symmetrically:\n  * *'We must not shape our tools merely to survive; we must ensure our tools do not reshape our humanity.'*\n- **Anaphora (Rhythmic Repetition):** Repetition of opening phrases for rhetorical momentum:\n  * *'It demands fiscal courage; it demands institutional transparency; it demands ethical resolve.'*\n- **Tricolon (The Rule of Three):** Packaging arguments into triplets of escalating magnitude:\n  * *'Liberty is not preserved by decrees, nor sustained by armies, but safeguarded in the conscious vigilance of free citizens.'*",
+    "examples": [
+      {
+        "text": "When truth is eclipsed by convenience, and justice subordinated to expediency, the moral architecture of the state collapses.",
+        "notes": "Periodic sentence withholding the main clause until the end."
+      },
+      {
+        "text": "We should not adapt humanity to technological imperatives; rather, we must bend technological tools to human flourishing.",
+        "notes": "Chiasmic contrast."
+      },
+      {
+        "text": "The policy was ill-conceived in its inception, chaotic in its execution, and disastrous in its culmination.",
+        "notes": "Ascending tricolon (triplet of clauses)."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_w_ge_1",
+        "prompt": "Identify the rhetorical device in: 'It was chaotic in its inception, flawed in its execution, and catastrophic in its conclusion.'",
+        "answer": "Tricolon / Rule of Three",
+        "explanation": "A series of three parallel words or phrases of increasing gravity is a tricolon."
+      },
+      {
+        "id": "c2_w_ge_2",
+        "prompt": "Construct a chiasmus: 'Never let a fool kiss you or a _____ fool you.'",
+        "answer": "kiss",
+        "explanation": "'kiss you / kiss fool you' forms a chiasmic A-B-B-A structure."
+      },
+      {
+        "id": "c2_w_ge_3",
+        "prompt": "What is a periodic sentence? (A sentence with its main point delayed until the end / A sentence with many commas)",
+        "answer": "A sentence with its main point delayed until the end",
+        "explanation": "Periodic sentences build suspension by placing the independent main clause at the end."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_w_as_1",
+        "question": "Which of the following represents a Band 9 publication-grade periodic sentence?",
+        "options": [
+          "Democracy will fail if people don't vote because voting is good.",
+          "If the government ignores voters, and if voters stop caring, then the democracy dies.",
+          "Only when civic institutions are revitalized, when public discourse is liberated from partisan venality, and when economic equity is restored to working communities\u2014only then will our democratic republic regain its vitality.",
+          "Voting is important and people should do it every year."
+        ],
+        "correct_index": 2,
+        "explanation": "Delivers an ascending series of parallel dependent clauses before releasing the main proposition with commanding cadence."
+      },
+      {
+        "id": "c2_w_as_2",
+        "question": "What is the defining structural property of 'chiasmus' in classical rhetoric?",
+        "options": [
+          "A symmetrical inversion of grammatical structures across parallel clauses (A-B $\\rightarrow$ B-A)",
+          "A spelling error in ancient Greek",
+          "A poem that doesn't rhyme",
+          "A paragraph with no verbs"
+        ],
+        "correct_index": 0,
+        "explanation": "Chiasmus reverses concepts or syntactic structures symmetrically for powerful rhetorical impact."
+      },
+      {
+        "id": "c2_w_as_3",
+        "question": "How does rhythmic cadence influence an examiner's evaluation of Grammatical Range and Accuracy?",
+        "options": [
+          "It has no impact whatsoever",
+          "It exhibits effortless stylistic flexibility, natural cohesion, and mastery of sentence variety characteristic of Band 9",
+          "It makes the essay look like a song",
+          "It guarantees that word count doesn't matter"
+        ],
+        "correct_index": 1,
+        "explanation": "Band 9 descriptors explicitly demand full flexibility and precise use of a wide range of complex structures."
+      }
+    ],
+    "interactive_practice": []
+  },
+  {
+    "id": "curric_c2_speak_spontaneous_discourse",
+    "cefr_level": "C2",
+    "module_type": "speaking",
+    "title": "Spontaneous Discourse & Native-Like Idiom",
+    "order_index": 6,
+    "prerequisites": [
+      "curric_c1_speak_discourse_markers"
+    ],
+    "estimated_minutes": 55,
+    "objectives": [
+      "Maintain effortless spoken discourse at native pace without perceptible lexical searching or cognitive pause",
+      "Embed colloquial wit, erudite analogies, and situational humor with impeccable socio-pragmatic pitch",
+      "Synthesize abstract socio-cultural dilemmas in IELTS Speaking Part 3 with oratorical ease"
+    ],
+    "explanation_markdown": "### The Benchmark of Spontaneous C2 Fluency\nCEFR C2 and IELTS Band 9 Speaking are characterized by **effortless flow**. Pauses are strictly natural (breathing or dramatic emphasis), NEVER for searching for grammar or vocabulary:\n\n#### Core Competencies:\n1. **Analogy as an Argumentative Tool:**\n   * Instead of listing dry statistics, C2 speakers deploy resonant analogies: *'Treating climate change solely through consumer carbon offsets is rather like arranging deckchairs on the Titanic\u2014it gives an impression of purposeful industry while doing nothing to avert the iceberg.'*\n2. **Socio-Pragmatic Pitch:**\n   * Effortless switching between formal academic rhetoric and playful colloquial wit (*'That proposal is dead in the water'*, *'par for the course'*, *'a storm in a teacup'*).\n3. **Conversational Agility:**\n   * Answering abstract interrogations by reframing the question itself: *'That's a fascinating premise, though I'd question whether framing it as a binary choice between economic growth and environmental stewardship doesn't present a false dichotomy.'*",
+    "examples": [
+      {
+        "text": "Treating systemic inequality solely with corporate philanthropy is like applying a band-aid to a structural fracture.",
+        "notes": "Powerful, vivid C2 argumentative analogy."
+      },
+      {
+        "text": "Framing the debate as a zero-sum game between economic growth and ecological conservation presents an unhelpful false dichotomy.",
+        "notes": "Intellectual reframing of examiner prompt."
+      },
+      {
+        "text": "That legislative proposal was dead on arrival; it completely ignored regional constitutional sensitivities.",
+        "notes": "Natural idiomatic register."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_sp_ge_1",
+        "prompt": "Complete the analogy: 'Treating inflation solely by printing more currency is like trying to extinguish a fire with _____.' (water / gasoline)",
+        "answer": "gasoline",
+        "explanation": "Adding fuel to fire is the classical analogy for self-defeating interventions."
+      },
+      {
+        "id": "c2_sp_ge_2",
+        "prompt": "Which idiom describes an exaggerated fuss over an insignificant matter? (a storm in a teacup / a cold day in July)",
+        "answer": "a storm in a teacup",
+        "explanation": "'A storm in a teacup' denotes a disproportionate overreaction to a minor incident."
+      },
+      {
+        "id": "c2_sp_ge_3",
+        "prompt": "Reframe: 'Is money or happiness more important?'",
+        "answer": "That presents a false dichotomy; financial security is a prerequisite for holistic happiness, not its adversary.",
+        "explanation": "Reframes simplistic either/or options into an integrated reality."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_sp_as_1",
+        "question": "Which spoken turn in IELTS Speaking Part 3 exemplifies Band 9 spontaneous discourse?",
+        "options": [
+          "Money is good. But happiness is also very good. So I like both.",
+          "That question poses an intriguing dilemma, though I would argue it constructs a false dichotomy. Financial solvency provides the baseline stability upon which human well-being rests; however, treating wealth accumulation as an end in itself yields diminishing emotional returns.",
+          "I want to make a lot of money because then I can be happy with cars.",
+          "Happiness cannot be bought in shops."
+        ],
+        "correct_index": 1,
+        "explanation": "Seamlessly reframes false dichotomy, balances material solvency with diminishing returns, and speaks with effortless academic poise."
+      },
+      {
+        "id": "c2_sp_as_2",
+        "question": "What distinguishes natural C2 pause behavior from lower-band hesitation?",
+        "options": [
+          "C2 speakers pause solely for dramatic effect or thought structuring, not to search for English vocabulary or syntax",
+          "C2 speakers never pause under any circumstances",
+          "C2 speakers speak at 500 words per minute",
+          "C2 speakers cough before answering"
+        ],
+        "correct_index": 0,
+        "explanation": "Band 9 fluency descriptors state: 'Any hesitation is content-related rather than to find words or grammar'."
+      },
+      {
+        "id": "c2_sp_as_3",
+        "question": "What is the rhetorical benefit of using vivid analogies in speaking interviews?",
+        "options": [
+          "It simplifies complex abstract concepts and demonstrates supreme lexical and conceptual command",
+          "It confuses the examiner",
+          "It proves the candidate knows stories about animals",
+          "It eliminates the need for grammar"
+        ],
+        "correct_index": 0,
+        "explanation": "Metaphor and analogy transform dry intellectual points into memorable, lucid communicative turns."
+      }
+    ],
+    "interactive_practice": []
+  },
+  {
+    "id": "curric_c2_pron_modulation",
+    "cefr_level": "C2",
+    "module_type": "pronunciation",
+    "title": "Voice Modulation, Dramatic Pausing & Rhetorical Oratory",
+    "order_index": 7,
+    "prerequisites": [
+      "curric_c1_pron_intonation"
+    ],
+    "estimated_minutes": 55,
+    "objectives": [
+      "Modulate pitch, vocal tempo, and dynamic volume to command auditorium attention during public addresses",
+      "Deploy strategic dramatic pauses (pregnant pauses) immediately prior to delivering pivotal thesis assertions",
+      "Vary acoustic timbre to project warmth, moral authority, satirical skepticism, or intellectual detachment"
+    ],
+    "explanation_markdown": "### Suprasegmental Oratory & Voice Modulation\nAt the pinnacle of spoken English, pronunciation transcends phonetic accuracy to encompass **acoustic orchestration**:\n\n#### 1. Dynamic Tempo Variation:\n- **Accelerando (Speeding Up):** Used during descriptive build-ups, lists, or excitement to build narrative momentum.\n- **Ritardando (Slowing Down):** Decelerating tempo dramatically on the core thesis statement forces the listener's cognitive focus onto every individual word:\n  * *'And that... is why... the policy... failed.'*\n\n#### 2. The Pregnant Pause:\nSilence is a powerful acoustic instrument. A two-second pause placed:\n- **Before an assertion:** Generates heightened anticipation.\n- **After an assertion:** Grants the audience cognitive space to absorb the profound implication of the proposition.\n\n#### 3. Pitch Register Modulation:\n- High Pitch Register: Excitement, curiosity, rhetorical questioning.\n- Low Pitch Register: Solemnity, authority, decisive finality.",
+    "examples": [
+      {
+        "text": "The speaker paused for two full seconds before uttering the final, devastating statistic.",
+        "notes": "Strategic deployment of pregnant silence for dramatic gravity."
+      },
+      {
+        "text": "Accelerating through the historical context, she abruptly slowed her cadence to emphasize the moral conclusion.",
+        "notes": "Dynamic tempo variation (accelerando into ritardando)."
+      },
+      {
+        "text": "Lowering his vocal pitch, he delivered the verdict with indisputable moral resonance.",
+        "notes": "Pitch modulation to convey authority."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_p_ge_1",
+        "prompt": "What effect does decelerating your speech tempo have on the listener? (Increases focus and gravity / Causes confusion)",
+        "answer": "Increases focus and gravity",
+        "explanation": "Slowing tempo signals to the listener that the upcoming words carry supreme importance."
+      },
+      {
+        "id": "c2_p_ge_2",
+        "prompt": "What is a 'pregnant pause' in public speaking? (A significant silence filled with meaning / Forgetting what to say)",
+        "answer": "A significant silence filled with meaning",
+        "explanation": "A pregnant pause is an intentional silence pregnant with anticipation and dramatic weight."
+      },
+      {
+        "id": "c2_p_ge_3",
+        "prompt": "Should your pitch stay at a flat, unvarying monotone level during an IELTS Part 3 discussion? (Yes / No)",
+        "answer": "No",
+        "explanation": "Monotone delivery is heavily penalized under the IELTS Pronunciation criteria."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_p_as_1",
+        "question": "How does deliberate silence (pausing) function as a rhetorical device in advanced spoken English?",
+        "options": [
+          "It shows the candidate has fallen asleep",
+          "It frames pivotal claims, creates dramatic tension, and allows listeners to absorb complex conceptual propositions",
+          "It is penalized as an error in IELTS",
+          "It wastes examination time"
+        ],
+        "correct_index": 1,
+        "explanation": "Purposeful pauses create dramatic emphasis and signal supreme oratorical self-assurance."
+      },
+      {
+        "id": "c2_p_as_2",
+        "question": "What does a flat, unvarying acoustic monotone signify under IELTS Pronunciation rubrics?",
+        "options": [
+          "A Band 9 British accent",
+          "A severe defect in intonation and rhythm limiting the pronunciation score to Band 5 or 6",
+          "Extreme academic intelligence",
+          "Proper etiquette"
+        ],
+        "correct_index": 1,
+        "explanation": "Rubrics require natural variation in pitch, rhythm, and intonation for higher bands."
+      },
+      {
+        "id": "c2_p_as_3",
+        "question": "How should an orator vocalize an ascending tricolon (a triplet of phrases)?",
+        "options": [
+          "By getting quieter with every item",
+          "By elevating pitch, energy, or volume progressively with each of the three items",
+          "By whispering all three",
+          "By skipping the third phrase"
+        ],
+        "correct_index": 1,
+        "explanation": "An ascending tricolon builds momentum by escalating acoustic prominence across the three parts."
+      }
+    ],
+    "interactive_practice": []
+  },
+  {
+    "id": "curric_c2_func_keynote",
+    "cefr_level": "C2",
+    "module_type": "functional",
+    "title": "High-Stakes Keynote Delivery & Hostile Q&A Handling",
+    "order_index": 8,
+    "prerequisites": [
+      "curric_c1_func_negotiation"
+    ],
+    "estimated_minutes": 55,
+    "objectives": [
+      "Deliver commanding keynote orations combining personal ethos, logos, and emotional pathos",
+      "Field aggressive, hostile media interrogations and cross-examinations unflappably",
+      "Deploy the 'Bridge' technique to deflect loaded questions back to core strategic messaging"
+    ],
+    "explanation_markdown": "### 1. High-Stakes Public Keynote Architecture\nDelivering a global keynote requires synthesizing the classical Aristotelian triad:\n- **Ethos (Credibility & Character):** *'Over twenty-five years in clinical oncology, I have witnessed both the agony of diagnostic delay and the miracle of early detection.'*\n- **Logos (Intellectual Rigor & Data):** *'The longitudinal cohort data spanning seventy thousand patients confirms a forty-percent reduction in metastatic recurrence.'*\n- **Pathos (Moral Urgency & Emotional Resonance):** *'Behind every single statistic sits a parent, a child, an irreplaceable life whose future hangs upon the wisdom of our decision today.'*\n\n### 2. The 'Bridging' Technique for Hostile Q&A\nWhen an adversarial journalist or critic asks a trap question (*'Isn't your technology just an overpriced boondoggle that failed its trials?'*):\n1. **Acknowledge & Neutralize:** *'That question touches upon the rigorous regulatory scrutiny our phase-three trials underwent...'*\n2. **The Verbal Bridge:** *'...and what those regulatory findings actually demonstrated was...' / '...what is essential to bear in mind is...'*\n3. **Core Message:** *'...that efficacy was achieved in ninety-four percent of compliant cohorts.'*",
+    "examples": [
+      {
+        "text": "Behind every clinical metric stands a human life whose preservation demands our unwavering collective courage.",
+        "notes": "Aristotelian pathos in keynote delivery."
+      },
+      {
+        "text": "I welcome that question because it highlights the fundamental distinction between short-term capital volatility and long-term infrastructure value.",
+        "notes": "Bridging technique in hostile Q&A."
+      },
+      {
+        "text": "Let me address the premise of your interrogation directly, while correcting the statistical inaccuracy upon which it rests.",
+        "notes": "Firm, poised executive pushback against loaded question."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_f_ge_1",
+        "prompt": "Identify the rhetorical bridge: 'That is an important concern, and what our data fundamentally proves is...'",
+        "answer": "and what our data fundamentally proves is",
+        "explanation": "This phrase serves as the transitional bridge moving from the question to the core message."
+      },
+      {
+        "id": "c2_f_ge_2",
+        "prompt": "Which Aristotelian appeal relies on clinical statistics and longitudinal data? (Ethos / Logos / Pathos)",
+        "answer": "Logos",
+        "explanation": "Logos is the appeal to logic, evidence, and empirical reasoning."
+      },
+      {
+        "id": "c2_f_ge_3",
+        "prompt": "How should a CEO respond to a hostile shout from the audience? (Shout back / Respond with unshakeable calm and address the substantive point)",
+        "answer": "Respond with unshakeable calm and address the substantive point",
+        "explanation": "Unshakeable composure affirms executive authority and neutralizes hostility."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_f_as_1",
+        "question": "What is the primary objective of the 'Bridging' technique during hostile media interrogations?",
+        "options": [
+          "To lie to the public",
+          "To acknowledge the topic professionally while seamlessly redirecting the narrative back to substantiated key messages",
+          "To run off the stage",
+          "To insult the journalist"
+        ],
+        "correct_index": 1,
+        "explanation": "Bridging prevents defensive traps and pivots the focus back to positive strategic realities."
+      },
+      {
+        "id": "c2_f_as_2",
+        "question": "Which combination of elements defines an exceptional, historic keynote address?",
+        "options": [
+          "Reading a PowerPoint presentation word-for-word in monotone",
+          "Harmonizing personal credibility (Ethos), rigorous evidence (Logos), and moral resonance (Pathos)",
+          "Speaking for four hours without breaks",
+          "Showing complex mathematical formulas only"
+        ],
+        "correct_index": 1,
+        "explanation": "Classical rhetoric unites Ethos, Logos, and Pathos to achieve persuasive impact."
+      },
+      {
+        "id": "c2_f_as_3",
+        "question": "How should an executive dismantle a loaded premise in an interrogation (e.g., 'When will you stop polluting rivers?')?",
+        "options": [
+          "By accepting the false premise",
+          "By calmly identifying and rejecting the false premise before articulating documented environmental compliance",
+          "By refusing to answer entirely",
+          "By crying"
+        ],
+        "correct_index": 1,
+        "explanation": "A loaded question's false premise must be dismantled calmly and explicitly."
+      }
+    ],
+    "interactive_practice": []
+  },
+  {
+    "id": "curric_c2_review_milestone",
+    "cefr_level": "C2",
+    "module_type": "review",
+    "title": "C2 Master Capstone Examination & Proficiency Certification",
+    "order_index": 9,
+    "prerequisites": [
+      "curric_c2_gram_cleft_sentences",
+      "curric_c2_write_mastery"
+    ],
+    "estimated_minutes": 65,
+    "objectives": [
+      "Demonstrate complete bilingual/native-level English proficiency across all syntactic, lexical, phonological, and pragmatic domains",
+      "Attain certification for IELTS Band 8.5\u20139.0 performance across Academic and General Training specifications",
+      "Synthesize mandative subjunctives, classical rhetorical devices, subtext dissection, and keynote oratory"
+    ],
+    "explanation_markdown": "### C2 Master Capstone Evaluation\nAttaining CEFR C2 Proficiency is the ultimate milestone in English language education. It certifies that the learner possesses:\n1. **Flawless Syntactic Command:** Effortless deployment of mandative subjunctives (*demand that he submit*), absolute clauses, and stylistic ellipsis.\n2. **Lexical Erudition:** Natural command of conceptual metaphors, classical idioms (*Pyrrhic victory, Gordian knot*), and subtle connotative nuance.\n3. **Hermeneutic Acuity:** Deciphering dense satire, ironic litotes, and complex philosophical treatises.\n4. **Master Oratory & Rhetoric:** Commanding rhythmic periodic sentences, chiasmic balance, and unshakeable public presence.\n\nComplete this master capstone assessment to earn your official Band 9.0 Master Certification.",
+    "examples": [
+      {
+        "text": "The international convention mandates that every sovereign entity submit comprehensive emissions registries annually.",
+        "notes": "Mandative subjunctive with flawless formal concord."
+      },
+      {
+        "text": "What was heralded as an economic triumph proved, in retrospective analysis, a devastating Pyrrhic victory.",
+        "notes": "Clefting and classical idiom."
+      },
+      {
+        "text": "Only when ethical wisdom guides technological capability\u2014only then can human society claim genuine advancement.",
+        "notes": "Periodic sentence with restrictive inversion."
+      }
+    ],
+    "guided_exercises": [
+      {
+        "id": "c2_rev_ge_1",
+        "prompt": "Apply the mandative subjunctive: 'The charter stipulates that each member state _____ (contribute) ten percent.'",
+        "answer": "contribute",
+        "explanation": "Mandative subjunctive uses base verb 'contribute'."
+      },
+      {
+        "id": "c2_rev_ge_2",
+        "prompt": "What classical idiom signifies an irrevocable, decisive step committing oneself to hazard? (Crossing the _____)",
+        "answer": "Rubicon",
+        "explanation": "Crossing the Rubicon."
+      },
+      {
+        "id": "c2_rev_ge_3",
+        "prompt": "Identify the literary figure: 'Ask not what your country can do for you; ask what you can do for your country.'",
+        "answer": "Chiasmus",
+        "explanation": "A-B (country for you) / B-A (you for country) forms a classical chiasmus."
+      }
+    ],
+    "assessment": [
+      {
+        "id": "c2_rev_as_1",
+        "question": "Which sentence demonstrates 100% flawless C2 mandative subjunctive and stylistic mastery?",
+        "options": [
+          "The senate mandated that the governor resigns his office immediately.",
+          "The senate mandated that the governor resign his office immediately, all legal avenues having been exhausted.",
+          "The senate mandated that the governor will resign, and he did it.",
+          "The senate mandated the governor to resigning his office."
+        ],
+        "correct_index": 1,
+        "explanation": "'mandated that the governor resign' (mandative subjunctive base verb) + 'all legal avenues having been exhausted' (absolute clause)."
+      },
+      {
+        "id": "c2_rev_as_2",
+        "question": "In literary and philosophical prose, what is the effect of combining litotes with satirical mock-flattery?",
+        "options": [
+          "It creates a scathing, multi-layered critique that exposes hypocrisy without resorting to crude polemics",
+          "It makes the text impossible to understand",
+          "It means the author is complimenting their opponents",
+          "It is forbidden in academic journals"
+        ],
+        "correct_index": 0,
+        "explanation": "Litotes and mock-flattery produce subtle, devastating satirical irony characteristic of master C2 prose."
+      },
+      {
+        "id": "c2_rev_as_3",
+        "question": "What is the defining mark of an IELTS Band 9 candidate in Speaking and Writing?",
+        "options": [
+          "Using only long words found in the dictionary",
+          "Effortless, natural precision, sophisticated stylistic flexibility, nuanced dialectical reasoning, and complete absence of mechanical strain",
+          "Speaking with an exaggerated aristocratic accent",
+          "Writing 5,000 words in 40 minutes"
+        ],
+        "correct_index": 1,
+        "explanation": "Band 9 descriptors explicitly demand full flexibility, effortless naturalness, and comprehensive stylistic command."
+      }
+    ],
+    "interactive_practice": []
+  }
+]

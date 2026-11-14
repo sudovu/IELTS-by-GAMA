@@ -6,7 +6,9 @@ import unittest
 from core.scoring.band_calculator import BandCalculator
 from core.scoring.cefr_diagnostic import CEFRDiagnostic
 from core.progress.study_planner import StudyPlanner
+from core.progress.analytics import LearningAnalytics
 from core.database.db_manager import DatabaseManager
+from core.database.repositories import LearnerRepository, TestResultRepository, MistakeBookRepository
 import tempfile
 import os
 
@@ -49,6 +51,49 @@ class TestStudyPlanAndScoring(unittest.TestCase):
         self.assertIn("tasks", plan)
         self.assertEqual(len(plan["tasks"]), 3)
         self.assertIn("Good morning", plan["daily_greeting"])
+
+    def test_dynamic_skills_radar_baseline(self):
+        # Baseline without test records should derive from CEFR level
+        learner_repo = LearnerRepository(self.db)
+        learner = learner_repo.create_learner(name="Test B1", current_band=5.0, cefr_level="B1")
+
+        analytics = LearningAnalytics(self.db)
+        dashboard = analytics.get_dashboard_data(learner["id"])
+
+        radar = dashboard["skills_radar"]
+        self.assertIn("Reading", radar)
+        self.assertIn("Listening", radar)
+        self.assertIn("Writing", radar)
+        self.assertIn("Speaking", radar)
+        self.assertIn("Grammar", radar)
+        self.assertIn("Vocabulary", radar)
+        self.assertIn("Fluency", radar)
+        self.assertIn("Pronunciation", radar)
+        # B1 base is 5.0
+        self.assertEqual(radar["Reading"], 5.0)
+        self.assertEqual(radar["Listening"], 5.0)
+
+    def test_dynamic_skills_radar_with_test_evidence(self):
+        learner_repo = LearnerRepository(self.db)
+        learner = learner_repo.create_learner(name="Scored Learner", current_band=6.0, cefr_level="B2")
+
+        test_repo = TestResultRepository(self.db)
+        test_repo.record_result(
+            learner_id=learner["id"],
+            test_type="mock_reading",
+            track="Academic",
+            overall_band=7.5,
+            reading_band=8.0,
+            listening_band=7.0
+        )
+
+        analytics = LearningAnalytics(self.db)
+        dashboard = analytics.get_dashboard_data(learner["id"])
+        radar = dashboard["skills_radar"]
+
+        # Reading should be 8.0, Listening should be 7.0 from real test results
+        self.assertEqual(radar["Reading"], 8.0)
+        self.assertEqual(radar["Listening"], 7.0)
 
 
 if __name__ == "__main__":

@@ -71,9 +71,11 @@ class DatabaseManager:
                 cursor.close()
 
     def init_schema(self):
-        """Executes schema initialization script safely."""
+        """Executes schema initialization script safely and runs pending migrations."""
         with self.connection() as conn:
             conn.executescript(SCHEMA_SQL)
+        from .migrations import MigrationManager
+        MigrationManager(self).run_migrations()
 
     def execute(self, sql: str, params: tuple = ()) -> sqlite3.Cursor:
         """Executes a single parameterized query."""

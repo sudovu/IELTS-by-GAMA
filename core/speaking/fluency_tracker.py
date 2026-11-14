@@ -17,6 +17,19 @@ class FluencyTracker:
     def analyze_fluency(cls, speech_text: str, duration_seconds: float = 60.0) -> Dict[str, Any]:
         words = re.findall(r"\b[a-zA-Z']+\b", speech_text.lower())
         word_count = len(words)
+        if word_count == 0:
+            return {
+                "word_count": 0,
+                "duration_seconds": duration_seconds,
+                "words_per_minute": 0.0,
+                "target_wpm_range": "120 - 150 WPM",
+                "total_filler_words": 0,
+                "filler_percentage": 0.0,
+                "filler_breakdown": {},
+                "adjacent_repetitions": 0,
+                "estimated_fc_band": 0.0,
+                "feedback": "No spoken turn detected (Band 0.0). Please check your microphone or enter a spoken response."
+            }
 
         duration_minutes = max(0.1, duration_seconds / 60.0)
         wpm = round(word_count / duration_minutes, 1)

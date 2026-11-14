@@ -214,31 +214,316 @@ class ReadingEngine:
                 {"question_keyword": "incoming solar radiation", "passage_synonym": "incident solar radiation / solar irradiance"},
                 {"question_keyword": "cooling process", "passage_synonym": "evapotranspiration / dissipating latent heat"}
             ]
+        },
+        # -------------------------------------------------------------
+        # IELTS GENERAL TRAINING READING PASSAGES
+        # -------------------------------------------------------------
+        "gt_s1": {
+            "id": "gt_s1",
+            "track": "General Training",
+            "section": 1,
+            "title": "Community College Adult Education & Facility Guidelines",
+            "text": (
+                "Welcome to the Southwark Community College Continuing Education Programme. We provide a diverse range of "
+                "evening and weekend courses designed for career advancement and personal enrichment.\n\n"
+                "Registration and Tuition Fees:\n"
+                "Enrollment opens four weeks prior to the start of each academic term. To guarantee placement, fees must be "
+                "settled in full at least seven working days before the inaugural class. A non-refundable administration levy "
+                "of £25 applies to all new applicants. Concessionary discounts of 20% are available to senior citizens aged 65 "
+                "and over, full-time undergraduate students, and registered jobseekers upon presentation of verifiable documentation.\n\n"
+                "Class Cancellations and Refunds:\n"
+                "Courses with fewer than eight confirmed participants will regrettably be suspended. In such instances, enrolled "
+                "candidates will receive an immediate full refund or may transfer credit to an alternate course without penalty. "
+                "Individual withdrawals requested more than ten days before course commencement will receive an 80% tuition refund. "
+                "No refunds will be granted for cancellations submitted within seven days of the course starting date.\n\n"
+                "Campus Facilities & Parking Permits:\n"
+                "Evening learners enjoy complimentary access to the college library and computer laboratories until 9:30 PM on "
+                "weekdays. On-campus vehicular parking is strictly regulated. Learners may obtain a subsidized evening parking "
+                "permit from the Security Pavilion for £15 per term. Parking without a valid displayed permit will result in an "
+                "immediate fixed penalty charge of £40."
+            ),
+            "questions": [
+                {
+                    "num": 1,
+                    "type": "TFNG",
+                    "prompt": "Tuition fees may be paid on the day the course begins.",
+                    "correct": "False",
+                    "evidence": "fees must be settled in full at least seven working days before the inaugural class",
+                    "explanation": "The text states fees must be paid at least seven working days prior to the first class."
+                },
+                {
+                    "num": 2,
+                    "type": "TFNG",
+                    "prompt": "Jobseekers are entitled to a 20 percent concession on tuition fees.",
+                    "correct": "True",
+                    "evidence": "Concessionary discounts of 20% are available to... registered jobseekers upon presentation of verifiable documentation.",
+                    "explanation": "Jobseekers receive a 20% discount if they provide documentation."
+                },
+                {
+                    "num": 3,
+                    "type": "TFNG",
+                    "prompt": "The college library remains open on Saturday evenings.",
+                    "correct": "Not Given",
+                    "evidence": "Evening learners enjoy complimentary access to the college library... until 9:30 PM on weekdays.",
+                    "explanation": "Weekday opening hours are given, but Saturday evening library hours are not specified."
+                },
+                {
+                    "num": 4,
+                    "type": "Completion",
+                    "max_words": 1,
+                    "prompt": "Courses will be cancelled if they fail to attract at least _____ students.",
+                    "acceptable": ["eight", "8"],
+                    "evidence": "Courses with fewer than eight confirmed participants will regrettably be suspended.",
+                    "explanation": "The minimum enrollment threshold is eight participants."
+                },
+                {
+                    "num": 5,
+                    "type": "Completion",
+                    "max_words": 2,
+                    "prompt": "Evening parking permits must be acquired from the _____.",
+                    "acceptable": ["Security Pavilion", "security pavilion"],
+                    "evidence": "Learners may obtain a subsidized evening parking permit from the Security Pavilion",
+                    "explanation": "The Security Pavilion issues parking permits."
+                }
+            ],
+            "synonym_table": [
+                {"question_keyword": "concession on tuition", "passage_synonym": "Concessionary discounts of 20%"},
+                {"question_keyword": "cancelled", "passage_synonym": "regrettably be suspended"},
+                {"question_keyword": "acquired from", "passage_synonym": "obtain... from"}
+            ]
+        },
+        "gt_s2": {
+            "id": "gt_s2",
+            "track": "General Training",
+            "section": 2,
+            "title": "Corporate Ergonomics & Hybrid Telecommuting Policy",
+            "text": (
+                "Apex Global Enterprises is dedicated to promoting occupational health and workplace well-being across our "
+                "hybrid workforce. This protocol outlines workstation ergonomic standards and remote telecommuting compliance.\n\n"
+                "Workstation Setup Standards:\n"
+                "Employees are required to maintain an ergonomically sound physical setup whether working in the corporate "
+                "headquarters or within a designated domestic workspace. Display monitors should be positioned directly at eye level "
+                "at approximately an arm's length (50 to 70 centimeters) from the user, ensuring the upper third of the screen "
+                "aligns with natural horizontal gaze. Chairs must offer adjustable lumbar support, with seat height configured so "
+                "that thighs remain parallel to the floor and feet rest firmly upon a solid surface or footrest.\n\n"
+                "Micro-Breaks and Movement:\n"
+                "Sustained static postures represent a leading contributor to musculoskeletal discomfort. Staff members must adhere "
+                "to the '20-20-20 rule': every 20 minutes, gaze at an object situated at least 20 feet away for a duration of 20 seconds "
+                "to alleviate ocular strain. In addition, employees are strongly urged to stand and stretch for at least two minutes "
+                "every hour during prolonged computer usage.\n\n"
+                "IT Security & Equipment Allocation:\n"
+                "Apex provides each eligible telecommuting employee with a standardized laptop, an external monitor, an ergonomic "
+                "keyboard, and a peripheral mouse. Domestic computer equipment is strictly prohibited from connecting to the internal "
+                "corporate virtual private network (VPN). Any accidental data breach or unauthorized device connection must be "
+                "notified to the IT Security Helpdesk within two hours of discovery."
+            ),
+            "questions": [
+                {
+                    "num": 1,
+                    "type": "MCQ",
+                    "prompt": "According to the protocol, how far should the computer display be placed from the employee?",
+                    "correct": "B",
+                    "evidence": "approximately an arm's length (50 to 70 centimeters) from the user",
+                    "explanation": "The text explicitly specifies an arm's length, or 50 to 70 cm.",
+                    "distractor_analysis": {
+                        "A": "Incorrect; 20 cm is far too close.",
+                        "C": "Incorrect; 100 cm exceeds the 50-70 cm limit."
+                    }
+                },
+                {
+                    "num": 2,
+                    "type": "TFNG",
+                    "prompt": "Staff members are permitted to connect personal home desktop computers to the corporate VPN.",
+                    "correct": "False",
+                    "evidence": "Domestic computer equipment is strictly prohibited from connecting to the internal corporate virtual private network (VPN).",
+                    "explanation": "The passage states domestic computers are strictly prohibited from connecting to the corporate VPN."
+                },
+                {
+                    "num": 3,
+                    "type": "Completion",
+                    "max_words": 2,
+                    "prompt": "The 20-20-20 rule is intended to alleviate _____ among computer users.",
+                    "acceptable": ["ocular strain", "eye strain"],
+                    "evidence": "gaze at an object situated at least 20 feet away for a duration of 20 seconds to alleviate ocular strain.",
+                    "explanation": "The text states the rule is to alleviate ocular strain."
+                },
+                {
+                    "num": 4,
+                    "type": "Completion",
+                    "max_words": 2,
+                    "prompt": "Security incidents must be reported to the IT Security Helpdesk within _____.",
+                    "acceptable": ["two hours", "2 hours"],
+                    "evidence": "notified to the IT Security Helpdesk within two hours of discovery.",
+                    "explanation": "The notification deadline is two hours."
+                }
+            ],
+            "synonym_table": [
+                {"question_keyword": "personal home computers", "passage_synonym": "Domestic computer equipment"},
+                {"question_keyword": "reported", "passage_synonym": "notified"},
+                {"question_keyword": "prevent", "passage_synonym": "alleviate / minimize"}
+            ]
+        },
+        "gt_s3": {
+            "id": "gt_s3",
+            "track": "General Training",
+            "section": 3,
+            "title": "The Evolution & Civil Engineering of the Suspension Bridge",
+            "text": (
+                "The suspension bridge is arguably humanity's most elegant architectural triumph over geographical obstacles, "
+                "spanning vast waterways with soaring aesthetic lightness. While rudimentary rope and vine suspension bridges "
+                "have spanned Himalayan ravines for over two millennia, the genesis of modern structural suspension engineering "
+                "occurred in the early nineteenth century with the advent of wrought iron chain cables, pioneered by American "
+                "engineer James Finley and refined by British industrial titan Thomas Telford at the Menai Strait.\n\n"
+                "The mechanical principle underpinning a suspension bridge is deceptively simple: tensile forces. Heavy vertical "
+                "deck loads—comprising vehicular traffic, rail carriages, and dead weight—are transferred through vertical hanger ropes "
+                "upwards to massive main suspension cables. These main cables drape parabolically over colossal support towers before "
+                "being firmly secured into subterranean concrete anchorages at either terminal bank. In essence, the roadway is "
+                "literally hung from the sky, with the towers experiencing pure vertical compression while the cables endure colossal tension.\n\n"
+                "However, suspension bridges are acutely vulnerable to dynamic aerodynamic resonance. This catastrophic flaw was "
+                "dramatically illustrated in November 1940 by the collapse of the Tacoma Narrows Bridge in Washington State. Designed "
+                "with an aesthetically slender, solid-plate girder deck, the bridge acted like an airplane wing in moderate 42-mph winds. "
+                "Vortices shed along the girders matched the natural frequency of the bridge, exciting torsional flutter that tore "
+                "the roadway apart within hours of onset.\n\n"
+                "Following the Tacoma disaster, aerodynamic engineering fundamentally transformed bridge design. Contemporary civil "
+                "engineers utilize open aerodynamic steel trusses or streamlined hollow aerofoil box girders, thoroughly verified "
+                "through boundary-layer wind tunnel simulation. Structures such as the Akashi Kaikyo Bridge in Japan and the Canakkale "
+                "Bridge in Turkey now span distances exceeding two kilometers with total aeroelastic stability."
+            ),
+            "questions": [
+                {
+                    "num": 1,
+                    "type": "TFNG",
+                    "prompt": "Primitive suspension bridges were built in Asia long before the nineteenth century.",
+                    "correct": "True",
+                    "evidence": "While rudimentary rope and vine suspension bridges have spanned Himalayan ravines for over two millennia",
+                    "explanation": "The text confirms rope bridges spanned Himalayan ravines for over 2,000 years."
+                },
+                {
+                    "num": 2,
+                    "type": "TFNG",
+                    "prompt": "Main suspension cables experience compressive forces rather than tensile forces.",
+                    "correct": "False",
+                    "evidence": "towers experiencing pure vertical compression while the cables endure colossal tension.",
+                    "explanation": "Cables endure tension, while towers experience compression."
+                },
+                {
+                    "num": 3,
+                    "type": "MCQ",
+                    "prompt": "What caused the structural failure of the Tacoma Narrows Bridge?",
+                    "correct": "C",
+                    "evidence": "Vortices shed along the girders matched the natural frequency of the bridge, exciting torsional flutter",
+                    "explanation": "Aerodynamic resonance and torsional flutter induced by wind vortices destroyed the bridge.",
+                    "distractor_analysis": {
+                        "A": "Overloaded traffic weight was not the cause.",
+                        "B": "Subterranean anchorage fracture was not mentioned."
+                    }
+                },
+                {
+                    "num": 4,
+                    "type": "Completion",
+                    "max_words": 2,
+                    "prompt": "Modern bridge deck stability is verified using boundary-layer _____ simulation.",
+                    "acceptable": ["wind tunnel"],
+                    "evidence": "thoroughly verified through boundary-layer wind tunnel simulation.",
+                    "explanation": "Wind tunnel simulation verifies aeroelastic stability."
+                }
+            ],
+            "synonym_table": [
+                {"question_keyword": "primitive", "passage_synonym": "rudimentary"},
+                {"question_keyword": "compressive forces", "passage_synonym": "pure vertical compression"},
+                {"question_keyword": "failure", "passage_synonym": "collapse / tore the roadway apart"}
+            ]
         }
     }
 
     @classmethod
-    def list_passages(cls) -> List[Dict[str, Any]]:
+    def list_passages(cls, track: Optional[str] = None) -> List[Dict[str, Any]]:
+        passages = list(cls.ORIGINAL_PASSAGES.values())
+        if track:
+            passages = [p for p in passages if p["track"].lower() == track.lower()]
         return [
             {
                 "id": p["id"],
                 "track": p["track"],
+                "section": p.get("section", 1),
                 "title": p["title"],
                 "question_count": len(p["questions"])
             }
-            for p in cls.ORIGINAL_PASSAGES.values()
+            for p in passages
         ]
 
     @classmethod
-    def get_passage(cls, passage_id: str = "acad_p1") -> Optional[Dict[str, Any]]:
-        return cls.ORIGINAL_PASSAGES.get(passage_id)
+    def get_passage(cls, passage_id: str = "acad_p1", show_answers: bool = False) -> Optional[Dict[str, Any]]:
+        """
+        Retrieves passage text and questions.
+        If show_answers is False (exam mode), answer keys, evidence, and explanations are sanitized.
+        """
+        p = cls.ORIGINAL_PASSAGES.get(passage_id)
+        if not p:
+            return None
+
+        clean = {
+            "id": p["id"],
+            "track": p["track"],
+            "section": p.get("section", 1),
+            "title": p["title"],
+            "text": p["text"],
+            "questions": []
+        }
+
+        for q in p["questions"]:
+            q_copy = {
+                "num": q["num"],
+                "type": q["type"],
+                "prompt": q["prompt"],
+                "max_words": q.get("max_words")
+            }
+            if show_answers:
+                q_copy["correct"] = q.get("correct")
+                q_copy["acceptable"] = q.get("acceptable")
+                q_copy["evidence"] = q.get("evidence")
+                q_copy["explanation"] = q.get("explanation")
+                q_copy["distractor_analysis"] = q.get("distractor_analysis")
+            clean["questions"].append(q_copy)
+
+        if show_answers and "synonym_table" in p:
+            clean["synonym_table"] = p["synonym_table"]
+
+        return clean
 
     @classmethod
-    def evaluate_test(cls, passage_id: str, user_answers: Dict[int, str]) -> Dict[str, Any]:
+    def generate_full_mock(cls, track: str = "Academic") -> Dict[str, Any]:
         """
-        user_answers: {question_num: string_answer}
+        Generates a comprehensive multi-passage mock examination for Academic or General Training.
+        Sanitizes answer keys for active exam mode.
         """
-        passage = cls.get_passage(passage_id)
+        is_academic = track.lower().startswith("acad")
+        passages = []
+        target_keys = ["acad_p1", "acad_p2", "acad_p3"] if is_academic else ["gt_s1", "gt_s2", "gt_s3"]
+
+        total_questions = 0
+        for k in target_keys:
+            p = cls.get_passage(k, show_answers=False)
+            if p:
+                passages.append(p)
+                total_questions += len(p["questions"])
+
+        return {
+            "mock_id": f"mock_reading_{track.lower()[:4]}",
+            "track": "Academic" if is_academic else "General Training",
+            "time_limit_minutes": 60,
+            "passages": passages,
+            "total_questions": total_questions,
+            "instructions": "Read the passages carefully and answer all questions within the 60-minute time allocation."
+        }
+
+    @classmethod
+    def evaluate_test(cls, passage_id: str, user_answers: Dict[Any, str]) -> Dict[str, Any]:
+        """
+        Grades reading test submissions using ReadingQuestionTypes dispatcher.
+        Explains WHY correct is correct and WHY errors are incorrect.
+        """
+        passage = cls.ORIGINAL_PASSAGES.get(passage_id)
         if not passage:
             raise ValueError(f"Passage {passage_id} not found")
 
@@ -248,41 +533,15 @@ class ReadingEngine:
 
         for q in passage["questions"]:
             qnum = q["num"]
-            ans = user_answers.get(qnum, "")
-            qtype = q["type"]
-
-            if qtype == "TFNG":
-                res = ReadingQuestionTypes.grade_tfng(
-                    user_answer=ans,
-                    correct_answer=q["correct"],
-                    passage_evidence=q["evidence"],
-                    explanation=q["explanation"]
-                )
-            elif qtype == "Completion":
-                res = ReadingQuestionTypes.grade_completion(
-                    user_answer=ans,
-                    acceptable_answers=q["acceptable"],
-                    max_words=q.get("max_words", 2),
-                    passage_evidence=q["evidence"],
-                    explanation=q["explanation"]
-                )
-            else:
-                res = {
-                    "type": qtype,
-                    "user_answer": ans,
-                    "correct_answer": q.get("correct", ""),
-                    "is_correct": ans.strip().lower() == q.get("correct", "").strip().lower(),
-                    "passage_evidence": q.get("evidence", ""),
-                    "explanation": q.get("explanation", "")
-                }
-
+            # Look up answer by integer or string key
+            ans = user_answers.get(qnum) or user_answers.get(str(qnum)) or ""
+            res = ReadingQuestionTypes.grade_question(q, str(ans))
             res["question_num"] = qnum
             res["prompt"] = q["prompt"]
             if res["is_correct"]:
                 correct_count += 1
             detailed_eval.append(res)
 
-        # Scale band score based on Academic track
         band = BandCalculator.raw_to_band_reading(correct_count, track=passage["track"], total_questions=total)
 
         return {

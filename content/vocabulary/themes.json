@@ -1,0 +1,4462 @@
+{
+  "daily_life": [
+    {
+      "word": "routine",
+      "pos": "noun",
+      "cefr_level": "A2",
+      "band_tier": "Band 5.0-6.0",
+      "pronunciation": "roo-TEEN",
+      "ipa": "/ruːˈtiːn/",
+      "definition": "A regular sequence of actions followed systematically.",
+      "simple_definition": "Usual daily schedule.",
+      "advanced_definition": "A customary procedure established through repeated practice.",
+      "contextual_example": "Establishing a consistent morning study routine dramatically improves vocabulary retention.",
+      "synonyms": [
+        "habit",
+        "schedule",
+        "regimen"
+      ],
+      "antonyms": [
+        "disorder",
+        "chaos"
+      ],
+      "word_family": {
+        "noun": "routine",
+        "adjective": "routine",
+        "adverb": "routinely"
+      },
+      "collocations": [
+        "daily routine",
+        "establish a routine"
+      ],
+      "grammatical_patterns": [
+        "part of one's routine"
+      ],
+      "common_mistakes": [
+        "Do not confuse with 'custom'."
+      ],
+      "formality_and_register": "Neutral / General English",
+      "ielts_usefulness": "High-frequency in Speaking Part 1."
+    },
+    {
+      "word": "commute",
+      "pos": "verb",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "kuh-MYOOT",
+      "ipa": "/kəˈmjuːt/",
+      "definition": "To travel regularly between one's residence and workplace.",
+      "simple_definition": "Travel back and forth to work.",
+      "advanced_definition": "To journey recurringly between home and office.",
+      "contextual_example": "Many professionals prefer working remotely to avoid a gruelling two-hour daily commute.",
+      "synonyms": [
+        "travel",
+        "journey",
+        "transit"
+      ],
+      "antonyms": [
+        "reside",
+        "stay"
+      ],
+      "word_family": {
+        "verb": "commute",
+        "noun": "commuter"
+      },
+      "collocations": [
+        "daily commute",
+        "long commute"
+      ],
+      "grammatical_patterns": [
+        "commute between X and Y"
+      ],
+      "common_mistakes": [
+        "Refers strictly to recurring transit, not holidays."
+      ],
+      "formality_and_register": "Neutral Academic",
+      "ielts_usefulness": "Essential for urban planning essays."
+    },
+    {
+      "word": "leisure",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "LEZH-er",
+      "ipa": "/ˈleʒə/",
+      "definition": "Free time when one is not working or occupied.",
+      "simple_definition": "Free time for relaxation.",
+      "advanced_definition": "Time provided by the cessation of work or duties.",
+      "contextual_example": "Digital entertainment has transformed contemporary leisure pursuits among adolescents.",
+      "synonyms": [
+        "recreation",
+        "downtime",
+        "free time"
+      ],
+      "antonyms": [
+        "labor",
+        "toil"
+      ],
+      "word_family": {
+        "noun": "leisure",
+        "adjective": "leisurely"
+      },
+      "collocations": [
+        "leisure activities",
+        "at one's leisure"
+      ],
+      "grammatical_patterns": [
+        "spend leisure time"
+      ],
+      "common_mistakes": [
+        "'Leisurely' is an adjective, not a noun."
+      ],
+      "formality_and_register": "Standard Academic",
+      "ielts_usefulness": "Speaking Part 1 & 2 hobbies topics."
+    },
+    {
+      "word": "chores",
+      "pos": "noun",
+      "cefr_level": "A2",
+      "band_tier": "Band 5.0-5.5",
+      "pronunciation": "CHAWZ",
+      "ipa": "/tʃɔːz/",
+      "definition": "Routine household tasks such as cleaning or cooking.",
+      "simple_definition": "Housework jobs.",
+      "advanced_definition": "Unpleasant or tedious but necessary domestic duties.",
+      "contextual_example": "Sharing domestic chores equitably fosters marital harmony.",
+      "synonyms": [
+        "errands",
+        "housework",
+        "tasks"
+      ],
+      "antonyms": [
+        "leisure",
+        "play"
+      ],
+      "word_family": {
+        "noun": "chore"
+      },
+      "collocations": [
+        "household chores",
+        "domestic chores"
+      ],
+      "grammatical_patterns": [
+        "do the chores"
+      ],
+      "common_mistakes": [
+        "Usually plural when meaning housework."
+      ],
+      "formality_and_register": "General English",
+      "ielts_usefulness": "Speaking Part 1 family topics."
+    },
+    {
+      "word": "multitask",
+      "pos": "verb",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "MUL-tee-task",
+      "ipa": "/ˈmʌltiˌtɑːsk/",
+      "definition": "To perform more than one activity at the same time.",
+      "simple_definition": "Do several things at once.",
+      "advanced_definition": "Concurrent cognitive execution of multiple tasks.",
+      "contextual_example": "Attempting to multitask while studying impairs long-term memory consolidation.",
+      "synonyms": [
+        "juggle tasks",
+        "split attention"
+      ],
+      "antonyms": [
+        "focus",
+        "single-task"
+      ],
+      "word_family": {
+        "verb": "multitask",
+        "noun": "multitasking"
+      },
+      "collocations": [
+        "ability to multitask",
+        "chronic multitasking"
+      ],
+      "grammatical_patterns": [
+        "multitask between X and Y"
+      ],
+      "common_mistakes": [
+        "Do not confuse with procrastination."
+      ],
+      "formality_and_register": "Modern Professional",
+      "ielts_usefulness": "Writing Task 2 digital distraction topics."
+    },
+    {
+      "word": "sedentary",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "SED-un-tree",
+      "ipa": "/ˈsedntri/",
+      "definition": "Involving much sitting and little physical exercise.",
+      "simple_definition": "Sitting down for long periods.",
+      "advanced_definition": "Characterized by physical inactivity and seated posture.",
+      "contextual_example": "A sedentary lifestyle significantly elevates the risk of cardiovascular disease.",
+      "synonyms": [
+        "inactive",
+        "desk-bound",
+        "stationary"
+      ],
+      "antonyms": [
+        "active",
+        "dynamic"
+      ],
+      "word_family": {
+        "adjective": "sedentary",
+        "noun": "sedentariness"
+      },
+      "collocations": [
+        "sedentary lifestyle",
+        "sedentary occupation"
+      ],
+      "grammatical_patterns": [
+        "lead a sedentary life"
+      ],
+      "common_mistakes": [
+        "Spelled with '-ary' suffix."
+      ],
+      "formality_and_register": "Formal Scientific",
+      "ielts_usefulness": "High-scoring in health and lifestyle essays."
+    },
+    {
+      "word": "errand",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "EH-rund",
+      "ipa": "/ˈerənd/",
+      "definition": "A short trip to deliver or collect something or accomplish a job.",
+      "simple_definition": "Quick trip for a task.",
+      "advanced_definition": "A brief journey undertaken on minor business.",
+      "contextual_example": "He spent the afternoon running domestic errands across the city.",
+      "synonyms": [
+        "chore",
+        "task",
+        "trip"
+      ],
+      "antonyms": [
+        "relaxation"
+      ],
+      "word_family": {
+        "noun": "errand"
+      },
+      "collocations": [
+        "run errands",
+        "daily errands"
+      ],
+      "grammatical_patterns": [
+        "run an errand"
+      ],
+      "common_mistakes": [
+        "Pair with 'run errands', not 'make errands'."
+      ],
+      "formality_and_register": "Neutral General",
+      "ielts_usefulness": "Speaking Part 1 weekends topics."
+    },
+    {
+      "word": "punctual",
+      "pos": "adjective",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "PUNK-choo-ul",
+      "ipa": "/ˈpʌŋktʃuəl/",
+      "definition": "Doing something or arriving at the agreed time; on time.",
+      "simple_definition": "Always on time.",
+      "advanced_definition": "Strictly observant of an appointed hour.",
+      "contextual_example": "Being punctual for professional interviews conveys organizational reliability.",
+      "synonyms": [
+        "prompt",
+        "timely",
+        "on time"
+      ],
+      "antonyms": [
+        "tardy",
+        "late",
+        "delayed"
+      ],
+      "word_family": {
+        "adjective": "punctual",
+        "noun": "punctuality",
+        "adverb": "punctually"
+      },
+      "collocations": [
+        "strictly punctual",
+        "reputation for being punctual"
+      ],
+      "grammatical_patterns": [
+        "punctual for an appointment"
+      ],
+      "common_mistakes": [
+        "Do not confuse with 'punctilious'."
+      ],
+      "formality_and_register": "Professional Formal",
+      "ielts_usefulness": "Speaking Part 1 time management topics."
+    }
+  ],
+  "education": [
+    {
+      "word": "curriculum",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "kuh-RIK-yuh-lum",
+      "ipa": "/kəˈrɪkjələm/",
+      "definition": "The subjects comprising an academic program of study.",
+      "simple_definition": "Subjects taught at school.",
+      "advanced_definition": "The overarching aggregate of courses provided by an institution.",
+      "contextual_example": "Secondary curricula should emphasize empirical reasoning over rote memorization.",
+      "synonyms": [
+        "syllabus",
+        "coursework",
+        "academic programme"
+      ],
+      "antonyms": [
+        "extracurriculars"
+      ],
+      "word_family": {
+        "noun": "curriculum",
+        "plural": "curricula"
+      },
+      "collocations": [
+        "core curriculum",
+        "curriculum reform"
+      ],
+      "grammatical_patterns": [
+        "on the curriculum"
+      ],
+      "common_mistakes": [
+        "Plural is 'curricula'."
+      ],
+      "formality_and_register": "Academic Discourse",
+      "ielts_usefulness": "Writing Task 2 education prompts."
+    },
+    {
+      "word": "pedagogy",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "PED-uh-godj-ee",
+      "ipa": "/ˈpedəɡɒdʒi/",
+      "definition": "The method and theoretical practice of teaching.",
+      "simple_definition": "Teaching theory and methods.",
+      "advanced_definition": "The theoretical and practical methodology of instruction.",
+      "contextual_example": "Constructivist pedagogy encourages students to discover scientific principles actively.",
+      "synonyms": [
+        "didactics",
+        "instructional methodology"
+      ],
+      "antonyms": [
+        "rote learning"
+      ],
+      "word_family": {
+        "noun": "pedagogy",
+        "adjective": "pedagogical",
+        "adverb": "pedagogically"
+      },
+      "collocations": [
+        "modern pedagogy",
+        "pedagogical approach"
+      ],
+      "grammatical_patterns": [
+        "principles of pedagogy"
+      ],
+      "common_mistakes": [
+        "Stress is on the first syllable."
+      ],
+      "formality_and_register": "Scholarly",
+      "ielts_usefulness": "Band 8+ Education essays."
+    },
+    {
+      "word": "tertiary",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "TER-shuh-ree",
+      "ipa": "/ˈtɜːʃəri/",
+      "definition": "Relating to university or post-secondary education.",
+      "simple_definition": "College/university education.",
+      "advanced_definition": "The third stage of formalized post-school education.",
+      "contextual_example": "Subsidizing tertiary education creates a highly skilled workforce.",
+      "synonyms": [
+        "higher education",
+        "post-secondary"
+      ],
+      "antonyms": [
+        "primary",
+        "secondary"
+      ],
+      "word_family": {
+        "adjective": "tertiary"
+      },
+      "collocations": [
+        "tertiary education",
+        "tertiary sector"
+      ],
+      "grammatical_patterns": [
+        "enroll in tertiary studies"
+      ],
+      "common_mistakes": [
+        "Do not say 'tertiary school'."
+      ],
+      "formality_and_register": "Formal Academic",
+      "ielts_usefulness": "Task 1 & 2 university synonyms."
+    },
+    {
+      "word": "rote",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "ROHT",
+      "ipa": "/rəʊt/",
+      "definition": "Mechanical repetition of facts to be learned without comprehension.",
+      "simple_definition": "Learning by repeating.",
+      "advanced_definition": "Memorization through mechanical repetition.",
+      "contextual_example": "Rote learning is ineffective for developing critical thinking competencies.",
+      "synonyms": [
+        "memorization",
+        "cramming"
+      ],
+      "antonyms": [
+        "deep learning",
+        "inquiry"
+      ],
+      "word_family": {
+        "noun": "rote"
+      },
+      "collocations": [
+        "rote learning",
+        "learn by rote"
+      ],
+      "grammatical_patterns": [
+        "learn something by rote"
+      ],
+      "common_mistakes": [
+        "Collocation is 'by rote', not 'with rote'."
+      ],
+      "formality_and_register": "Educational Critique",
+      "ielts_usefulness": "Comparing school systems."
+    },
+    {
+      "word": "literacy",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "LIT-er-uh-see",
+      "ipa": "/ˈlɪtərəsi/",
+      "definition": "The ability to read and write; foundational competence.",
+      "simple_definition": "Reading and writing ability.",
+      "advanced_definition": "Foundational competence in textual or symbolic decoding.",
+      "contextual_example": "Financial literacy is essential for young adults managing credit.",
+      "synonyms": [
+        "competence",
+        "proficiency"
+      ],
+      "antonyms": [
+        "illiteracy",
+        "ignorance"
+      ],
+      "word_family": {
+        "noun": "literacy",
+        "adjective": "literate"
+      },
+      "collocations": [
+        "digital literacy",
+        "literacy rate"
+      ],
+      "grammatical_patterns": [
+        "achieve literacy in X"
+      ],
+      "common_mistakes": [
+        "Uncountable noun."
+      ],
+      "formality_and_register": "Sociological Discourse",
+      "ielts_usefulness": "Reading passages and Task 1 charts."
+    },
+    {
+      "word": "cognitive",
+      "pos": "adjective",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "KOG-nuh-tiv",
+      "ipa": "/ˈkɒɡnətɪv/",
+      "definition": "Relating to mental processes of reasoning and perception.",
+      "simple_definition": "Related to thinking.",
+      "advanced_definition": "Pertaining to intellectual mental operations.",
+      "contextual_example": "Bilingual education bolsters cognitive flexibility in young learners.",
+      "synonyms": [
+        "intellectual",
+        "mental",
+        "cerebral"
+      ],
+      "antonyms": [
+        "physical"
+      ],
+      "word_family": {
+        "adjective": "cognitive",
+        "noun": "cognition",
+        "adverb": "cognitively"
+      },
+      "collocations": [
+        "cognitive development",
+        "cognitive load"
+      ],
+      "grammatical_patterns": [
+        "cognitive process"
+      ],
+      "common_mistakes": [
+        "Do not confuse with 'conscious'."
+      ],
+      "formality_and_register": "Scientific Academic",
+      "ielts_usefulness": "High-scoring in linguistics/education."
+    },
+    {
+      "word": "syllabus",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "SIL-uh-bus",
+      "ipa": "/ˈsɪləbəs/",
+      "definition": "An outline of the subjects in a specific course.",
+      "simple_definition": "Class topics list.",
+      "advanced_definition": "Document outlining topics and deadlines for one course.",
+      "contextual_example": "The updated syllabus includes modules on artificial intelligence ethics.",
+      "synonyms": [
+        "course outline",
+        "programme"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "syllabus",
+        "plural": "syllabi"
+      },
+      "collocations": [
+        "course syllabus",
+        "exam syllabus"
+      ],
+      "grammatical_patterns": [
+        "on the syllabus"
+      ],
+      "common_mistakes": [
+        "Distinct from overall curriculum."
+      ],
+      "formality_and_register": "Formal Academic",
+      "ielts_usefulness": "Listening Section 3 college context."
+    },
+    {
+      "word": "vocational",
+      "pos": "adjective",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "voh-KAY-shun-ul",
+      "ipa": "/vəʊˈkeɪʃənl/",
+      "definition": "Relating to practical employment training and trades.",
+      "simple_definition": "Job-training education.",
+      "advanced_definition": "Imparting practical career competencies for skilled trades.",
+      "contextual_example": "Vocational apprenticeships bridge the gap between school and industry.",
+      "synonyms": [
+        "technical",
+        "career-oriented"
+      ],
+      "antonyms": [
+        "academic",
+        "theoretical"
+      ],
+      "word_family": {
+        "adjective": "vocational",
+        "noun": "vocation"
+      },
+      "collocations": [
+        "vocational training",
+        "vocational education"
+      ],
+      "grammatical_patterns": [
+        "pursue a vocational path"
+      ],
+      "common_mistakes": [
+        "'Vocation' also means a life calling."
+      ],
+      "formality_and_register": "Public Policy",
+      "ielts_usefulness": "Task 2 university vs trades."
+    }
+  ],
+  "work_and_careers": [
+    {
+      "word": "remuneration",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "ri-myoo-nuh-RAY-shun",
+      "ipa": "/rɪˌmjuːnəˈreɪʃn/",
+      "definition": "Financial compensation paid for work or services.",
+      "simple_definition": "Salary or wages.",
+      "advanced_definition": "Reward or recompense for services rendered.",
+      "contextual_example": "Executive remuneration packages should be contingent on sustainable corporate performance.",
+      "synonyms": [
+        "compensation",
+        "salary",
+        "earnings"
+      ],
+      "antonyms": [
+        "volunteerism"
+      ],
+      "word_family": {
+        "noun": "remuneration",
+        "verb": "remunerate",
+        "adjective": "remunerative"
+      },
+      "collocations": [
+        "financial remuneration",
+        "remuneration package"
+      ],
+      "grammatical_patterns": [
+        "remuneration for services"
+      ],
+      "common_mistakes": [
+        "Spelled '-neration', not '-naration'."
+      ],
+      "formality_and_register": "Formal Corporate",
+      "ielts_usefulness": "Task 2 salary and executive pay."
+    },
+    {
+      "word": "appraisal",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "uh-PRAY-zul",
+      "ipa": "/əˈpreɪzl/",
+      "definition": "A formal assessment of the performance or value of an employee.",
+      "simple_definition": "Job performance evaluation.",
+      "advanced_definition": "Systematic evaluation of work performance.",
+      "contextual_example": "Annual performance appraisals provide workers with structured career feedback.",
+      "synonyms": [
+        "evaluation",
+        "assessment",
+        "review"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "appraisal",
+        "verb": "appraise"
+      },
+      "collocations": [
+        "performance appraisal",
+        "annual appraisal"
+      ],
+      "grammatical_patterns": [
+        "conduct an appraisal"
+      ],
+      "common_mistakes": [
+        "Do not confuse 'appraise' (assess) with 'apprise' (inform)."
+      ],
+      "formality_and_register": "Business Professional",
+      "ielts_usefulness": "Workplace management topics."
+    },
+    {
+      "word": "redundancy",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "ri-DUN-dun-see",
+      "ipa": "/rɪˈdʌndənsi/",
+      "definition": "The state of being no longer needed; dismissal because a job ceases to exist.",
+      "simple_definition": "Being laid off.",
+      "advanced_definition": "Termination of employment resulting from workforce reduction.",
+      "contextual_example": "Automation in manufacturing has resulted in involuntary redundancies across the sector.",
+      "synonyms": [
+        "layoff",
+        "job loss",
+        "downsizing"
+      ],
+      "antonyms": [
+        "recruitment",
+        "hiring"
+      ],
+      "word_family": {
+        "noun": "redundancy",
+        "adjective": "redundant"
+      },
+      "collocations": [
+        "voluntary redundancy",
+        "compulsory redundancy",
+        "make redundant"
+      ],
+      "grammatical_patterns": [
+        "face redundancy"
+      ],
+      "common_mistakes": [
+        "In UK: 'made redundant' means laid off, not fired for misconduct."
+      ],
+      "formality_and_register": "Corporate / Economic",
+      "ielts_usefulness": "Task 2 employment/AI essays."
+    },
+    {
+      "word": "probation",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "proh-BAY-shun",
+      "ipa": "/prəˈbeɪʃn/",
+      "definition": "A period of trial and evaluation for a new employee.",
+      "simple_definition": "Trial work period.",
+      "advanced_definition": "Testing period during which an employee's competence is vetted.",
+      "contextual_example": "During his six-month probationary period, his coding proficiency was closely monitored.",
+      "synonyms": [
+        "trial period",
+        "test phase"
+      ],
+      "antonyms": [
+        "permanent tenure"
+      ],
+      "word_family": {
+        "noun": "probation",
+        "adjective": "probationary"
+      },
+      "collocations": [
+        "probationary period",
+        "pass probation"
+      ],
+      "grammatical_patterns": [
+        "on probation"
+      ],
+      "common_mistakes": [
+        "Also used in criminal justice, but distinct in business."
+      ],
+      "formality_and_register": "Human Resources",
+      "ielts_usefulness": "Workplace interview topics."
+    },
+    {
+      "word": "advancement",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "ud-VAHNS-munt",
+      "ipa": "/ədˈvɑːnsmənt/",
+      "definition": "Development or improvement; promotion in a career.",
+      "simple_definition": "Career promotion and progress.",
+      "advanced_definition": "Upward progression within an organizational hierarchy.",
+      "contextual_example": "Mentorship programs significantly enhance career advancement opportunities for women.",
+      "synonyms": [
+        "promotion",
+        "progression",
+        "elevation"
+      ],
+      "antonyms": [
+        "demotion",
+        "stagnation"
+      ],
+      "word_family": {
+        "noun": "advancement",
+        "verb": "advance"
+      },
+      "collocations": [
+        "career advancement",
+        "professional advancement"
+      ],
+      "grammatical_patterns": [
+        "opportunities for advancement"
+      ],
+      "common_mistakes": [
+        "Uncountable when meaning abstract career progress."
+      ],
+      "formality_and_register": "Professional Academic",
+      "ielts_usefulness": "Speaking Part 2 & 3 career goals."
+    },
+    {
+      "word": "telecommuting",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "tel-ee-kuh-MYOO-ting",
+      "ipa": "/ˈtelikəˌmjuːtɪŋ/",
+      "definition": "Working from home using the internet, email, and telephone.",
+      "simple_definition": "Working from home.",
+      "advanced_definition": "Remote execution of employment duties via telecommunication links.",
+      "contextual_example": "Telecommuting affords workers substantial autonomy while decreasing corporate overheads.",
+      "synonyms": [
+        "remote work",
+        "working from home",
+        "distance working"
+      ],
+      "antonyms": [
+        "on-site work",
+        "office work"
+      ],
+      "word_family": {
+        "noun": "telecommuting",
+        "verb": "telecommute",
+        "noun_agent": "telecommuter"
+      },
+      "collocations": [
+        "adopt telecommuting",
+        "rise of telecommuting"
+      ],
+      "grammatical_patterns": [
+        "telecommute from home"
+      ],
+      "common_mistakes": [
+        "Synonymous with modern 'remote work'."
+      ],
+      "formality_and_register": "Modern Corporate",
+      "ielts_usefulness": "Task 2 future of work topics."
+    },
+    {
+      "word": "competence",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "KOM-pi-tuns",
+      "ipa": "/ˈkɒmpɪtəns/",
+      "definition": "The ability to do something successfully or efficiently.",
+      "simple_definition": "Ability and skill to do a job.",
+      "advanced_definition": "Sufficiency of qualification, knowledge, or capacity.",
+      "contextual_example": "Demonstrated linguistic competence is an essential prerequisite for international diplomacy.",
+      "synonyms": [
+        "proficiency",
+        "capability",
+        "adeptness"
+      ],
+      "antonyms": [
+        "incompetence",
+        "ineptitude"
+      ],
+      "word_family": {
+        "noun": "competence",
+        "adjective": "competent",
+        "adverb": "competently"
+      },
+      "collocations": [
+        "core competence",
+        "professional competence"
+      ],
+      "grammatical_patterns": [
+        "competence in doing something"
+      ],
+      "common_mistakes": [
+        "Can be spelled 'competence' or 'competency'."
+      ],
+      "formality_and_register": "Formal Academic",
+      "ielts_usefulness": "Writing Task 1 & 2 qualification lexis."
+    },
+    {
+      "word": "turnover",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "TERN-oh-ver",
+      "ipa": "/ˈtɜːnˌəʊvə/",
+      "definition": "The rate at which employees leave a workforce and are replaced.",
+      "simple_definition": "Rate workers quit and get replaced.",
+      "advanced_definition": "The cycle of staff departure and replacement in an enterprise.",
+      "contextual_example": "Toxic management cultures inevitably lead to high staff turnover and diminished morale.",
+      "synonyms": [
+        "attrition",
+        "staff churn"
+      ],
+      "antonyms": [
+        "retention",
+        "loyalty"
+      ],
+      "word_family": {
+        "noun": "turnover"
+      },
+      "collocations": [
+        "high staff turnover",
+        "reduce turnover",
+        "annual turnover"
+      ],
+      "grammatical_patterns": [
+        "turnover of employees"
+      ],
+      "common_mistakes": [
+        "Also means business financial revenue in British English."
+      ],
+      "formality_and_register": "Human Resources",
+      "ielts_usefulness": "Task 2 workplace management."
+    }
+  ],
+  "technology": [
+    {
+      "word": "algorithmic",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "al-guh-RITH-mik",
+      "ipa": "/ˌælɡəˈrɪðmɪk/",
+      "definition": "Relating to an algorithm or process of computer calculation.",
+      "simple_definition": "Related to computer algorithms.",
+      "advanced_definition": "Pertaining to mathematical step-by-step computational procedures.",
+      "contextual_example": "Algorithmic decision-making in financial credit assessment can inadvertently perpetuate bias.",
+      "synonyms": [
+        "computational",
+        "automated"
+      ],
+      "antonyms": [
+        "manual",
+        "intuitive"
+      ],
+      "word_family": {
+        "adjective": "algorithmic",
+        "noun": "algorithm",
+        "adverb": "algorithmically"
+      },
+      "collocations": [
+        "algorithmic bias",
+        "algorithmic trading"
+      ],
+      "grammatical_patterns": [
+        "determined by algorithmic models"
+      ],
+      "common_mistakes": [
+        "Note the voiced 'th' /ð/ in pronunciation."
+      ],
+      "formality_and_register": "Computer Science",
+      "ielts_usefulness": "Writing Task 2 AI and society."
+    },
+    {
+      "word": "automation",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "aw-tuh-MAY-shun",
+      "ipa": "/ˌɔːtəˈmeɪʃn/",
+      "definition": "The use of automatic equipment in manufacturing or data processing.",
+      "simple_definition": "Machines replacing human labor.",
+      "advanced_definition": "The execution of processes by mechanical or electronic means without human intervention.",
+      "contextual_example": "Industrial automation increases manufacturing throughput while transforming labor demand.",
+      "synonyms": [
+        "mechanization",
+        "computerization"
+      ],
+      "antonyms": [
+        "manual labor",
+        "handcraft"
+      ],
+      "word_family": {
+        "noun": "automation",
+        "verb": "automate",
+        "adjective": "automated"
+      },
+      "collocations": [
+        "factory automation",
+        "workplace automation",
+        "accelerate automation"
+      ],
+      "grammatical_patterns": [
+        "drive automation"
+      ],
+      "common_mistakes": [
+        "Uncountable noun."
+      ],
+      "formality_and_register": "Economics & Technology",
+      "ielts_usefulness": "Task 2 future of jobs essays."
+    },
+    {
+      "word": "surveillance",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "ser-VAY-luns",
+      "ipa": "/sɜːˈveɪləns/",
+      "definition": "Close observation, especially of a suspected person or public space.",
+      "simple_definition": "Watching people with cameras/sensors.",
+      "advanced_definition": "Continuous systematic oversight of persons or territories for security purposes.",
+      "contextual_example": "The ubiquity of facial recognition surveillance cameras sparks intense debate over civil privacy.",
+      "synonyms": [
+        "monitoring",
+        "observation",
+        "scrutiny"
+      ],
+      "antonyms": [
+        "privacy",
+        "anonymity"
+      ],
+      "word_family": {
+        "noun": "surveillance"
+      },
+      "collocations": [
+        "mass surveillance",
+        "surveillance camera",
+        "electronic surveillance"
+      ],
+      "grammatical_patterns": [
+        "under surveillance"
+      ],
+      "common_mistakes": [
+        "Spelled 'sur-veil-lance' (French root)."
+      ],
+      "formality_and_register": "Political / Tech",
+      "ielts_usefulness": "Writing Task 2 state surveillance prompts."
+    },
+    {
+      "word": "proliferation",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "pruh-lif-uh-RAY-shun",
+      "ipa": "/prəˌlɪfəˈreɪʃn/",
+      "definition": "Rapid increase in the number or amount of something.",
+      "simple_definition": "Fast spread or growth.",
+      "advanced_definition": "Exponential growth, reproduction, or diffusion of phenomena.",
+      "contextual_example": "The rapid proliferation of smartphones has altered social interactions among teenagers.",
+      "synonyms": [
+        "expansion",
+        "multiplication",
+        "surge"
+      ],
+      "antonyms": [
+        "reduction",
+        "scarcity"
+      ],
+      "word_family": {
+        "noun": "proliferation",
+        "verb": "proliferate"
+      },
+      "collocations": [
+        "rapid proliferation",
+        "nuclear proliferation",
+        "proliferation of devices"
+      ],
+      "grammatical_patterns": [
+        "proliferation of X"
+      ],
+      "common_mistakes": [
+        "High-tier formal noun."
+      ],
+      "formality_and_register": "Academic / Geopolitics",
+      "ielts_usefulness": "Band 8+ technology essays."
+    },
+    {
+      "word": "cybersecurity",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "SY-ber-si-kyoor-i-tee",
+      "ipa": "/ˈsaɪbəsɪˌkjʊərəti/",
+      "definition": "Measures taken to protect computers and networks against unauthorized access.",
+      "simple_definition": "Online safety and defense.",
+      "advanced_definition": "The protection of internet-connected systems from digital attacks.",
+      "contextual_example": "Hospitals must fortify their cybersecurity protocols to protect sensitive patient records.",
+      "synonyms": [
+        "data defense",
+        "network security"
+      ],
+      "antonyms": [
+        "vulnerability"
+      ],
+      "word_family": {
+        "noun": "cybersecurity"
+      },
+      "collocations": [
+        "cybersecurity breach",
+        "robust cybersecurity"
+      ],
+      "grammatical_patterns": [
+        "invest in cybersecurity"
+      ],
+      "common_mistakes": [
+        "Single compound word in modern English."
+      ],
+      "formality_and_register": "Information Technology",
+      "ielts_usefulness": "Cyber threats and privacy topics."
+    },
+    {
+      "word": "obsolete",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "OB-suh-leet",
+      "ipa": "/ˈɒbsəliːt/",
+      "definition": "No longer produced or used; out of date.",
+      "simple_definition": "Old-fashioned and useless.",
+      "advanced_definition": "No longer in use or fashion because replaced by modern innovation.",
+      "contextual_example": "Compact discs have become virtually obsolete with the advent of cloud music streaming.",
+      "synonyms": [
+        "antiquated",
+        "outdated",
+        "archaic"
+      ],
+      "antonyms": [
+        "cutting-edge",
+        "contemporary",
+        "current"
+      ],
+      "word_family": {
+        "adjective": "obsolete",
+        "noun": "obsolescence"
+      },
+      "collocations": [
+        "render obsolete",
+        "virtually obsolete",
+        "planned obsolescence"
+      ],
+      "grammatical_patterns": [
+        "become obsolete"
+      ],
+      "common_mistakes": [
+        "'Planned obsolescence' is an important economic concept."
+      ],
+      "formality_and_register": "Technology History",
+      "ielts_usefulness": "Task 2 tech change essays."
+    },
+    {
+      "word": "disruptive",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "dis-RUP-tiv",
+      "ipa": "/dɪsˈrʌptɪv/",
+      "definition": "Innovating in a way that displaces an established technology or industry.",
+      "simple_definition": "Changing how an entire industry works.",
+      "advanced_definition": "Upending conventional market structures through radical innovation.",
+      "contextual_example": "Generative artificial intelligence represents a profoundly disruptive technology across creative fields.",
+      "synonyms": [
+        "revolutionary",
+        "transformative",
+        "groundbreaking"
+      ],
+      "antonyms": [
+        "conventional",
+        "traditional"
+      ],
+      "word_family": {
+        "adjective": "disruptive",
+        "verb": "disrupt",
+        "noun": "disruption"
+      },
+      "collocations": [
+        "disruptive technology",
+        "disruptive innovation"
+      ],
+      "grammatical_patterns": [
+        "disruptive impact on X"
+      ],
+      "common_mistakes": [
+        "In business, 'disruptive' is highly positive, unlike in schooling."
+      ],
+      "formality_and_register": "Business Technology",
+      "ielts_usefulness": "Technology and innovation essays."
+    },
+    {
+      "word": "ubiquitous",
+      "pos": "adjective",
+      "cefr_level": "C1",
+      "band_tier": "Band 8.0-9.0",
+      "pronunciation": "yoo-BIK-wuh-tus",
+      "ipa": "/juːˈbɪkwɪtəs/",
+      "definition": "Present, appearing, or found everywhere.",
+      "simple_definition": "Found everywhere.",
+      "advanced_definition": "Existing or being encountered simultaneously in all locations.",
+      "contextual_example": "Mobile computing has become so ubiquitous that digital disconnection is increasingly difficult.",
+      "synonyms": [
+        "omnipresent",
+        "pervasive",
+        "universal"
+      ],
+      "antonyms": [
+        "rare",
+        "localized",
+        "scarce"
+      ],
+      "word_family": {
+        "adjective": "ubiquitous",
+        "noun": "ubiquity",
+        "adverb": "ubiquitously"
+      },
+      "collocations": [
+        "become ubiquitous",
+        "ubiquitous presence"
+      ],
+      "grammatical_patterns": [
+        "ubiquitous across society"
+      ],
+      "common_mistakes": [
+        "Advanced Band 8+ academic adjective."
+      ],
+      "formality_and_register": "High Academic",
+      "ielts_usefulness": "Writing Task 2 Band 9 lexis."
+    }
+  ],
+  "science": [
+    {
+      "word": "empirical",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "em-PIR-i-kul",
+      "ipa": "/ɪmˈpɪrɪkl/",
+      "definition": "Based on, concerned with, or verifiable by observation rather than theory.",
+      "simple_definition": "Based on real experiment and data.",
+      "advanced_definition": "Originating in or corroborated by physical observation or experimentation.",
+      "contextual_example": "Scientific theories require rigorous empirical verification before gaining institutional consensus.",
+      "synonyms": [
+        "observational",
+        "evidence-based",
+        "experimental"
+      ],
+      "antonyms": [
+        "theoretical",
+        "conjectural"
+      ],
+      "word_family": {
+        "adjective": "empirical",
+        "noun": "empiricism",
+        "adverb": "empirically"
+      },
+      "collocations": [
+        "empirical evidence",
+        "empirical data",
+        "empirical research"
+      ],
+      "grammatical_patterns": [
+        "substantiated by empirical proof"
+      ],
+      "common_mistakes": [
+        "Opposite of 'purely theoretical'."
+      ],
+      "formality_and_register": "Scientific Philosophy",
+      "ielts_usefulness": "Research and education essays."
+    },
+    {
+      "word": "hypothesis",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "hy-POTH-uh-sis",
+      "ipa": "/haɪˈpɒθəsɪs/",
+      "definition": "A proposed explanation for a phenomenon, made as a starting point for investigation.",
+      "simple_definition": "Scientific guess to test.",
+      "advanced_definition": "A provisional proposition formulated to deduce consequences testable by reality.",
+      "contextual_example": "The astrophysicist proposed a novel hypothesis explaining cosmic radiation fluctuations.",
+      "synonyms": [
+        "proposition",
+        "conjecture",
+        "premise"
+      ],
+      "antonyms": [
+        "fact",
+        "certainty"
+      ],
+      "word_family": {
+        "noun": "hypothesis",
+        "plural": "hypotheses",
+        "verb": "hypothesize"
+      },
+      "collocations": [
+        "formulate a hypothesis",
+        "test a hypothesis",
+        "refute a hypothesis"
+      ],
+      "grammatical_patterns": [
+        "working hypothesis"
+      ],
+      "common_mistakes": [
+        "Plural is 'hypotheses' /haɪˈpɒθəsiːz/."
+      ],
+      "formality_and_register": "Academic Research",
+      "ielts_usefulness": "IELTS Reading and methodology."
+    },
+    {
+      "word": "anomalous",
+      "pos": "adjective",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "uh-NOM-uh-lus",
+      "ipa": "/əˈnɒmələs/",
+      "definition": "Deviating from what is standard, normal, or expected.",
+      "simple_definition": "Strangely abnormal or irregular.",
+      "advanced_definition": "Inconsistent with standard empirical expectations or established laws.",
+      "contextual_example": "Researchers discarded the anomalous laboratory readings to preserve sample integrity.",
+      "synonyms": [
+        "aberrant",
+        "atypical",
+        "irregular"
+      ],
+      "antonyms": [
+        "normative",
+        "standard"
+      ],
+      "word_family": {
+        "adjective": "anomalous",
+        "noun": "anomaly"
+      },
+      "collocations": [
+        "anomalous results",
+        "anomalous behavior"
+      ],
+      "grammatical_patterns": [
+        "exhibit anomalous traits"
+      ],
+      "common_mistakes": [
+        "Noun form is 'anomaly'."
+      ],
+      "formality_and_register": "High Scientific",
+      "ielts_usefulness": "Reading Section 3 scientific passages."
+    },
+    {
+      "word": "corroborate",
+      "pos": "verb",
+      "cefr_level": "C1",
+      "band_tier": "Band 8.0-8.5",
+      "pronunciation": "kuh-ROB-uh-rayt",
+      "ipa": "/kəˈrɒbəreɪt/",
+      "definition": "Confirm or give support to a statement, theory, or finding.",
+      "simple_definition": "Back up with more proof.",
+      "advanced_definition": "To strengthen or substantiate with independent secondary evidence.",
+      "contextual_example": "Independent clinical trials subsequently corroborated the efficacy of the vaccine.",
+      "synonyms": [
+        "substantiate",
+        "verify",
+        "validate",
+        "confirm"
+      ],
+      "antonyms": [
+        "refute",
+        "disprove"
+      ],
+      "word_family": {
+        "verb": "corroborate",
+        "noun": "corroboration",
+        "adjective": "corroborative"
+      },
+      "collocations": [
+        "corroborate evidence",
+        "corroborate findings"
+      ],
+      "grammatical_patterns": [
+        "corroborated by independent data"
+      ],
+      "common_mistakes": [
+        "Double 'r' in spelling: c-o-r-r-o-b-o-r-a-t-e."
+      ],
+      "formality_and_register": "Legal & Scientific",
+      "ielts_usefulness": "High-tier academic argument writing."
+    },
+    {
+      "word": "replicate",
+      "pos": "verb",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "REP-li-kayt",
+      "ipa": "/ˈreplɪkeɪt/",
+      "definition": "Repeat or duplicate an experiment or process to obtain a consistent result.",
+      "simple_definition": "Copy or repeat an experiment.",
+      "advanced_definition": "To reproduce experimental conditions to ascertain validity.",
+      "contextual_example": "Scientific integrity requires that peer laboratories be capable of replicating all published findings.",
+      "synonyms": [
+        "reproduce",
+        "duplicate",
+        "mirror"
+      ],
+      "antonyms": [
+        "originate"
+      ],
+      "word_family": {
+        "verb": "replicate",
+        "noun": "replication"
+      },
+      "collocations": [
+        "replicate results",
+        "replicate an experiment",
+        "replicate findings"
+      ],
+      "grammatical_patterns": [
+        "ability to replicate"
+      ],
+      "common_mistakes": [
+        "'Replication crisis' is a prominent modern topic."
+      ],
+      "formality_and_register": "Academic Research",
+      "ielts_usefulness": "Scientific methodology passages."
+    },
+    {
+      "word": "paradigm",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "PAIR-uh-dyme",
+      "ipa": "/ˈpærədaɪm/",
+      "definition": "A typical example or pattern of something; a distinct scientific worldview.",
+      "simple_definition": "Overarching theoretical framework.",
+      "advanced_definition": "A philosophical and theoretical framework of a scientific school or discipline.",
+      "contextual_example": "Quantum mechanics triggered a profound paradigm shift in theoretical physics.",
+      "synonyms": [
+        "archetype",
+        "model",
+        "worldview",
+        "framework"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "paradigm",
+        "adjective": "paradigmatic"
+      },
+      "collocations": [
+        "paradigm shift",
+        "dominant paradigm"
+      ],
+      "grammatical_patterns": [
+        "shift the paradigm"
+      ],
+      "common_mistakes": [
+        "Silent 'g' in pronunciation: /ˈpærədaɪm/."
+      ],
+      "formality_and_register": "Philosophical Science",
+      "ielts_usefulness": "Band 8.5+ writing and academic essays."
+    },
+    {
+      "word": "synthetic",
+      "pos": "adjective",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "sin-THET-ik",
+      "ipa": "/sɪnˈθetɪk/",
+      "definition": "Made by chemical synthesis, especially to imitate a natural product.",
+      "simple_definition": "Man-made, not natural.",
+      "advanced_definition": "Formed by artificial chemical process rather than natural extraction.",
+      "contextual_example": "Synthetic fertilizers elevated crop yields but caused subsequent riverine eutrophication.",
+      "synonyms": [
+        "artificial",
+        "manufactured",
+        "man-made"
+      ],
+      "antonyms": [
+        "natural",
+        "organic"
+      ],
+      "word_family": {
+        "adjective": "synthetic",
+        "verb": "synthesize",
+        "noun": "synthesis"
+      },
+      "collocations": [
+        "synthetic materials",
+        "synthetic fibers",
+        "synthetic chemicals"
+      ],
+      "grammatical_patterns": [
+        "produced via synthetic means"
+      ],
+      "common_mistakes": [
+        "Do not confuse with 'synthesized' in literature."
+      ],
+      "formality_and_register": "Chemistry / Materials",
+      "ielts_usefulness": "Task 1 processes and manufacturing."
+    },
+    {
+      "word": "catalyst",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "KAT-uh-list",
+      "ipa": "/ˈkætəlɪst/",
+      "definition": "A substance that increases the rate of a chemical reaction without undergoing permanent change; an agent of change.",
+      "simple_definition": "Something causing fast change.",
+      "advanced_definition": "An agency or substance that accelerates transitions without being consumed.",
+      "contextual_example": "Government funding for public infrastructure serves as a major catalyst for regional economic growth.",
+      "synonyms": [
+        "stimulus",
+        "impetus",
+        "spark",
+        "accelerator"
+      ],
+      "antonyms": [
+        "inhibitor",
+        "deterrent"
+      ],
+      "word_family": {
+        "noun": "catalyst",
+        "adjective": "catalytic",
+        "verb": "catalyze"
+      },
+      "collocations": [
+        "act as a catalyst",
+        "catalyst for change",
+        "economic catalyst"
+      ],
+      "grammatical_patterns": [
+        "catalyst for X"
+      ],
+      "common_mistakes": [
+        "Widely used metaphorically in politics and economics."
+      ],
+      "formality_and_register": "Chemistry & Rhetoric",
+      "ielts_usefulness": "High-scoring in essay conclusion links."
+    }
+  ],
+  "environment": [
+    {
+      "word": "sustainability",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "suh-stay-nuh-BIL-uh-tee",
+      "ipa": "/səˌsteɪnəˈbɪləti/",
+      "definition": "Meeting present needs without compromising future generations.",
+      "simple_definition": "Eco-friendly long-term survival.",
+      "advanced_definition": "Development that balances ecological, social, and economic imperatives.",
+      "contextual_example": "Corporate commitment to environmental sustainability is no longer optional.",
+      "synonyms": [
+        "eco-preservation",
+        "viability"
+      ],
+      "antonyms": [
+        "exhaustion",
+        "depletion"
+      ],
+      "word_family": {
+        "noun": "sustainability",
+        "adjective": "sustainable",
+        "adverb": "sustainably"
+      },
+      "collocations": [
+        "environmental sustainability",
+        "promote sustainability"
+      ],
+      "grammatical_patterns": [
+        "commitment to sustainability"
+      ],
+      "common_mistakes": [
+        "Spelled '-ability'."
+      ],
+      "formality_and_register": "Environmental Discourse",
+      "ielts_usefulness": "Essential for all green Task 2 essays."
+    },
+    {
+      "word": "mitigation",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "mit-i-GAY-shun",
+      "ipa": "/ˌmɪtɪˈɡeɪʃn/",
+      "definition": "The action of reducing the severity or seriousness of something.",
+      "simple_definition": "Making a problem less severe.",
+      "advanced_definition": "Systematic alleviation of environmental hazards or carbon output.",
+      "contextual_example": "Investing in tidal flood barriers is a crucial climate mitigation strategy.",
+      "synonyms": [
+        "alleviation",
+        "abatement",
+        "reduction"
+      ],
+      "antonyms": [
+        "exacerbation",
+        "intensification"
+      ],
+      "word_family": {
+        "noun": "mitigation",
+        "verb": "mitigate"
+      },
+      "collocations": [
+        "climate change mitigation",
+        "disaster mitigation"
+      ],
+      "grammatical_patterns": [
+        "strategy for mitigation"
+      ],
+      "common_mistakes": [
+        "Distinguish from 'adaptation'."
+      ],
+      "formality_and_register": "Public Policy",
+      "ielts_usefulness": "Band 7.5+ environmental vocabulary."
+    },
+    {
+      "word": "biodiversity",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "by-oh-di-VER-si-tee",
+      "ipa": "/ˌbaɪəʊdaɪˈvɜːsəti/",
+      "definition": "The variety of plant and animal life in a particular habitat.",
+      "simple_definition": "Variety of species in nature.",
+      "advanced_definition": "Ecological variety of species and genetic alleles within a biome.",
+      "contextual_example": "Deforestation in the Amazon basin causes catastrophic loss of biodiversity.",
+      "synonyms": [
+        "ecological variety",
+        "species richness"
+      ],
+      "antonyms": [
+        "monoculture"
+      ],
+      "word_family": {
+        "noun": "biodiversity",
+        "adjective": "biodiverse"
+      },
+      "collocations": [
+        "preserve biodiversity",
+        "loss of biodiversity"
+      ],
+      "grammatical_patterns": [
+        "threat to biodiversity"
+      ],
+      "common_mistakes": [
+        "Uncountable noun."
+      ],
+      "formality_and_register": "Ecology",
+      "ielts_usefulness": "Wildlife and rainforest preservation prompts."
+    },
+    {
+      "word": "deplete",
+      "pos": "verb",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "di-PLEET",
+      "ipa": "/dɪˈpliːt/",
+      "definition": "Use up the supply or resources of something.",
+      "simple_definition": "Empty or use up completely.",
+      "advanced_definition": "To exhaust natural reservoirs, minerals, or energy supplies.",
+      "contextual_example": "Intensive commercial irrigation continues to deplete regional aquifers.",
+      "synonyms": [
+        "exhaust",
+        "drain",
+        "consume"
+      ],
+      "antonyms": [
+        "replenish",
+        "renew"
+      ],
+      "word_family": {
+        "verb": "deplete",
+        "noun": "depletion"
+      },
+      "collocations": [
+        "deplete resources",
+        "deplete stocks",
+        "ozone depletion"
+      ],
+      "grammatical_patterns": [
+        "deplete supplies"
+      ],
+      "common_mistakes": [
+        "Noun form is 'depletion'."
+      ],
+      "formality_and_register": "Environmental Science",
+      "ielts_usefulness": "Resource depletion essays."
+    },
+    {
+      "word": "deforestation",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "dee-for-is-TAY-shun",
+      "ipa": "/diːˌfɒrɪˈsteɪʃn/",
+      "definition": "The permanent clearing of trees and forested areas by humans.",
+      "simple_definition": "Cutting down forests.",
+      "advanced_definition": "The large-scale clearing of forests for agricultural or timber extraction.",
+      "contextual_example": "Tropical deforestation is a major anthropogenic driver of atmospheric greenhouse gas accumulation.",
+      "synonyms": [
+        "logging",
+        "forest clearance"
+      ],
+      "antonyms": [
+        "afforestation",
+        "reforestation"
+      ],
+      "word_family": {
+        "noun": "deforestation",
+        "ant_noun": "afforestation"
+      },
+      "collocations": [
+        "halt deforestation",
+        "illegal deforestation"
+      ],
+      "grammatical_patterns": [
+        "impact of deforestation"
+      ],
+      "common_mistakes": [
+        "Antonym is 'reforestation' or 'afforestation'."
+      ],
+      "formality_and_register": "Environmental Science",
+      "ielts_usefulness": "Global warming prompts."
+    },
+    {
+      "word": "ecosystem",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "EE-koh-sis-tum",
+      "ipa": "/ˈiːkəʊˌsɪstəm/",
+      "definition": "A biological community of interacting organisms and their physical environment.",
+      "simple_definition": "Natural community of plants and animals.",
+      "advanced_definition": "A self-sustaining complex of plant, animal, and microorganism communities.",
+      "contextual_example": "Coral reefs are among the most fragile ecosystems on the planet.",
+      "synonyms": [
+        "biome",
+        "ecological community"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "ecosystem",
+        "adjective": "ecological"
+      },
+      "collocations": [
+        "fragile ecosystem",
+        "marine ecosystem",
+        "ecosystem services"
+      ],
+      "grammatical_patterns": [
+        "disrupt the ecosystem"
+      ],
+      "common_mistakes": [
+        "Can be plural: 'ecosystems'."
+      ],
+      "formality_and_register": "Biology & Ecology",
+      "ielts_usefulness": "Marine and wildlife reading/writing."
+    },
+    {
+      "word": "renewable",
+      "pos": "adjective",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "ri-NYOO-uh-bul",
+      "ipa": "/rɪˈnjuːəbl/",
+      "definition": "Capable of being replenished naturally within a human lifespan.",
+      "simple_definition": "Energy that doesn't run out.",
+      "advanced_definition": "Derived from inexhaustible natural sources like sun and wind.",
+      "contextual_example": "Nations must transition from fossil fuels to renewable energy sources.",
+      "synonyms": [
+        "sustainable",
+        "green",
+        "clean"
+      ],
+      "antonyms": [
+        "finite",
+        "exhaustible",
+        "fossil"
+      ],
+      "word_family": {
+        "adjective": "renewable",
+        "noun": "renewables"
+      },
+      "collocations": [
+        "renewable energy",
+        "renewable resources",
+        "renewable power"
+      ],
+      "grammatical_patterns": [
+        "invest in renewables"
+      ],
+      "common_mistakes": [
+        "'Renewables' can be a plural noun."
+      ],
+      "formality_and_register": "Energy Policy",
+      "ielts_usefulness": "Energy transition Task 2 essays."
+    },
+    {
+      "word": "effluent",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "EF-loo-unt",
+      "ipa": "/ˈefluənt/",
+      "definition": "Liquid waste or sewage discharged into a river or the sea.",
+      "simple_definition": "Liquid factory waste.",
+      "advanced_definition": "Untreated chemical or municipal wastewater released into waterways.",
+      "contextual_example": "Triclosan and industrial effluents severely contaminate local river systems.",
+      "synonyms": [
+        "wastewater",
+        "toxic discharge",
+        "pollutant"
+      ],
+      "antonyms": [
+        "purified water"
+      ],
+      "word_family": {
+        "noun": "effluent"
+      },
+      "collocations": [
+        "industrial effluent",
+        "toxic effluent",
+        "discharge effluent"
+      ],
+      "grammatical_patterns": [
+        "polluted by effluent"
+      ],
+      "common_mistakes": [
+        "Do not confuse with 'affluent' (wealthy)."
+      ],
+      "formality_and_register": "Industrial Ecology",
+      "ielts_usefulness": "Water pollution topics."
+    }
+  ],
+  "health": [
+    {
+      "word": "cardiovascular",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "kar-dee-oh-VAS-kyoo-ler",
+      "ipa": "/ˌkɑːdiəʊˈvæskjələ/",
+      "definition": "Relating to the heart and blood vessels.",
+      "simple_definition": "Related to heart and blood circulation.",
+      "advanced_definition": "Pertaining to the circulatory system.",
+      "contextual_example": "Aerobic physical exertion promotes long-term cardiovascular health.",
+      "synonyms": [
+        "circulatory",
+        "heart-related"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "adjective": "cardiovascular"
+      },
+      "collocations": [
+        "cardiovascular disease",
+        "cardiovascular fitness"
+      ],
+      "grammatical_patterns": [
+        "risk of cardiovascular"
+      ],
+      "common_mistakes": [
+        "Pronounced /ˌkɑːdiəʊˈvæskjələ/."
+      ],
+      "formality_and_register": "Medical Science",
+      "ielts_usefulness": "Lifestyle disease essays."
+    },
+    {
+      "word": "epidemic",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "ep-i-DEM-ik",
+      "ipa": "/ˌepɪˈdemɪk/",
+      "definition": "A widespread occurrence of an infectious disease in a community.",
+      "simple_definition": "Widespread disease outbreak.",
+      "advanced_definition": "Outbreak of disease affecting disproportionate numbers at a particular time.",
+      "contextual_example": "Health authorities mobilized resources to suppress the influenza epidemic.",
+      "synonyms": [
+        "outbreak",
+        "plague",
+        "pandemic"
+      ],
+      "antonyms": [
+        "containment"
+      ],
+      "word_family": {
+        "noun": "epidemic",
+        "adjective": "epidemic",
+        "noun_larger": "pandemic"
+      },
+      "collocations": [
+        "obesity epidemic",
+        "flu epidemic",
+        "halt an epidemic"
+      ],
+      "grammatical_patterns": [
+        "declared an epidemic"
+      ],
+      "common_mistakes": [
+        "'Pandemic' is worldwide; 'epidemic' is regional."
+      ],
+      "formality_and_register": "Public Health",
+      "ielts_usefulness": "Health policy prompts."
+    },
+    {
+      "word": "inoculation",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "i-nok-yoo-LAY-shun",
+      "ipa": "/ɪˌnɒkjuˈleɪʃn/",
+      "definition": "The action of vaccinating someone to produce immunity.",
+      "simple_definition": "Vaccine injection.",
+      "advanced_definition": "Artificial induction of active acquired immunity through antigenic delivery.",
+      "contextual_example": "Universal childhood inoculation eradicated smallpox globally.",
+      "synonyms": [
+        "vaccination",
+        "immunization"
+      ],
+      "antonyms": [
+        "infection"
+      ],
+      "word_family": {
+        "noun": "inoculation",
+        "verb": "inoculate"
+      },
+      "collocations": [
+        "mass inoculation",
+        "inoculation campaign"
+      ],
+      "grammatical_patterns": [
+        "inoculate against disease"
+      ],
+      "common_mistakes": [
+        "Single 'n', double 'c': i-n-o-c-u-l-a-t-i-o-n."
+      ],
+      "formality_and_register": "Medicine & History",
+      "ielts_usefulness": "Public healthcare debates."
+    },
+    {
+      "word": "nutritional",
+      "pos": "adjective",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "nyoo-TRISH-un-ul",
+      "ipa": "/njuːˈtrɪʃənl/",
+      "definition": "Relating to the process of providing or obtaining nourishment.",
+      "simple_definition": "Related to food health value.",
+      "advanced_definition": "Pertaining to the intake and biochemical assimilation of dietary nutrients.",
+      "contextual_example": "Fast food generally lacks essential nutritional value.",
+      "synonyms": [
+        "dietary",
+        "nourishing",
+        "healthful"
+      ],
+      "antonyms": [
+        "unwholesome"
+      ],
+      "word_family": {
+        "adjective": "nutritional",
+        "noun": "nutrition",
+        "noun_agent": "nutritionist"
+      },
+      "collocations": [
+        "nutritional value",
+        "nutritional deficiency",
+        "nutritional benefits"
+      ],
+      "grammatical_patterns": [
+        "source of nutritional"
+      ],
+      "common_mistakes": [
+        "Noun is 'nutrition', not 'nutritionness'."
+      ],
+      "formality_and_register": "Food & Health",
+      "ielts_usefulness": "School lunches and diet prompts."
+    },
+    {
+      "word": "chronic",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "KRON-ik",
+      "ipa": "/ˈkrɒnɪk/",
+      "definition": "Persisting for a long time or constantly recurring.",
+      "simple_definition": "Long-lasting sickness.",
+      "advanced_definition": "Designating disease or condition enduring over extensive duration.",
+      "contextual_example": "Chronic sleep deprivation impairs cognitive performance and emotional resilience.",
+      "synonyms": [
+        "persistent",
+        "long-term",
+        "incurable"
+      ],
+      "antonyms": [
+        "acute",
+        "temporary"
+      ],
+      "word_family": {
+        "adjective": "chronic",
+        "adverb": "chronically"
+      },
+      "collocations": [
+        "chronic illness",
+        "chronic disease",
+        "chronic pain"
+      ],
+      "grammatical_patterns": [
+        "suffer from chronic X"
+      ],
+      "common_mistakes": [
+        "Opposite of 'acute' (sharp/sudden)."
+      ],
+      "formality_and_register": "Clinical Medicine",
+      "ielts_usefulness": "Healthcare funding essays."
+    },
+    {
+      "word": "therapeutic",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "ther-uh-PYOO-tik",
+      "ipa": "/ˌθerəˈpjuːtɪk/",
+      "definition": "Relating to the healing of disease; producing good effects on mind/body.",
+      "simple_definition": "Healing or relaxing.",
+      "advanced_definition": "Serving to cure or alleviate disease or mental distress.",
+      "contextual_example": "Gardening and nature walks exert a therapeutic influence on anxiety.",
+      "synonyms": [
+        "curative",
+        "healing",
+        "restorative"
+      ],
+      "antonyms": [
+        "harmful",
+        "deleterious"
+      ],
+      "word_family": {
+        "adjective": "therapeutic",
+        "noun": "therapy",
+        "noun_agent": "therapist"
+      },
+      "collocations": [
+        "therapeutic benefits",
+        "therapeutic intervention"
+      ],
+      "grammatical_patterns": [
+        "proven therapeutic value"
+      ],
+      "common_mistakes": [
+        "Pronounced /ˌθerəˈpjuːtɪk/."
+      ],
+      "formality_and_register": "Psychology & Medicine",
+      "ielts_usefulness": "Mental health and leisure topics."
+    },
+    {
+      "word": "longevity",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "lon-JEV-i-tee",
+      "ipa": "/lɒnˈdʒevəti/",
+      "definition": "Long life; existence for a long duration.",
+      "simple_definition": "Long lifespan.",
+      "advanced_definition": "The duration of individual life beyond average cohort benchmarks.",
+      "contextual_example": "Advances in biomedical sanitation have dramatically expanded human longevity.",
+      "synonyms": [
+        "lifespan",
+        "life expectancy",
+        "durability"
+      ],
+      "antonyms": [
+        "transience",
+        "brevity"
+      ],
+      "word_family": {
+        "noun": "longevity"
+      },
+      "collocations": [
+        "promote longevity",
+        "human longevity",
+        "exceptional longevity"
+      ],
+      "grammatical_patterns": [
+        "secret to longevity"
+      ],
+      "common_mistakes": [
+        "'g' is soft: /lɒnˈdʒevəti/."
+      ],
+      "formality_and_register": "Demography & Health",
+      "ielts_usefulness": "Aging population essays."
+    },
+    {
+      "word": "debilitating",
+      "pos": "adjective",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "di-BIL-i-tay-ting",
+      "ipa": "/dɪˈbɪlɪteɪtɪŋ/",
+      "definition": "Making someone very weak and infirm.",
+      "simple_definition": "Severely weakening the body or mind.",
+      "advanced_definition": "Causing serious impairment of strength, vitality, or cognitive ability.",
+      "contextual_example": "Chronic fatigue syndrome can be a debilitating condition that severely limits daily activity.",
+      "synonyms": [
+        "incapacitating",
+        "crippling",
+        "enervating"
+      ],
+      "antonyms": [
+        "restorative",
+        "invigorating",
+        "strengthening"
+      ],
+      "word_family": {
+        "adjective": "debilitating",
+        "verb": "debilitate",
+        "noun": "debility"
+      },
+      "collocations": [
+        "debilitating disease",
+        "debilitating condition",
+        "debilitating effect"
+      ],
+      "grammatical_patterns": [
+        "debilitating to someone"
+      ],
+      "common_mistakes": [
+        "Do not confuse with rehabilitating."
+      ],
+      "formality_and_register": "Clinical / Medical Academic",
+      "ielts_usefulness": "High-scoring lexis for public health and illness prompts."
+    }
+  ],
+  "society": [
+    {
+      "word": "urbanization",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "er-buh-ny-ZAY-shun",
+      "ipa": "/ˌɜːbənaɪˈzeɪʃn/",
+      "definition": "The process of making an area more urban; population shift from country to city.",
+      "simple_definition": "Growth of cities.",
+      "advanced_definition": "Demographic transition wherein populations aggregate into urban centers.",
+      "contextual_example": "Rapid urbanization places immense pressure on municipal sanitation and transit.",
+      "synonyms": [
+        "city expansion",
+        "urban development"
+      ],
+      "antonyms": [
+        "ruralization"
+      ],
+      "word_family": {
+        "noun": "urbanization",
+        "adjective": "urban",
+        "verb": "urbanize"
+      },
+      "collocations": [
+        "rapid urbanization",
+        "pace of urbanization"
+      ],
+      "grammatical_patterns": [
+        "driven by urbanization"
+      ],
+      "common_mistakes": [
+        "Can be spelled with -s- or -z-."
+      ],
+      "formality_and_register": "Sociology / Geography",
+      "ielts_usefulness": "City planning and migration topics."
+    },
+    {
+      "word": "stratification",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "strat-i-fi-KAY-shun",
+      "ipa": "/ˌstrætɪfɪˈkeɪʃn/",
+      "definition": "The arrangement or classification of something into different groups or layers.",
+      "simple_definition": "Division into social classes.",
+      "advanced_definition": "Hierarchical societal organization structuring unequal access to resources.",
+      "contextual_example": "Unequal access to elite education perpetuates rigid social stratification.",
+      "synonyms": [
+        "social division",
+        "class hierarchy"
+      ],
+      "antonyms": [
+        "social equality",
+        "egalitarianism"
+      ],
+      "word_family": {
+        "noun": "stratification",
+        "verb": "stratify"
+      },
+      "collocations": [
+        "social stratification",
+        "socio-economic stratification"
+      ],
+      "grammatical_patterns": [
+        "system of stratification"
+      ],
+      "common_mistakes": [
+        "Academic sociological term."
+      ],
+      "formality_and_register": "Sociology",
+      "ielts_usefulness": "Inequality and class essays."
+    },
+    {
+      "word": "cohesion",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "koh-HEE-zhun",
+      "ipa": "/kəʊˈhiːʒn/",
+      "definition": "The action or state of cohering or sticking together; unity in society.",
+      "simple_definition": "Societal unity and bonding.",
+      "advanced_definition": "Interpersonal trust and solidarity holding communities together.",
+      "contextual_example": "Community sports festivals strengthen local social cohesion across diverse immigrant groups.",
+      "synonyms": [
+        "solidarity",
+        "unity",
+        "harmony"
+      ],
+      "antonyms": [
+        "division",
+        "fragmentation"
+      ],
+      "word_family": {
+        "noun": "cohesion",
+        "adjective": "cohesive"
+      },
+      "collocations": [
+        "social cohesion",
+        "community cohesion",
+        "promote cohesion"
+      ],
+      "grammatical_patterns": [
+        "foster social cohesion"
+      ],
+      "common_mistakes": [
+        "Essential criteria name in Writing (Coherence and Cohesion)."
+      ],
+      "formality_and_register": "Sociology & Linguistics",
+      "ielts_usefulness": "Community and immigration essays."
+    },
+    {
+      "word": "gentrification",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "jen-tri-fi-KAY-shun",
+      "ipa": "/ˌdʒentrɪfɪˈkeɪʃn/",
+      "definition": "Renovation of urban areas resulting in displacement of lower-income residents.",
+      "simple_definition": "Upgrading neighborhoods displacing locals.",
+      "advanced_definition": "Urban redevelopment attracting affluent residents and escalating property values.",
+      "contextual_example": "While gentrification renovates historic architecture, it frequently displaces working-class families.",
+      "synonyms": [
+        "urban redevelopment",
+        "renewal"
+      ],
+      "antonyms": [
+        "urban decay",
+        "blight"
+      ],
+      "word_family": {
+        "noun": "gentrification",
+        "verb": "gentrify"
+      },
+      "collocations": [
+        "rapid gentrification",
+        "process of gentrification"
+      ],
+      "grammatical_patterns": [
+        "spurred by gentrification"
+      ],
+      "common_mistakes": [
+        "Central contemporary urban planning debate."
+      ],
+      "formality_and_register": "Urban Sociology",
+      "ielts_usefulness": "Housing and city life essays."
+    },
+    {
+      "word": "marginalized",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "MAR-ji-nuh-lyzd",
+      "ipa": "/ˈmɑːdʒɪnəlaɪzd/",
+      "definition": "Treated as insignificant or peripheral in a society.",
+      "simple_definition": "Excluded or pushed to the edge.",
+      "advanced_definition": "Relegated to powerless outer fringes of social, economic, or political life.",
+      "contextual_example": "Community legal clinics provide pro bono assistance to marginalized populations.",
+      "synonyms": [
+        "disenfranchised",
+        "underprivileged",
+        "disadvantaged"
+      ],
+      "antonyms": [
+        "privileged",
+        "empowered"
+      ],
+      "word_family": {
+        "adjective": "marginalized",
+        "verb": "marginalize",
+        "noun": "marginalization"
+      },
+      "collocations": [
+        "marginalized groups",
+        "marginalized communities"
+      ],
+      "grammatical_patterns": [
+        "protect the marginalized"
+      ],
+      "common_mistakes": [
+        "Verb form is 'marginalize'."
+      ],
+      "formality_and_register": "Social Justice",
+      "ielts_usefulness": "Human rights and equality essays."
+    },
+    {
+      "word": "disparity",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "dis-PAIR-i-tee",
+      "ipa": "/dɪˈspærəti/",
+      "definition": "A great difference or inequality.",
+      "simple_definition": "Unfair difference in money or health.",
+      "advanced_definition": "Incongruity or inequality in opportunity, treatment, or distribution.",
+      "contextual_example": "The economic disparity between rural agricultural regions and coastal metropolises continues to widen.",
+      "synonyms": [
+        "inequality",
+        "imbalance",
+        "gap"
+      ],
+      "antonyms": [
+        "parity",
+        "equality",
+        "equilibrium"
+      ],
+      "word_family": {
+        "noun": "disparity",
+        "plural": "disparities",
+        "ant_noun": "parity"
+      },
+      "collocations": [
+        "wealth disparity",
+        "income disparity",
+        "regional disparities"
+      ],
+      "grammatical_patterns": [
+        "disparity between X and Y"
+      ],
+      "common_mistakes": [
+        "Antonym is 'parity'."
+      ],
+      "formality_and_register": "Economics & Sociology",
+      "ielts_usefulness": "Income gap and globalization."
+    },
+    {
+      "word": "demographics",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "dem-uh-GRAF-iks",
+      "ipa": "/ˌdeməˈɡræfɪks/",
+      "definition": "Statistical data relating to the population and particular groups within it.",
+      "simple_definition": "Population statistics.",
+      "advanced_definition": "Quantitative characteristics of human populations such as age, gender, and income.",
+      "contextual_example": "Shifting demographics in aging societies necessitate urgent pension system reforms.",
+      "synonyms": [
+        "population data",
+        "vital statistics"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "demographics",
+        "adjective": "demographic",
+        "noun_field": "demography"
+      },
+      "collocations": [
+        "changing demographics",
+        "demographic shift",
+        "key demographics"
+      ],
+      "grammatical_patterns": [
+        "appeal to demographics"
+      ],
+      "common_mistakes": [
+        "Plural noun."
+      ],
+      "formality_and_register": "Demography",
+      "ielts_usefulness": "Task 1 charts and population trends."
+    },
+    {
+      "word": "infrastructure",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "IN-fruh-struk-cher",
+      "ipa": "/ˈɪnfrəˌstrʌktʃə/",
+      "definition": "The basic physical and organizational structures needed for the operation of a society.",
+      "simple_definition": "Roads, power, and water systems.",
+      "advanced_definition": "Foundational public works enabling economic transport, energy, and communication.",
+      "contextual_example": "Investing in green public transit infrastructure accelerates urban decarbonization.",
+      "synonyms": [
+        "public works",
+        "facilities",
+        "utilities"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "infrastructure",
+        "adjective": "infrastructural"
+      },
+      "collocations": [
+        "transport infrastructure",
+        "critical infrastructure",
+        "telecom infrastructure"
+      ],
+      "grammatical_patterns": [
+        "invest in infrastructure"
+      ],
+      "common_mistakes": [
+        "Usually uncountable in general sense."
+      ],
+      "formality_and_register": "Public Administration",
+      "ielts_usefulness": "High-frequency throughout IELTS."
+    }
+  ],
+  "culture": [
+    {
+      "word": "heritage",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "HER-i-tij",
+      "ipa": "/ˈherɪtɪdʒ/",
+      "definition": "Property, traditions, or culture inherited from past generations.",
+      "simple_definition": "Cultural history passed down.",
+      "advanced_definition": "Enduring cultural legacy, traditions, and historical assets.",
+      "contextual_example": "UNESCO works to preserve tangible and intangible cultural heritage worldwide.",
+      "synonyms": [
+        "legacy",
+        "inheritance",
+        "tradition"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "heritage"
+      },
+      "collocations": [
+        "cultural heritage",
+        "national heritage",
+        "heritage site"
+      ],
+      "grammatical_patterns": [
+        "protect our heritage"
+      ],
+      "common_mistakes": [
+        "Uncountable noun."
+      ],
+      "formality_and_register": "Cultural Studies",
+      "ielts_usefulness": "Tourism and historical preservation."
+    },
+    {
+      "word": "assimilation",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "uh-sim-uh-LAY-shun",
+      "ipa": "/əˌsɪməˈleɪʃn/",
+      "definition": "The process of absorbing and integrating people into a wider society or culture.",
+      "simple_definition": "Blending into a new culture.",
+      "advanced_definition": "Sociocultural integration wherein minorities adopt customs of dominant culture.",
+      "contextual_example": "Language acquisition programs facilitate smooth cultural assimilation for newly arrived refugees.",
+      "synonyms": [
+        "integration",
+        "acculturation",
+        "incorporation"
+      ],
+      "antonyms": [
+        "segregation",
+        "isolation"
+      ],
+      "word_family": {
+        "noun": "assimilation",
+        "verb": "assimilate"
+      },
+      "collocations": [
+        "cultural assimilation",
+        "policy of assimilation"
+      ],
+      "grammatical_patterns": [
+        "assimilate into society"
+      ],
+      "common_mistakes": [
+        "Verb is 'assimilate'."
+      ],
+      "formality_and_register": "Sociology / Anthropology",
+      "ielts_usefulness": "Immigration and diversity essays."
+    },
+    {
+      "word": "preservation",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "prez-er-VAY-shun",
+      "ipa": "/ˌprezəˈveɪʃn/",
+      "definition": "The act of maintaining something in its original or existing state.",
+      "simple_definition": "Keeping something safe from harm.",
+      "advanced_definition": "Systematic conservation to prevent decay or destruction of cultural assets.",
+      "contextual_example": "Historical preservation laws prevent developers from demolishing Victorian public libraries.",
+      "synonyms": [
+        "conservation",
+        "safeguarding",
+        "protection"
+      ],
+      "antonyms": [
+        "demolition",
+        "destruction"
+      ],
+      "word_family": {
+        "noun": "preservation",
+        "verb": "preserve"
+      },
+      "collocations": [
+        "historic preservation",
+        "preservation of languages"
+      ],
+      "grammatical_patterns": [
+        "dedicated to preservation"
+      ],
+      "common_mistakes": [
+        "Verb is 'preserve'."
+      ],
+      "formality_and_register": "History & Architecture",
+      "ielts_usefulness": "Architecture and museum prompts."
+    },
+    {
+      "word": "indigenous",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "in-DIJ-uh-nus",
+      "ipa": "/ɪnˈdɪdʒənəs/",
+      "definition": "Originating or occurring naturally in a particular place; native.",
+      "simple_definition": "Native to a specific land.",
+      "advanced_definition": "Originating organically within a region prior to colonization.",
+      "contextual_example": "Indigenous knowledge regarding medicinal plants is invaluable for botanical pharmacology.",
+      "synonyms": [
+        "native",
+        "aboriginal",
+        "endemic"
+      ],
+      "antonyms": [
+        "foreign",
+        "alien",
+        "introduced"
+      ],
+      "word_family": {
+        "adjective": "indigenous"
+      },
+      "collocations": [
+        "indigenous population",
+        "indigenous rights",
+        "indigenous languages"
+      ],
+      "grammatical_patterns": [
+        "indigenous to a region"
+      ],
+      "common_mistakes": [
+        "Capitalized when naming specific peoples."
+      ],
+      "formality_and_register": "Anthropology / Ecology",
+      "ielts_usefulness": "Cultural diversity topics."
+    },
+    {
+      "word": "folklore",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "FOHK-lor",
+      "ipa": "/ˈfəʊklɔː/",
+      "definition": "Traditional beliefs, customs, and stories of a community passed by word of mouth.",
+      "simple_definition": "Traditional myths and legends.",
+      "advanced_definition": "The oral narrative traditions and superstitions of a cultural group.",
+      "contextual_example": "Celtic folklore contains rich allegorical tales of enchanted forests and ancient heroes.",
+      "synonyms": [
+        "mythology",
+        "legends",
+        "lore"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "folklore",
+        "adjective": "folkloric"
+      },
+      "collocations": [
+        "traditional folklore",
+        "oral folklore"
+      ],
+      "grammatical_patterns": [
+        "steeped in folklore"
+      ],
+      "common_mistakes": [
+        "Silent 'l': pronounced /fəʊk/."
+      ],
+      "formality_and_register": "Literature / Culture",
+      "ielts_usefulness": "Speaking Part 2 celebrations/stories."
+    },
+    {
+      "word": "aesthetic",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "ees-THET-ik",
+      "ipa": "/iːsˈθetɪk/",
+      "definition": "Concerned with beauty or the appreciation of beauty.",
+      "simple_definition": "Pleasing to look at.",
+      "advanced_definition": "Pertaining to philosophical taste and sensory appreciation of art.",
+      "contextual_example": "Modernist architecture emphasizes functional utility over ornate aesthetic embellishment.",
+      "synonyms": [
+        "artistic",
+        "visual",
+        "tasteful"
+      ],
+      "antonyms": [
+        "utilitarian",
+        "unattractive"
+      ],
+      "word_family": {
+        "adjective": "aesthetic",
+        "noun": "aesthetics",
+        "adverb": "aesthetically"
+      },
+      "collocations": [
+        "aesthetic value",
+        "aesthetic appeal",
+        "aesthetic sensibilities"
+      ],
+      "grammatical_patterns": [
+        "from an aesthetic viewpoint"
+      ],
+      "common_mistakes": [
+        "British spelling 'aesthetic', US 'esthetic'."
+      ],
+      "formality_and_register": "Art & Philosophy",
+      "ielts_usefulness": "Architecture and design prompts."
+    },
+    {
+      "word": "monumental",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "mon-yoo-MEN-tul",
+      "ipa": "/ˌmɒnjuˈmentl/",
+      "definition": "Great in importance, extent, or size; relating to a monument.",
+      "simple_definition": "Massive and historically vital.",
+      "advanced_definition": "Possessing imposing scale and historical gravitas.",
+      "contextual_example": "The restoration of Notre-Dame Cathedral represents a monumental feat of master craftsmanship.",
+      "synonyms": [
+        "colossal",
+        "epic",
+        "historic",
+        "mammoth"
+      ],
+      "antonyms": [
+        "trivial",
+        "inconsequential"
+      ],
+      "word_family": {
+        "adjective": "monumental",
+        "noun": "monument"
+      },
+      "collocations": [
+        "monumental achievement",
+        "monumental task",
+        "monumental scale"
+      ],
+      "grammatical_patterns": [
+        "of monumental importance"
+      ],
+      "common_mistakes": [
+        "Also means huge in effort."
+      ],
+      "formality_and_register": "History & Art",
+      "ielts_usefulness": "Heritage and engineering topics."
+    },
+    {
+      "word": "tradition",
+      "pos": "noun",
+      "cefr_level": "A2",
+      "band_tier": "Band 5.5-6.5",
+      "pronunciation": "truh-DISH-un",
+      "ipa": "/trəˈdɪʃn/",
+      "definition": "The transmission of customs or beliefs from generation to generation.",
+      "simple_definition": "Custom passed down through families.",
+      "advanced_definition": "Inherited established pattern of thought, action, or behavior.",
+      "contextual_example": "Sharing a communal feast during the harvest festival is an enduring national tradition.",
+      "synonyms": [
+        "custom",
+        "convention",
+        "ritual"
+      ],
+      "antonyms": [
+        "novelty",
+        "innovation"
+      ],
+      "word_family": {
+        "noun": "tradition",
+        "adjective": "traditional",
+        "adverb": "traditionally"
+      },
+      "collocations": [
+        "rich tradition",
+        "upheld tradition",
+        "family tradition"
+      ],
+      "grammatical_patterns": [
+        "by tradition"
+      ],
+      "common_mistakes": [
+        "Pair with 'uphold / maintain traditions'."
+      ],
+      "formality_and_register": "Sociology",
+      "ielts_usefulness": "Speaking Part 1 festivals."
+    }
+  ],
+  "business": [
+    {
+      "word": "entrepreneur",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "on-truh-pruh-NUR",
+      "ipa": "/ˌɒntrəprəˈnɜː/",
+      "definition": "A person who sets up a business, taking on financial risks in the hope of profit.",
+      "simple_definition": "Person who starts a business.",
+      "advanced_definition": "An innovator who coordinates capital and labor to commercialize a novel venture.",
+      "contextual_example": "Young tech entrepreneurs in Silicon Valley disrupted conventional financial banking.",
+      "synonyms": [
+        "business owner",
+        "founder",
+        "innovator"
+      ],
+      "antonyms": [
+        "employee",
+        "salaried worker"
+      ],
+      "word_family": {
+        "noun": "entrepreneur",
+        "adjective": "entrepreneurial",
+        "noun_field": "entrepreneurship"
+      },
+      "collocations": [
+        "budding entrepreneur",
+        "successful entrepreneur",
+        "entrepreneurial spirit"
+      ],
+      "grammatical_patterns": [
+        "become an entrepreneur"
+      ],
+      "common_mistakes": [
+        "French loanword spelling: e-n-t-r-e-p-r-e-n-e-u-r."
+      ],
+      "formality_and_register": "Commerce",
+      "ielts_usefulness": "Small business and innovation."
+    },
+    {
+      "word": "monopoly",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "muh-NOP-uh-lee",
+      "ipa": "/məˈnɒpəli/",
+      "definition": "The exclusive possession or control of the supply of or trade in a commodity.",
+      "simple_definition": "Single company controlling an entire market.",
+      "advanced_definition": "Market structure characterized by a single supplier exerting unchecked pricing power.",
+      "contextual_example": "Antitrust regulatory agencies monitor tech conglomerates to prevent uncompetitive monopolies.",
+      "synonyms": [
+        "cartel",
+        "trust",
+        "corner on the market"
+      ],
+      "antonyms": [
+        "free market",
+        "competition"
+      ],
+      "word_family": {
+        "noun": "monopoly",
+        "plural": "monopolies",
+        "adjective": "monopolistic",
+        "verb": "monopolize"
+      },
+      "collocations": [
+        "state monopoly",
+        "break up a monopoly",
+        "natural monopoly"
+      ],
+      "grammatical_patterns": [
+        "hold a monopoly on X"
+      ],
+      "common_mistakes": [
+        "Verb is 'monopolize'."
+      ],
+      "formality_and_register": "Economics",
+      "ielts_usefulness": "Free trade and corporate regulation."
+    },
+    {
+      "word": "revenue",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "REV-uh-nyoo",
+      "ipa": "/ˈrevənjuː/",
+      "definition": "Income, especially when of an organization and of a substantial nature.",
+      "simple_definition": "Total business income.",
+      "advanced_definition": "Total gross financial proceeds before deducting expenses and taxation.",
+      "contextual_example": "The corporation reported an eighteen percent surge in quarterly advertising revenue.",
+      "synonyms": [
+        "income",
+        "earnings",
+        "turnover"
+      ],
+      "antonyms": [
+        "expenditure",
+        "outflow"
+      ],
+      "word_family": {
+        "noun": "revenue"
+      },
+      "collocations": [
+        "tax revenue",
+        "annual revenue",
+        "generate revenue"
+      ],
+      "grammatical_patterns": [
+        "source of revenue"
+      ],
+      "common_mistakes": [
+        "Uncountable in general financial context."
+      ],
+      "formality_and_register": "Accounting",
+      "ielts_usefulness": "Task 1 financial bar charts."
+    },
+    {
+      "word": "subsidiary",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "sub-SID-ee-er-ee",
+      "ipa": "/səbˈsɪdiəri/",
+      "definition": "A company controlled by a holding or parent company.",
+      "simple_definition": "Branch company owned by a bigger parent.",
+      "advanced_definition": "An enterprise whose majority voting shares are owned by another corporate entity.",
+      "contextual_example": "The multinational automobile giant manufactures electric batteries through a specialized German subsidiary.",
+      "synonyms": [
+        "affiliate",
+        "branch",
+        "division"
+      ],
+      "antonyms": [
+        "parent company"
+      ],
+      "word_family": {
+        "noun": "subsidiary",
+        "adjective": "subsidiary"
+      },
+      "collocations": [
+        "wholly owned subsidiary",
+        "foreign subsidiary"
+      ],
+      "grammatical_patterns": [
+        "operate as a subsidiary"
+      ],
+      "common_mistakes": [
+        "Spelled '-ary', not '-ery'."
+      ],
+      "formality_and_register": "Corporate Law",
+      "ielts_usefulness": "Multinational business passages."
+    },
+    {
+      "word": "feasibility",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "fee-zuh-BIL-uh-tee",
+      "ipa": "/ˌfiːzəˈbɪləti/",
+      "definition": "The state or degree of being easily or conveniently done.",
+      "simple_definition": "Practical possibility of doing a project.",
+      "advanced_definition": "The practical and economic viability of an intended technical proposal.",
+      "contextual_example": "Before breaking ground on the railway extension, civil engineers conducted a comprehensive feasibility study.",
+      "synonyms": [
+        "viability",
+        "practicability",
+        "plausibility"
+      ],
+      "antonyms": [
+        "impossibility",
+        "impracticability"
+      ],
+      "word_family": {
+        "noun": "feasibility",
+        "adjective": "feasible"
+      },
+      "collocations": [
+        "feasibility study",
+        "assess the feasibility",
+        "economic feasibility"
+      ],
+      "grammatical_patterns": [
+        "test the feasibility"
+      ],
+      "common_mistakes": [
+        "Adjective is 'feasible'."
+      ],
+      "formality_and_register": "Engineering & Management",
+      "ielts_usefulness": "Project proposals and public spending."
+    },
+    {
+      "word": "stakeholder",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "STAYK-hohl-der",
+      "ipa": "/ˈsteɪkˌhəʊldə/",
+      "definition": "A person with an interest or concern in something, especially a business.",
+      "simple_definition": "Anyone affected by a company's decisions.",
+      "advanced_definition": "Any party having a direct or indirect vested interest in organizational actions.",
+      "contextual_example": "Corporate leadership consulted community stakeholders before expanding the industrial facility.",
+      "synonyms": [
+        "interested party",
+        "shareholder",
+        "partner"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "stakeholder"
+      },
+      "collocations": [
+        "key stakeholders",
+        "stakeholder engagement",
+        "consult stakeholders"
+      ],
+      "grammatical_patterns": [
+        "value for stakeholders"
+      ],
+      "common_mistakes": [
+        "Broader than 'shareholder' (includes staff, customers, neighbors)."
+      ],
+      "formality_and_register": "Corporate Governance",
+      "ielts_usefulness": "Task 2 corporate responsibility."
+    },
+    {
+      "word": "insolvency",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "in-SOL-vun-see",
+      "ipa": "/ɪnˈsɒlvənsi/",
+      "definition": "The state of being unable to pay the money owed, by a person or company.",
+      "simple_definition": "Bankruptcy.",
+      "advanced_definition": "Financial failure wherein current liabilities exceed liquid assets and cash-flow.",
+      "contextual_example": "Escalating interest rates precipitated widespread corporate insolvencies across the retail sector.",
+      "synonyms": [
+        "bankruptcy",
+        "liquidation",
+        "ruin"
+      ],
+      "antonyms": [
+        "solvency",
+        "liquidity"
+      ],
+      "word_family": {
+        "noun": "insolvency",
+        "adjective": "insolvent",
+        "ant_noun": "solvency"
+      },
+      "collocations": [
+        "declare insolvency",
+        "face insolvency",
+        "insolvency proceedings"
+      ],
+      "grammatical_patterns": [
+        "verge of insolvency"
+      ],
+      "common_mistakes": [
+        "Antonym is 'solvency'."
+      ],
+      "formality_and_register": "Corporate Finance",
+      "ielts_usefulness": "Business collapse reading passages."
+    },
+    {
+      "word": "conglomerate",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "kun-GLOM-er-it",
+      "ipa": "/kənˈɡlɒmərət/",
+      "definition": "A number of different things or parts that are grouped together; a multi-industry corporation.",
+      "simple_definition": "Giant mega-corporation.",
+      "advanced_definition": "A diversified multi-industry enterprise resulting from multiple commercial mergers.",
+      "contextual_example": "The media conglomerate controls major newspapers, broadcasting networks, and film production studios.",
+      "synonyms": [
+        "multinational",
+        "corporate group",
+        "holding company"
+      ],
+      "antonyms": [
+        "independent firm"
+      ],
+      "word_family": {
+        "noun": "conglomerate",
+        "verb": "conglomerate"
+      },
+      "collocations": [
+        "media conglomerate",
+        "industrial conglomerate"
+      ],
+      "grammatical_patterns": [
+        "operate as a conglomerate"
+      ],
+      "common_mistakes": [
+        "Pronounced /-ət/ for noun, /-eɪt/ for verb."
+      ],
+      "formality_and_register": "Business Law",
+      "ielts_usefulness": "Media monopolies and commerce."
+    }
+  ],
+  "travel": [
+    {
+      "word": "itinerary",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "eye-TIN-er-uh-ree",
+      "ipa": "/aɪˈtɪnərəri/",
+      "definition": "A planned route or journey; a travel schedule.",
+      "simple_definition": "Travel timetable and schedule.",
+      "advanced_definition": "A documented schedule detailing destinations, flight numbers, and accommodation.",
+      "contextual_example": "Our travel agent forwarded an itemized itinerary covering our seven-day tour of Kyoto.",
+      "synonyms": [
+        "travel plan",
+        "route",
+        "schedule"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "itinerary",
+        "plural": "itineraries"
+      },
+      "collocations": [
+        "planned itinerary",
+        "detailed itinerary",
+        "on the itinerary"
+      ],
+      "grammatical_patterns": [
+        "included in the itinerary"
+      ],
+      "common_mistakes": [
+        "Spelled i-t-i-n-e-r-a-r-y."
+      ],
+      "formality_and_register": "Tourism Management",
+      "ielts_usefulness": "Speaking Part 2 memorable trips."
+    },
+    {
+      "word": "destination",
+      "pos": "noun",
+      "cefr_level": "A2",
+      "band_tier": "Band 5.5-6.5",
+      "pronunciation": "des-ti-NAY-shun",
+      "ipa": "/ˌdestɪˈneɪʃn/",
+      "definition": "The place to which someone or something is going or being sent.",
+      "simple_definition": "Place you are traveling to.",
+      "advanced_definition": "The terminal arrival point of a journey.",
+      "contextual_example": "Bali has evolved into one of the most sought-after holiday destinations in Southeast Asia.",
+      "synonyms": [
+        "terminus",
+        "arrival point",
+        "resort"
+      ],
+      "antonyms": [
+        "departure point"
+      ],
+      "word_family": {
+        "noun": "destination",
+        "verb": "destine"
+      },
+      "collocations": [
+        "popular destination",
+        "final destination",
+        "holiday destination"
+      ],
+      "grammatical_patterns": [
+        "reach one's destination"
+      ],
+      "common_mistakes": [
+        "Preposition: 'destination for tourists'."
+      ],
+      "formality_and_register": "General Travel",
+      "ielts_usefulness": "Task 1 charts and travel speaking."
+    },
+    {
+      "word": "hospitality",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "hos-pi-TAL-i-tee",
+      "ipa": "/ˌhɒspɪˈtæləti/",
+      "definition": "The friendly and generous reception and entertainment of guests; hotel industry.",
+      "simple_definition": "Warm welcome and hotel service.",
+      "advanced_definition": "Generous social hosting, or the commercial lodging and food services industry.",
+      "contextual_example": "We were deeply touched by the warm hospitality extended by the rural village elders.",
+      "synonyms": [
+        "welcome",
+        "cordiality",
+        "friendliness"
+      ],
+      "antonyms": [
+        "hostility",
+        "coldness"
+      ],
+      "word_family": {
+        "noun": "hospitality",
+        "adjective": "hospitable"
+      },
+      "collocations": [
+        "warm hospitality",
+        "hospitality industry",
+        "hospitality sector"
+      ],
+      "grammatical_patterns": [
+        "show hospitality to X"
+      ],
+      "common_mistakes": [
+        "Do not confuse with 'hospital'."
+      ],
+      "formality_and_register": "Tourism Services",
+      "ielts_usefulness": "Speaking Part 1 & 2 hosting."
+    },
+    {
+      "word": "excursion",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "ik-SKER-shun",
+      "ipa": "/ɪkˈskɜːʃn/",
+      "definition": "A short journey or trip, especially one taken as a leisure activity.",
+      "simple_definition": "Day trip for pleasure.",
+      "advanced_definition": "A brief pleasure outing organized for recreational exploration.",
+      "contextual_example": "The cruise package includes a guided excursion to ancient archaeological ruins.",
+      "synonyms": [
+        "day trip",
+        "outing",
+        "jaunt"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "excursion"
+      },
+      "collocations": [
+        "day excursion",
+        "guided excursion",
+        "go on an excursion"
+      ],
+      "grammatical_patterns": [
+        "excursion to a place"
+      ],
+      "common_mistakes": [
+        "Pair with 'go on an excursion'."
+      ],
+      "formality_and_register": "Tourism",
+      "ielts_usefulness": "Listening Section 1 holiday bookings."
+    },
+    {
+      "word": "transit",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "TRAN-zit",
+      "ipa": "/ˈtrænzɪt/",
+      "definition": "The carrying of people, goods, or materials from one place to another.",
+      "simple_definition": "Moving people or changing flights.",
+      "advanced_definition": "Passage or transportation from one spatial terminal to another.",
+      "contextual_example": "The municipality invested forty million pounds into high-speed urban transit corridors.",
+      "synonyms": [
+        "transportation",
+        "conveyance",
+        "passage"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "transit",
+        "verb": "transit"
+      },
+      "collocations": [
+        "public transit",
+        "rapid transit",
+        "in transit"
+      ],
+      "grammatical_patterns": [
+        "passengers in transit"
+      ],
+      "common_mistakes": [
+        "'In transit' means currently traveling."
+      ],
+      "formality_and_register": "Urban Planning",
+      "ielts_usefulness": "Transit and city design essays."
+    },
+    {
+      "word": "congestion",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "kun-JES-chun",
+      "ipa": "/kənˈdʒestʃən/",
+      "definition": "The state of being congested or overcrowded, especially traffic.",
+      "simple_definition": "Heavy traffic jams.",
+      "advanced_definition": "Severe impediment of traffic movement caused by excessive vehicular volume.",
+      "contextual_example": "Implementing a downtown congestion charge dramatically reduced peak-hour traffic delays.",
+      "synonyms": [
+        "traffic jam",
+        "gridlock",
+        "bottleneck"
+      ],
+      "antonyms": [
+        "free flow"
+      ],
+      "word_family": {
+        "noun": "congestion",
+        "adjective": "congested"
+      },
+      "collocations": [
+        "traffic congestion",
+        "ease congestion",
+        "congestion charge"
+      ],
+      "grammatical_patterns": [
+        "relieve congestion"
+      ],
+      "common_mistakes": [
+        "Uncountable noun in traffic context."
+      ],
+      "formality_and_register": "Urban Transport",
+      "ielts_usefulness": "Writing Task 2 traffic congestion."
+    },
+    {
+      "word": "ecotourism",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "EE-koh-toor-iz-um",
+      "ipa": "/ˈiːkəʊˌtʊərɪzəm/",
+      "definition": "Tourism directed towards exotic natural environments to support conservation.",
+      "simple_definition": "Green eco-friendly travel.",
+      "advanced_definition": "Environmentally responsible travel to natural areas that conserves the ecosystem.",
+      "contextual_example": "Costa Rica pioneered sustainable ecotourism, financing national parks through visitor permits.",
+      "synonyms": [
+        "sustainable tourism",
+        "green travel"
+      ],
+      "antonyms": [
+        "mass tourism"
+      ],
+      "word_family": {
+        "noun": "ecotourism",
+        "noun_agent": "ecotourist"
+      },
+      "collocations": [
+        "promote ecotourism",
+        "community-based ecotourism"
+      ],
+      "grammatical_patterns": [
+        "industry of ecotourism"
+      ],
+      "common_mistakes": [
+        "Contrasts with 'mass tourism'."
+      ],
+      "formality_and_register": "Environmental Tourism",
+      "ielts_usefulness": "Task 2 tourism impact essays."
+    },
+    {
+      "word": "accommodate",
+      "pos": "verb",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "uh-KOM-uh-dayt",
+      "ipa": "/əˈkɒmədeɪt/",
+      "definition": "Provide lodging or sufficient space for; fit in with the wishes of.",
+      "simple_definition": "Provide a place to stay.",
+      "advanced_definition": "To furnish with lodging, or adjust harmoniously to requirements.",
+      "contextual_example": "The newly refurbished conference hotel can accommodate up to eight hundred delegates.",
+      "synonyms": [
+        "house",
+        "lodge",
+        "billet"
+      ],
+      "antonyms": [
+        "turn away"
+      ],
+      "word_family": {
+        "verb": "accommodate",
+        "noun": "accommodation"
+      },
+      "collocations": [
+        "accommodate guests",
+        "accommodate needs"
+      ],
+      "grammatical_patterns": [
+        "sufficient space to accommodate"
+      ],
+      "common_mistakes": [
+        "Double 'c', double 'm': a-c-c-o-m-m-o-d-a-t-e."
+      ],
+      "formality_and_register": "Hospitality",
+      "ielts_usefulness": "General Training Section 1 lodging."
+    }
+  ],
+  "government": [
+    {
+      "word": "legislation",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "lej-is-LAY-shun",
+      "ipa": "/ˌledʒɪsˈleɪʃn/",
+      "definition": "Laws, considered collectively; the process of enacting laws.",
+      "simple_definition": "Laws passed by parliament.",
+      "advanced_definition": "Statutory enactments authored and ratified by a legislative body.",
+      "contextual_example": "Parliament passed landmark environmental legislation penalizing industrial carbon emissions.",
+      "synonyms": [
+        "statutes",
+        "laws",
+        "acts",
+        "regulations"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "legislation",
+        "verb": "legislate",
+        "noun_agent": "legislator",
+        "adjective": "legislative"
+      },
+      "collocations": [
+        "pass legislation",
+        "enact legislation",
+        "introduce legislation"
+      ],
+      "grammatical_patterns": [
+        "under the legislation"
+      ],
+      "common_mistakes": [
+        "Uncountable noun; do not say 'a legislation'."
+      ],
+      "formality_and_register": "Law & Politics",
+      "ielts_usefulness": "Writing Task 2 government laws."
+    },
+    {
+      "word": "jurisdiction",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "joor-is-DIK-shun",
+      "ipa": "/ˌdʒʊərɪsˈdɪkʃn/",
+      "definition": "The official power to make legal decisions and judgments.",
+      "simple_definition": "Legal authority of a court or territory.",
+      "advanced_definition": "The territorial and constitutional authority granted to a legal agency.",
+      "contextual_example": "Cybercrimes committed across international borders create complex jurisdiction challenges for police.",
+      "synonyms": [
+        "authority",
+        "domain",
+        "legal reach"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "jurisdiction",
+        "adjective": "jurisdictional"
+      },
+      "collocations": [
+        "under the jurisdiction",
+        "fall within jurisdiction",
+        "territorial jurisdiction"
+      ],
+      "grammatical_patterns": [
+        "outside our jurisdiction"
+      ],
+      "common_mistakes": [
+        "Pronounced /ˌdʒʊərɪsˈdɪkʃn/."
+      ],
+      "formality_and_register": "Legal Studies",
+      "ielts_usefulness": "International law and crime prompts."
+    },
+    {
+      "word": "sovereignty",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "SOV-rin-tee",
+      "ipa": "/ˈsɒvrənti/",
+      "definition": "Supreme power or authority; the authority of a state to govern itself.",
+      "simple_definition": "National independence and rule.",
+      "advanced_definition": "Autonomous political self-determination free from external geopolitical control.",
+      "contextual_example": "Small island states fiercely assert their territorial sovereignty over surrounding maritime fisheries.",
+      "synonyms": [
+        "autonomy",
+        "self-governance",
+        "independence"
+      ],
+      "antonyms": [
+        "vassalage",
+        "subjugation"
+      ],
+      "word_family": {
+        "noun": "sovereignty",
+        "adjective": "sovereign"
+      },
+      "collocations": [
+        "national sovereignty",
+        "violate sovereignty",
+        "state sovereignty"
+      ],
+      "grammatical_patterns": [
+        "defend sovereignty"
+      ],
+      "common_mistakes": [
+        "Silent 'g': pronounced /ˈsɒvrənti/."
+      ],
+      "formality_and_register": "International Relations",
+      "ielts_usefulness": "Geopolitics and treaties."
+    },
+    {
+      "word": "bureaucracy",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "byoo-ROK-ruh-see",
+      "ipa": "/bjʊəˈrɒkrəsi/",
+      "definition": "A system of government in which decisions are made by state officials; complex administration.",
+      "simple_definition": "Complicated government paperwork.",
+      "advanced_definition": "Administrative apparatus structured around rigid procedural rules and hierarchies.",
+      "contextual_example": "Excessive civil bureaucracy stifles entrepreneurial innovation and delays public construction.",
+      "synonyms": [
+        "red tape",
+        "administration",
+        "officialdom"
+      ],
+      "antonyms": [
+        "flexibility",
+        "agility"
+      ],
+      "word_family": {
+        "noun": "bureaucracy",
+        "noun_agent": "bureaucrat",
+        "adjective": "bureaucratic"
+      },
+      "collocations": [
+        "cut red tape and bureaucracy",
+        "inefficient bureaucracy"
+      ],
+      "grammatical_patterns": [
+        "bogged down in bureaucracy"
+      ],
+      "common_mistakes": [
+        "Spelled b-u-r-e-a-u-c-r-a-c-y."
+      ],
+      "formality_and_register": "Public Administration",
+      "ielts_usefulness": "Government efficiency essays."
+    },
+    {
+      "word": "referendum",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "ref-er-EN-dum",
+      "ipa": "/ˌrefəˈrendəm/",
+      "definition": "A general vote by the electorate on a single political question for a direct decision.",
+      "simple_definition": "Public vote on one big law.",
+      "advanced_definition": "A direct constitutional mechanism submitting legislative questions to popular ballot.",
+      "contextual_example": "The electorate voted decisively in favor of constitutional reform in the nationwide referendum.",
+      "synonyms": [
+        "plebiscite",
+        "public ballot",
+        "popular vote"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "referendum",
+        "plural": "referendums"
+      },
+      "collocations": [
+        "hold a referendum",
+        "national referendum",
+        "referendum result"
+      ],
+      "grammatical_patterns": [
+        "call for a referendum"
+      ],
+      "common_mistakes": [
+        "Plural is 'referendums' or 'referenda'."
+      ],
+      "formality_and_register": "Constitutional Law",
+      "ielts_usefulness": "Democracy and voting prompts."
+    },
+    {
+      "word": "constituent",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "kun-STICH-oo-unt",
+      "ipa": "/kənˈstɪtʃuənt/",
+      "definition": "A member of an area who elects a representative to parliament.",
+      "simple_definition": "Voter represented by a politician.",
+      "advanced_definition": "An enfranchised citizen entitled to political representation.",
+      "contextual_example": "The member of parliament held a weekly surgery to hear grievances from local constituents.",
+      "synonyms": [
+        "voter",
+        "elector",
+        "citizen"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "constituent",
+        "noun_abstract": "constituency"
+      },
+      "collocations": [
+        "meet with constituents",
+        "represent constituents"
+      ],
+      "grammatical_patterns": [
+        "accountable to constituents"
+      ],
+      "common_mistakes": [
+        "Also means an elementary component in chemistry."
+      ],
+      "formality_and_register": "Political Science",
+      "ielts_usefulness": "Electoral systems."
+    },
+    {
+      "word": "governance",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "GUV-er-nuns",
+      "ipa": "/ˈɡʌvənəns/",
+      "definition": "The action or manner of governing a state or organization.",
+      "simple_definition": "Way a country or company is run.",
+      "advanced_definition": "The strategic exercise of executive management, ethics, and regulatory oversight.",
+      "contextual_example": "Transparent institutional governance is essential to prevent corruption in developing economies.",
+      "synonyms": [
+        "administration",
+        "leadership",
+        "stewardship"
+      ],
+      "antonyms": [
+        "misrule",
+        "anarchy"
+      ],
+      "word_family": {
+        "noun": "governance",
+        "verb": "govern"
+      },
+      "collocations": [
+        "good governance",
+        "corporate governance",
+        "weak governance"
+      ],
+      "grammatical_patterns": [
+        "standards of governance"
+      ],
+      "common_mistakes": [
+        "Broader than 'government'; encompasses accountability."
+      ],
+      "formality_and_register": "Public Administration",
+      "ielts_usefulness": "Institutions and corruption."
+    },
+    {
+      "word": "treaty",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "TREE-tee",
+      "ipa": "/ˈtriːti/",
+      "definition": "A formally concluded and ratified agreement between states.",
+      "simple_definition": "Official international peace deal.",
+      "advanced_definition": "A legally binding contractual covenant ratified between sovereign nations.",
+      "contextual_example": "Signatories to the non-proliferation treaty agreed to permit unannounced nuclear inspections.",
+      "synonyms": [
+        "pact",
+        "accord",
+        "covenant",
+        "agreement"
+      ],
+      "antonyms": [
+        "hostility",
+        "war"
+      ],
+      "word_family": {
+        "noun": "treaty",
+        "plural": "treaties"
+      },
+      "collocations": [
+        "sign a treaty",
+        "ratify a treaty",
+        "peace treaty"
+      ],
+      "grammatical_patterns": [
+        "treaty on environmental limits"
+      ],
+      "common_mistakes": [
+        "Preposition: 'treaty between nations'."
+      ],
+      "formality_and_register": "International Relations",
+      "ielts_usefulness": "Global treaties in Task 2."
+    }
+  ],
+  "economics": [
+    {
+      "word": "inflation",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "in-FLAY-shun",
+      "ipa": "/ɪnˈfleɪʃn/",
+      "definition": "A general increase in prices and fall in the purchasing value of money.",
+      "simple_definition": "Prices going up over time.",
+      "advanced_definition": "A persistent macroeconomic escalation in general price indices eroding real purchasing parity.",
+      "contextual_example": "Surging energy tariffs triggered acute consumer price inflation across Western economies.",
+      "synonyms": [
+        "price rise",
+        "devaluation"
+      ],
+      "antonyms": [
+        "deflation"
+      ],
+      "word_family": {
+        "noun": "inflation",
+        "adjective": "inflationary",
+        "verb": "inflate"
+      },
+      "collocations": [
+        "curb inflation",
+        "soaring inflation",
+        "rate of inflation"
+      ],
+      "grammatical_patterns": [
+        "combat inflation"
+      ],
+      "common_mistakes": [
+        "Antonym is 'deflation'."
+      ],
+      "formality_and_register": "Macroeconomics",
+      "ielts_usefulness": "Task 1 charts and economic essays."
+    },
+    {
+      "word": "recession",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "ri-SESH-un",
+      "ipa": "/rɪˈseʃn/",
+      "definition": "A period of temporary economic decline during which trade and industrial activity fall.",
+      "simple_definition": "Economic slump and job loss.",
+      "advanced_definition": "Consecutive quarters of negative GDP contraction accompanied by escalating unemployment.",
+      "contextual_example": "During the deep financial recession of 2008, thousands of mortgage borrowers defaulted.",
+      "synonyms": [
+        "economic downturn",
+        "slump",
+        "depression"
+      ],
+      "antonyms": [
+        "boom",
+        "prosperity",
+        "expansion"
+      ],
+      "word_family": {
+        "noun": "recession",
+        "adjective": "recessionary"
+      },
+      "collocations": [
+        "economic recession",
+        "enter a recession",
+        "plunge into recession"
+      ],
+      "grammatical_patterns": [
+        "deep recession"
+      ],
+      "common_mistakes": [
+        "A prolonged recession is termed a 'depression'."
+      ],
+      "formality_and_register": "Macroeconomics",
+      "ielts_usefulness": "Financial crisis topics."
+    },
+    {
+      "word": "fiscal",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "FIS-kul",
+      "ipa": "/ˈfɪskl/",
+      "definition": "Relating to government revenue, especially taxes.",
+      "simple_definition": "Related to government tax and spending.",
+      "advanced_definition": "Pertaining to public budgetary management and government revenue collection.",
+      "contextual_example": "The chancellor introduced expansionary fiscal policies to stimulate consumer demand.",
+      "synonyms": [
+        "budgetary",
+        "tax-related",
+        "financial"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "adjective": "fiscal",
+        "adverb": "fiscally"
+      },
+      "collocations": [
+        "fiscal policy",
+        "fiscal year",
+        "fiscal deficit",
+        "fiscal stimulus"
+      ],
+      "grammatical_patterns": [
+        "adopt a fiscal stance"
+      ],
+      "common_mistakes": [
+        "Contrast with 'monetary' (central bank interest rates)."
+      ],
+      "formality_and_register": "Public Finance",
+      "ielts_usefulness": "Task 2 government spending essays."
+    },
+    {
+      "word": "deficit",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "DEF-i-sit",
+      "ipa": "/ˈdefɪsɪt/",
+      "definition": "The amount by which something, especially a sum of money, is too small.",
+      "simple_definition": "Spending more money than received.",
+      "advanced_definition": "The excess of public expenditure over revenue receipts within a fiscal period.",
+      "contextual_example": "Persistent trade deficits can depreciate a sovereign currency on international foreign exchanges.",
+      "synonyms": [
+        "shortfall",
+        "shortage",
+        "debt"
+      ],
+      "antonyms": [
+        "surplus",
+        "excess"
+      ],
+      "word_family": {
+        "noun": "deficit",
+        "ant_noun": "surplus"
+      },
+      "collocations": [
+        "budget deficit",
+        "trade deficit",
+        "running a deficit"
+      ],
+      "grammatical_patterns": [
+        "reduce the deficit"
+      ],
+      "common_mistakes": [
+        "Opposite of 'surplus'."
+      ],
+      "formality_and_register": "Economics",
+      "ielts_usefulness": "Trade charts and national finance."
+    },
+    {
+      "word": "tariff",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "TAIR-if",
+      "ipa": "/ˈtærɪf/",
+      "definition": "A tax or duty to be paid on a particular class of imports or exports.",
+      "simple_definition": "Import tax on foreign goods.",
+      "advanced_definition": "A customs duty levied by governments on cross-border merchandise to shield domestic industries.",
+      "contextual_example": "The imposition of retaliatory steel tariffs sparked an escalating trade war between the nations.",
+      "synonyms": [
+        "customs duty",
+        "import tax",
+        "levy"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "tariff"
+      },
+      "collocations": [
+        "impose tariffs",
+        "trade tariffs",
+        "protective tariff"
+      ],
+      "grammatical_patterns": [
+        "tariff on imported goods"
+      ],
+      "common_mistakes": [
+        "Spelled with one 'r', two 'f's: t-a-r-i-f-f."
+      ],
+      "formality_and_register": "International Trade",
+      "ielts_usefulness": "Global commerce essays."
+    },
+    {
+      "word": "commodity",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "kuh-MOD-i-tee",
+      "ipa": "/kəˈmɒdəti/",
+      "definition": "A raw material or primary agricultural product that can be bought and sold.",
+      "simple_definition": "Raw materials like oil, wheat, gold.",
+      "advanced_definition": "A standardized material good traded interchangeably on global mercantile exchanges.",
+      "contextual_example": "Crude petroleum remains the most volatile commodity in international mercantile exchanges.",
+      "synonyms": [
+        "raw material",
+        "product",
+        "merchandise"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "commodity",
+        "plural": "commodities"
+      },
+      "collocations": [
+        "commodity prices",
+        "staple commodity",
+        "commodity market"
+      ],
+      "grammatical_patterns": [
+        "trade in commodities"
+      ],
+      "common_mistakes": [
+        "Can be plural: 'commodities'."
+      ],
+      "formality_and_register": "Mercantile Economics",
+      "ielts_usefulness": "Task 1 trade charts and inflation."
+    },
+    {
+      "word": "liquidity",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "li-KWID-i-tee",
+      "ipa": "/lɪˈkwɪdəti/",
+      "definition": "The availability of liquid assets to a market or company; cash on hand.",
+      "simple_definition": "Ready cash available immediately.",
+      "advanced_definition": "The ease with which an asset can be converted into ready currency without capital loss.",
+      "contextual_example": "Central banks injected emergency liquidity into the banking system to avert interbank contagion.",
+      "synonyms": [
+        "cash availability",
+        "solvency"
+      ],
+      "antonyms": [
+        "illiquidity"
+      ],
+      "word_family": {
+        "noun": "liquidity",
+        "adjective": "liquid"
+      },
+      "collocations": [
+        "inject liquidity",
+        "liquidity crisis",
+        "sufficient liquidity"
+      ],
+      "grammatical_patterns": [
+        "lack of liquidity"
+      ],
+      "common_mistakes": [
+        "High-level banking term."
+      ],
+      "formality_and_register": "Monetary Economics",
+      "ielts_usefulness": "Bank runs and market crash reading."
+    },
+    {
+      "word": "subsidize",
+      "pos": "verb",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "SUB-si-dyz",
+      "ipa": "/ˈsʌbsɪdaɪz/",
+      "definition": "Support financially; pay part of the cost of producing something.",
+      "simple_definition": "Give government money to help pay for.",
+      "advanced_definition": "To furnish financial aid from public treasury to keep price low.",
+      "contextual_example": "The government subsidizes public transport to encourage citizens to leave cars at home.",
+      "synonyms": [
+        "fund",
+        "underwrite",
+        "finance",
+        "sponsor"
+      ],
+      "antonyms": [
+        "tax",
+        "penalize"
+      ],
+      "word_family": {
+        "verb": "subsidize",
+        "noun": "subsidy",
+        "adjective": "subsidized"
+      },
+      "collocations": [
+        "heavily subsidize",
+        "subsidize tuition fees"
+      ],
+      "grammatical_patterns": [
+        "subsidized by the state"
+      ],
+      "common_mistakes": [
+        "Noun is 'subsidy' (plural 'subsidies')."
+      ],
+      "formality_and_register": "Public Spending",
+      "ielts_usefulness": "Task 2 government funding essays."
+    }
+  ],
+  "media": [
+    {
+      "word": "censorship",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.5",
+      "pronunciation": "SEN-ser-ship",
+      "ipa": "/ˈsensəʃɪp/",
+      "definition": "The suppression or prohibition of any parts of books, news, or films considered politically unacceptable.",
+      "simple_definition": "Banning books or news.",
+      "advanced_definition": "Official restriction or suppression of expressive communication deemed subversive or immoral.",
+      "contextual_example": "Authoritarian regimes deploy rigorous internet censorship to suppress political dissent.",
+      "synonyms": [
+        "suppression",
+        "restriction",
+        "control"
+      ],
+      "antonyms": [
+        "free speech",
+        "openness"
+      ],
+      "word_family": {
+        "noun": "censorship",
+        "verb": "censor",
+        "noun_agent": "censor"
+      },
+      "collocations": [
+        "press censorship",
+        "internet censorship",
+        "subject to censorship"
+      ],
+      "grammatical_patterns": [
+        "impose censorship"
+      ],
+      "common_mistakes": [
+        "Do not confuse with 'censure' (criticism)."
+      ],
+      "formality_and_register": "Media Studies",
+      "ielts_usefulness": "Free speech and press freedom."
+    },
+    {
+      "word": "journalism",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "JER-nuh-liz-um",
+      "ipa": "/ˈdʒɜːnəlɪzəm/",
+      "definition": "The activity or profession of writing for newspapers, magazines, or news websites.",
+      "simple_definition": "News reporting profession.",
+      "advanced_definition": "The gathering, verification, and presentation of factual news and public affairs.",
+      "contextual_example": "Investigative journalism plays an indispensable watchdog role in democratic accountability.",
+      "synonyms": [
+        "reporting",
+        "the press",
+        "broadcasting"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "journalism",
+        "noun_agent": "journalist",
+        "adjective": "journalistic"
+      },
+      "collocations": [
+        "investigative journalism",
+        "responsible journalism",
+        "ethics of journalism"
+      ],
+      "grammatical_patterns": [
+        "career in journalism"
+      ],
+      "common_mistakes": [
+        "Spelled j-o-u-r-n-a-l-i-s-m."
+      ],
+      "formality_and_register": "Media Studies",
+      "ielts_usefulness": "Role of news in society."
+    },
+    {
+      "word": "misinformation",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "mis-in-fer-MAY-shun",
+      "ipa": "/ˌmɪsɪnfəˈmeɪʃn/",
+      "definition": "False or inaccurate information, especially that which is deliberately intended to deceive.",
+      "simple_definition": "Fake news spread online.",
+      "advanced_definition": "Factually erroneous data disseminated irrespective of malicious intent.",
+      "contextual_example": "The rapid spread of medical misinformation on social media undermines public vaccination campaigns.",
+      "synonyms": [
+        "fake news",
+        "disinformation",
+        "falsehoods"
+      ],
+      "antonyms": [
+        "verified truth",
+        "fact"
+      ],
+      "word_family": {
+        "noun": "misinformation",
+        "verb": "misinform"
+      },
+      "collocations": [
+        "viral misinformation",
+        "combat misinformation",
+        "spread misinformation"
+      ],
+      "grammatical_patterns": [
+        "gullible to misinformation"
+      ],
+      "common_mistakes": [
+        "'Disinformation' is deliberately malicious; 'misinformation' can be accidental."
+      ],
+      "formality_and_register": "Digital Sociology",
+      "ielts_usefulness": "Internet and social media essays."
+    },
+    {
+      "word": "broadcasting",
+      "pos": "noun",
+      "cefr_level": "B1",
+      "band_tier": "Band 6.0-6.5",
+      "pronunciation": "BRAWD-kas-ting",
+      "ipa": "/ˈbrɔːdkɑːstɪŋ/",
+      "definition": "The transmission of programmes or information by radio and television.",
+      "simple_definition": "TV and radio transmission.",
+      "advanced_definition": "Electronic distribution of audio and visual signals to broad public audiences.",
+      "contextual_example": "Public service broadcasting is funded by household license fees to ensure political neutrality.",
+      "synonyms": [
+        "telecasting",
+        "transmission",
+        "media coverage"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "broadcasting",
+        "verb": "broadcast",
+        "noun_agent": "broadcaster"
+      },
+      "collocations": [
+        "public broadcasting",
+        "commercial broadcasting",
+        "digital broadcasting"
+      ],
+      "grammatical_patterns": [
+        "broadcasting rights"
+      ],
+      "common_mistakes": [
+        "Past tense of 'broadcast' is usually 'broadcast' (not broadcasted)."
+      ],
+      "formality_and_register": "Media Industry",
+      "ielts_usefulness": "Entertainment and state media."
+    },
+    {
+      "word": "sensationalism",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "sen-SAY-shun-ul-iz-um",
+      "ipa": "/senˈseɪʃənəlɪzəm/",
+      "definition": "The presentation of stories in a way that is intended to provoke public interest at the expense of accuracy.",
+      "simple_definition": "Exaggerating news for clicks.",
+      "advanced_definition": "Journalistic exaggeration and emotive distortion engineered to escalate viewership.",
+      "contextual_example": "Tabloid sensationalism undermines serious democratic debate regarding complex economic legislation.",
+      "synonyms": [
+        "hype",
+        "exaggeration",
+        "yellow journalism"
+      ],
+      "antonyms": [
+        "objective reporting",
+        "sobriety"
+      ],
+      "word_family": {
+        "noun": "sensationalism",
+        "adjective": "sensational",
+        "verb": "sensationalize"
+      },
+      "collocations": [
+        "media sensationalism",
+        "resort to sensationalism"
+      ],
+      "grammatical_patterns": [
+        "accused of sensationalism"
+      ],
+      "common_mistakes": [
+        "Emotive, negative connotation."
+      ],
+      "formality_and_register": "Media Ethics",
+      "ielts_usefulness": "Task 2 media responsibility essays."
+    },
+    {
+      "word": "circulation",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 6.5-7.0",
+      "pronunciation": "ser-kyoo-LAY-shun",
+      "ipa": "/ˌsɜːkjəˈleɪʃn/",
+      "definition": "The number of copies of a newspaper or magazine that are usually sold each day/week.",
+      "simple_definition": "Number of newspapers sold.",
+      "advanced_definition": "Total verified distribution copies of a periodical publication.",
+      "contextual_example": "Print newspaper circulation has plummeted over the past decade as readership transitioned to mobile applications.",
+      "synonyms": [
+        "distribution",
+        "readership",
+        "sales"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "circulation"
+      },
+      "collocations": [
+        "newspaper circulation",
+        "declining circulation",
+        "mass circulation"
+      ],
+      "grammatical_patterns": [
+        "in circulation"
+      ],
+      "common_mistakes": [
+        "Also means blood flow in medicine."
+      ],
+      "formality_and_register": "Publishing",
+      "ielts_usefulness": "Task 1 charts on media consumption."
+    },
+    {
+      "word": "editorial",
+      "pos": "adjective",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-7.5",
+      "pronunciation": "ed-i-TOR-ee-ul",
+      "ipa": "/ˌedɪˈtɔːriəl/",
+      "definition": "Relating to the commissioning or preparing of material, or expressing author opinion.",
+      "simple_definition": "Opinion written by editor.",
+      "advanced_definition": "Reflecting the authorized institutional opinion of a publication's senior editors.",
+      "contextual_example": "The newspaper published a scathing editorial condemning the municipal government's transit cuts.",
+      "synonyms": [
+        "opinion piece",
+        "commentary"
+      ],
+      "antonyms": [
+        "factual reporting"
+      ],
+      "word_family": {
+        "adjective": "editorial",
+        "noun": "editorial",
+        "noun_agent": "editor"
+      },
+      "collocations": [
+        "editorial board",
+        "editorial independence",
+        "editorial integrity"
+      ],
+      "grammatical_patterns": [
+        "publish an editorial"
+      ],
+      "common_mistakes": [
+        "Can be an adjective or a noun."
+      ],
+      "formality_and_register": "Journalism",
+      "ielts_usefulness": "Press ethics and opinion pieces."
+    },
+    {
+      "word": "partisan",
+      "pos": "adjective",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "par-ti-ZAN",
+      "ipa": "/ˌpɑːtɪˈzæn/",
+      "definition": "Prejudiced in favor of a particular cause or party.",
+      "simple_definition": "One-sided and biased toward one political party.",
+      "advanced_definition": "Showing blind, uncritical, or aggressive allegiance to a political faction.",
+      "contextual_example": "Cable television news channels have abandoned objective neutrality in favor of hyper-partisan commentary.",
+      "synonyms": [
+        "biased",
+        "one-sided",
+        "sectarian",
+        "factional"
+      ],
+      "antonyms": [
+        "impartial",
+        "unbiased",
+        "neutral"
+      ],
+      "word_family": {
+        "adjective": "partisan",
+        "noun": "partisanship",
+        "ant_adj": "non-partisan"
+      },
+      "collocations": [
+        "partisan divide",
+        "fiercely partisan",
+        "bipartisan agreement"
+      ],
+      "grammatical_patterns": [
+        "accused of partisan bias"
+      ],
+      "common_mistakes": [
+        "Opposite is 'bipartisan' or 'non-partisan'."
+      ],
+      "formality_and_register": "Political Communication",
+      "ielts_usefulness": "Media neutrality in Task 2."
+    }
+  ],
+  "academic_english": [
+    {
+      "word": "substantiate",
+      "pos": "verb",
+      "cefr_level": "C1",
+      "band_tier": "Band 8.0-9.0",
+      "pronunciation": "sub-STAN-shee-ayt",
+      "ipa": "/səbˈstænʃieɪt/",
+      "definition": "Provide evidence to support or prove the truth of.",
+      "simple_definition": "Prove with solid evidence.",
+      "advanced_definition": "To validate a theoretical claim through corroborating empirical proof.",
+      "contextual_example": "The researcher failed to substantiate his extraordinary thesis with peer-reviewed statistical data.",
+      "synonyms": [
+        "corroborate",
+        "verify",
+        "validate",
+        "authenticate"
+      ],
+      "antonyms": [
+        "refute",
+        "disprove",
+        "undermine"
+      ],
+      "word_family": {
+        "verb": "substantiate",
+        "adjective": "substantive",
+        "adjective_past": "substantiated"
+      },
+      "collocations": [
+        "substantiate a claim",
+        "substantiate an argument"
+      ],
+      "grammatical_patterns": [
+        "substantiated by empirical data"
+      ],
+      "common_mistakes": [
+        "High-tier replacement for 'prove'."
+      ],
+      "formality_and_register": "Academic Rhetoric",
+      "ielts_usefulness": "Task 2 argument substantiation."
+    },
+    {
+      "word": "preclude",
+      "pos": "verb",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "pri-KLOOD",
+      "ipa": "/prɪˈkluːd/",
+      "definition": "Prevent from happening; make impossible.",
+      "simple_definition": "Prevent or stop from happening.",
+      "advanced_definition": "To render impossible or rule out in advance through prior circumstance.",
+      "contextual_example": "A severe budget deficit does not preclude the municipality from piloting modest cycling corridors.",
+      "synonyms": [
+        "prevent",
+        "prohibit",
+        "rule out",
+        "obviate"
+      ],
+      "antonyms": [
+        "allow",
+        "facilitate",
+        "permit"
+      ],
+      "word_family": {
+        "verb": "preclude"
+      },
+      "collocations": [
+        "preclude the possibility of X",
+        "preclude someone from doing Y"
+      ],
+      "grammatical_patterns": [
+        "does not preclude X"
+      ],
+      "common_mistakes": [
+        "Grammar pattern: 'preclude someone FROM doing something'."
+      ],
+      "formality_and_register": "Scholarly Argument",
+      "ielts_usefulness": "Advanced argumentative transitions."
+    },
+    {
+      "word": "nominalization",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 8.0-9.0",
+      "pronunciation": "nom-i-nuh-ly-ZAY-shun",
+      "ipa": "/ˌnɒmɪnəlaɪˈzeɪʃn/",
+      "definition": "The process of forming a noun from a verb or adjective; grammatical metaphor.",
+      "simple_definition": "Turning verbs into nouns.",
+      "advanced_definition": "The syntactic conversion of verbal predicates into nominal abstract entities.",
+      "contextual_example": "Mastering nominalization allows academic writers to compress complex processes into concise topic sentences.",
+      "synonyms": [
+        "noun formation",
+        "grammatical metaphor"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "nominalization",
+        "verb": "nominalize"
+      },
+      "collocations": [
+        "heavy nominalization",
+        "use of nominalization"
+      ],
+      "grammatical_patterns": [
+        "nominalization of verbs"
+      ],
+      "common_mistakes": [
+        "Hallmark of high-band academic writing."
+      ],
+      "formality_and_register": "Linguistics",
+      "ielts_usefulness": "IELTS Writing Task 2 Lexical Resource."
+    },
+    {
+      "word": "conflate",
+      "pos": "verb",
+      "cefr_level": "C1",
+      "band_tier": "Band 8.0-9.0",
+      "pronunciation": "kun-FLAYT",
+      "ipa": "/kənˈfleɪt/",
+      "definition": "Combine two or more texts, ideas, or arguments into one; confuse distinct things.",
+      "simple_definition": "Confuse two different ideas as one.",
+      "advanced_definition": "To fallaciously merge two separate conceptual entities, creating logical error.",
+      "contextual_example": "Public commentary frequently conflates economic growth with equitable human development.",
+      "synonyms": [
+        "confuse",
+        "merge",
+        "blend",
+        "amalgamate"
+      ],
+      "antonyms": [
+        "distinguish",
+        "differentiate"
+      ],
+      "word_family": {
+        "verb": "conflate",
+        "noun": "conflation"
+      },
+      "collocations": [
+        "conflate X with Y",
+        "conflate two concepts"
+      ],
+      "grammatical_patterns": [
+        "danger of conflating"
+      ],
+      "common_mistakes": [
+        "Preposition pattern: 'conflate X WITH Y'."
+      ],
+      "formality_and_register": "Philosophy / Logic",
+      "ielts_usefulness": "Detecting logical fallacies."
+    },
+    {
+      "word": "discourse",
+      "pos": "noun",
+      "cefr_level": "B2",
+      "band_tier": "Band 7.0-8.0",
+      "pronunciation": "DIS-kors",
+      "ipa": "/ˈdɪskɔːs/",
+      "definition": "Written or spoken communication or debate; a formal discussion of a topic.",
+      "simple_definition": "Formal discussion or talk.",
+      "advanced_definition": "Connected speech or writing organized according to institutional norms.",
+      "contextual_example": "Civil public discourse has deteriorated into vitriolic political polarization on social media platforms.",
+      "synonyms": [
+        "debate",
+        "dialogue",
+        "intellectual exchange"
+      ],
+      "antonyms": [],
+      "word_family": {
+        "noun": "discourse",
+        "verb": "discourse"
+      },
+      "collocations": [
+        "academic discourse",
+        "public discourse",
+        "political discourse"
+      ],
+      "grammatical_patterns": [
+        "modes of discourse"
+      ],
+      "common_mistakes": [
+        "Stress is on first syllable for noun: /ˈdɪskɔːs/."
+      ],
+      "formality_and_register": "Linguistics / Rhetoric",
+      "ielts_usefulness": "Speaking and writing markers."
+    },
+    {
+      "word": "synthesis",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 7.5-8.5",
+      "pronunciation": "SIN-thuh-sis",
+      "ipa": "/ˈsɪnθəsɪs/",
+      "definition": "The combination of ideas to form a theory or system.",
+      "simple_definition": "Combining multiple ideas into one.",
+      "advanced_definition": "The dialectical reconciliation of thesis and antithesis into a higher unified proposition.",
+      "contextual_example": "Her dissertation provides a brilliant synthesis of classical economics and contemporary climate science.",
+      "synonyms": [
+        "amalgamation",
+        "integration",
+        "fusion"
+      ],
+      "antonyms": [
+        "fragmentation",
+        "separation"
+      ],
+      "word_family": {
+        "noun": "synthesis",
+        "plural": "syntheses",
+        "verb": "synthesize",
+        "adjective": "synthetic"
+      },
+      "collocations": [
+        "comprehensive synthesis",
+        "synthesis of data"
+      ],
+      "grammatical_patterns": [
+        "synthesize conflicting views"
+      ],
+      "common_mistakes": [
+        "Plural is 'syntheses' /ˈsɪnθəsiːz/."
+      ],
+      "formality_and_register": "Epistemology",
+      "ielts_usefulness": "Task 2 conclusion and synthesis."
+    },
+    {
+      "word": "dichotomy",
+      "pos": "noun",
+      "cefr_level": "C1",
+      "band_tier": "Band 8.0-9.0",
+      "pronunciation": "dy-KOT-uh-mee",
+      "ipa": "/daɪˈkɒtəmi/",
+      "definition": "A division or contrast between two things that are represented as being opposed or entirely different.",
+      "simple_definition": "Dividing into two opposite sides.",
+      "advanced_definition": "A sharp conceptual bifurcation between two mutually exclusive entities.",
+      "contextual_example": "Educational theorists reject the false dichotomy between vocational apprenticeships and academic scholarship.",
+      "synonyms": [
+        "bifurcation",
+        "polarity",
+        "split"
+      ],
+      "antonyms": [
+        "harmony",
+        "unity"
+      ],
+      "word_family": {
+        "noun": "dichotomy",
+        "adjective": "dichotomous"
+      },
+      "collocations": [
+        "false dichotomy",
+        "sharp dichotomy"
+      ],
+      "grammatical_patterns": [
+        "construct a dichotomy"
+      ],
+      "common_mistakes": [
+        "'False dichotomy' is an essential analytical phrase."
+      ],
+      "formality_and_register": "Logic & Philosophy",
+      "ielts_usefulness": "Reframing Task 2 essay questions."
+    },
+    {
+      "word": "salient",
+      "pos": "adjective",
+      "cefr_level": "C1",
+      "band_tier": "Band 8.0-8.5",
+      "pronunciation": "SAY-lee-unt",
+      "ipa": "/ˈseɪliənt/",
+      "definition": "Most noticeable or important; prominent.",
+      "simple_definition": "The main, most noticeable points.",
+      "advanced_definition": "Standing out conspicuously from its context; of paramount significance.",
+      "contextual_example": "The report identifies several salient factors that contributed to the financial crisis.",
+      "synonyms": [
+        "prominent",
+        "pivotal",
+        "noteworthy",
+        "conspicuous"
+      ],
+      "antonyms": [
+        "minor",
+        "inconspicuous",
+        "trivial"
+      ],
+      "word_family": {
+        "adjective": "salient",
+        "noun": "salience"
+      },
+      "collocations": [
+        "salient features",
+        "salient points",
+        "most salient aspect"
+      ],
+      "grammatical_patterns": [
+        "salient to the discussion"
+      ],
+      "common_mistakes": [
+        "Pronounced /ˈseɪliənt/, not /sæliənt/."
+      ],
+      "formality_and_register": "Formal Academic Discourse",
+      "ielts_usefulness": "Essential keyword for IELTS Writing Task 1 overviews."
+    }
+  ]
+}

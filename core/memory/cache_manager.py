@@ -32,7 +32,7 @@ class CacheManager:
         cache_key = self._hash_key(key)
         data_json = json.dumps(data)
         size_bytes = len(data_json.encode("utf-8"))
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now(datetime.timezone.utc)
         expires_at = (now + datetime.timedelta(seconds=ttl_seconds)).isoformat()
         now_iso = now.isoformat()
 
@@ -57,7 +57,7 @@ class CacheManager:
 
     def get(self, key: str) -> Optional[Any]:
         cache_key = self._hash_key(key)
-        now_iso = datetime.datetime.utcnow().isoformat()
+        now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
         row = self.db.fetchone(
             "SELECT data_json, expires_at FROM smart_cache WHERE cache_key = ?",
             (cache_key,)
@@ -83,7 +83,7 @@ class CacheManager:
 
     def cleanup_expired(self) -> int:
         """Removes all cache entries whose expiration date is in the past."""
-        now_iso = datetime.datetime.utcnow().isoformat()
+        now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
         cur = self.db.execute("DELETE FROM smart_cache WHERE expires_at < ?", (now_iso,))
         return cur.rowcount if hasattr(cur, "rowcount") else 0
 

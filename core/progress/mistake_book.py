@@ -40,6 +40,10 @@ class MistakeBook:
         """Returns mistakes that require active review."""
         return self.repo.get_mistakes(learner_id, status="needs_improvement", limit=limit)
 
+    def get_mistakes(self, learner_id: str, limit: int = 50) -> List[Dict[str, Any]]:
+        """Returns all recorded mistakes for a learner."""
+        return self.repo.get_mistakes(learner_id, limit=limit)
+
     def review_mistake(self, mistake_id: str, is_successful: bool) -> Dict[str, Any]:
         """Updates mastery status based on learner recall in a drill."""
         return self.repo.update_mastery(mistake_id, success=is_successful)
