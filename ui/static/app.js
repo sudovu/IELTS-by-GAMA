@@ -2015,7 +2015,14 @@ const GOAL_DEFINITIONS = {
 
 window.navigateToTab = function(tabId) {
   if (!tabId) return;
-  const cleanId = tabId.replace("tab-", "");
+  let cleanId = tabId.replace("tab-", "");
+
+  // Phase 18: Restrict educator tabs for non-educator roles
+  const user = appState.currentUser || { role: "learner" };
+  const isEducator = user && ["admin", "teacher", "examiner", "senior_examiner"].includes(user.role);
+  if (!isEducator && ["teacher", "doublemark", "beta"].includes(cleanId)) {
+    cleanId = "dashboard";
+  }
 
   // 1. Switch active content pane
   document.querySelectorAll(".tab-pane").forEach(pane => pane.classList.remove("active"));
@@ -2031,9 +2038,9 @@ window.navigateToTab = function(tabId) {
   if (navItem) {
     navItem.classList.add("active");
 
-    // Ensure target group is visible without hiding other module categories
+    // Ensure target group is visible without hiding other module categories (unless restricted)
     const group = navItem.closest(".nav-category-group");
-    if (group && group.style.display === "none") {
+    if (group && (group.id !== "educatorNavGroup" || isEducator)) {
       group.style.display = "";
     }
 
@@ -5630,6 +5637,13 @@ function updateAuthPillUI() {
   if (teacherNotice) {
     teacherNotice.textContent = `${user.user_id} (${user.role.toUpperCase()})`;
   }
+
+  // Phase 18: Student-first clean UI. Hide educator tools from learners and guests.
+  const isEducator = user && ["admin", "teacher", "examiner", "senior_examiner"].includes(user.role);
+  const eduNav = document.getElementById("educatorNavGroup");
+  const eduFilter = document.getElementById("educatorFilterBtn");
+  if (eduNav) eduNav.style.display = isEducator ? "" : "none";
+  if (eduFilter) eduFilter.style.display = isEducator ? "" : "none";
 }
 
 window.loginWithCredentials = async function(username, password) {

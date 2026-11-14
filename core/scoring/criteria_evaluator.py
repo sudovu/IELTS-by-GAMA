@@ -34,15 +34,28 @@ class CriteriaEvaluator:
 
         # Average four criteria
         raw_avg = (tr_score + cc_score + lr_score + gra_score) / 4.0
-        adjusted_avg = max(1.0, raw_avg - length_penalty)
+        adjusted_avg = max(0.0, raw_avg - length_penalty)
         final_band = BandCalculator.round_band(adjusted_avg)
 
+        # Enforce realistic ceiling on severely underlength submissions
+        if word_count == 0:
+            final_band = 0.0
+        elif word_count < 25:
+            final_band = min(final_band, 1.5)
+        elif word_count < 50:
+            final_band = min(final_band, 2.5)
+
         criterion_name_1 = "Task Achievement" if task_type == "task_1" else "Task Response"
+
+        # Calculate confidence interval (approx +/- 0.5 band)
+        confidence_low = max(1.0, round(final_band - 0.5, 1))
+        confidence_high = min(9.0, round(final_band + 0.5, 1))
 
         return {
             "task_type": task_type,
             "track": track,
             "estimated_band": final_band,
+            "confidence_range": [confidence_low, confidence_high],
             "raw_average": round(raw_avg, 2),
             "word_count": word_count,
             "minimum_required_words": min_words,
@@ -55,7 +68,12 @@ class CriteriaEvaluator:
             },
             "feedback": feedback_notes or {},
             "disclaimer": BandCalculator.DISCLAIMER,
-            "notice": "Official IELTS public band descriptors were referenced for assessment rubrics."
+            "notice": "Official IELTS public band descriptors were referenced for assessment rubrics.",
+            "assessment_uncertainty_note": (
+                "Automated diagnostic estimate for formative practice only; carries an estimated margin of error "
+                "of ±0.5 to ±1.0 band. Human scoring agreement has not been established with formal examiner cohorts."
+            ),
+            "official_disclaimer": "Diagnostic estimate only; not an official IELTS score."
         }
 
     @classmethod
@@ -70,8 +88,12 @@ class CriteriaEvaluator:
         raw_avg = (fc_score + lr_score + gra_score + p_score) / 4.0
         final_band = BandCalculator.round_band(raw_avg)
 
+        confidence_low = max(1.0, round(final_band - 0.5, 1))
+        confidence_high = min(9.0, round(final_band + 0.5, 1))
+
         return {
             "estimated_band": final_band,
+            "confidence_range": [confidence_low, confidence_high],
             "raw_average": round(raw_avg, 2),
             "criteria": {
                 "Fluency and Coherence": round(fc_score, 1),
@@ -81,5 +103,12 @@ class CriteriaEvaluator:
             },
             "fluency_metrics": fluency_metrics or {},
             "disclaimer": BandCalculator.DISCLAIMER,
-            "notice": "Official IELTS public band descriptors were referenced for assessment rubrics."
+            "notice": "Official IELTS public band descriptors were referenced for assessment rubrics.",
+            "assessment_modality": "speech_to_text_transcript_recognition (non-acoustic)",
+            "pronunciation_limitation": "A transcript alone cannot reliably assess pronunciation, accent quality, or intonation. The displayed pronunciation rating is a neutral baseline and is unassessed via acoustic analysis.",
+            "acoustic_disclaimer": (
+                "This evaluation does not perform acoustic spectral, formant, or acoustic phoneme analysis; "
+                "assessments reflect speech-to-text transcript recognition and fluency tracker pacing."
+            ),
+            "official_disclaimer": "Diagnostic estimate only; not an official IELTS score."
         }

@@ -78,8 +78,18 @@ class BandCalculator:
             return 4.5
         elif score >= 10:
             return 4.0
-        else:
+        elif score >= 7:
             return 3.5
+        elif score >= 5:
+            return 3.0
+        elif score >= 3:
+            return 2.5
+        elif score >= 2:
+            return 2.0
+        elif score >= 1:
+            return 1.0
+        else:
+            return 0.0
 
     @classmethod
     def raw_to_band_reading(cls, correct_answers: int, track: str = "Academic", total_questions: int = 40) -> float:
@@ -109,8 +119,18 @@ class BandCalculator:
                 return 4.5
             elif score >= 15:
                 return 4.0
-            else:
+            elif score >= 12:
                 return 3.5
+            elif score >= 8:
+                return 3.0
+            elif score >= 5:
+                return 2.5
+            elif score >= 3:
+                return 2.0
+            elif score >= 1:
+                return 1.0
+            else:
+                return 0.0
         else:
             # Academic reading scale
             if score >= 39:
@@ -135,5 +155,15 @@ class BandCalculator:
                 return 4.5
             elif score >= 10:
                 return 4.0
-            else:
+            elif score >= 7:
                 return 3.5
+            elif score >= 5:
+                return 3.0
+            elif score >= 3:
+                return 2.5
+            elif score >= 2:
+                return 2.0
+            elif score >= 1:
+                return 1.0
+            else:
+                return 0.0

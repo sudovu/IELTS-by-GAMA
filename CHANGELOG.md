@@ -9,6 +9,86 @@ The versioning follows the convention:
 
 ---
 
+## [v1.6.0] - 2026-11-15 (Phase 18: Student-First IELTS Platform, Assessment Accuracy & Result Verification)
+
+### Added & Hardened
+- **Student-First Autonomous Architecture**:
+  - Re-architected system for complete autonomous self-study without requiring human teachers, examiners, or external calibration cohorts.
+  - Simplified student UI: educator management navigation groups and filter tabs are hidden by default and guarded by user roles (`admin`, `teacher`, `examiner`).
+  - Implemented honest empty states for new learners: zero synthetic scores or fabricated charts when a learner has not completed assessments.
+- **Listening Assessment Accuracy & Collision Prevention**:
+  - Fixed critical Section numbering collision in `core/listening/listening_engine.py`: renumbered all 4 sections to sequential integers (Q1–10, Q11–20, Q21–30, Q31–40).
+  - Enhanced answer evaluator to support both sequential keys (`listen_1` .. `listen_40`) and relative section indices (1..10).
+  - Added question-by-question breakdown with distractor rationales and script evidence.
+- **Reading Assessment Accuracy & Empty-Answer Guards**:
+  - Implemented explicit empty-answer and whitespace-only guards across all 5 grading functions (`grade_tfng`, `grade_ynng`, `grade_multiple_choice`, `grade_matching`, `grade_completion`).
+  - Blank and unanswered inputs strictly receive 0 marks and are flagged as `is_unanswered: True`.
+  - Replaced arbitrary key vulnerabilities with strict schema rejection.
+- **Band Calculation Integrity**:
+  - Corrected `raw_to_band_listening` and `raw_to_band_reading` in `BandCalculator` so that 0 correct answers accurately yields **Band 0.0** (resolving previous default of Band 3.5).
+  - Implemented full granular scale from Band 0.0 through Band 9.0 following Cambridge Assessment published guidelines.
+- **Writing & Speaking Evaluation Hardening**:
+  - Fixed empty-essay fallback bug in `ExamManager`: empty essays now strictly receive **Band 0.0**.
+  - Enforced underlength band ceilings in `CriteriaEvaluator`: 0 words $\to$ Band 0.0, 1–24 words $\to$ max 1.5, 25–49 words $\to$ max 2.5.
+  - Implemented official Cambridge IELTS writing formula: $\text{Writing Band} = \text{round\_band}(1/3 \times \text{Task 1} + 2/3 \times \text{Task 2})$.
+  - Added explicit non-acoustic transcript recognition and pronunciation limitation disclosures to all speaking evaluation outputs.
+- **Result Verification & Transparent Audit Records**:
+  - Enforced deterministic result calculation: raw scores, total questions, percentages, band estimates, confidence ranges ($\pm 0.5$), versioned scoring rules (`"1.6.0"`), and accepted answer lists are saved to immutable JSON records.
+  - Idempotency guard: duplicate submissions of already completed sessions return cached results without score mutation.
+- **Automated Mistake Book Integration**:
+  - Automatic error logging from Reading and Listening practice tests directly into `MistakeBook` with context, user answer, correct answer, and explanation.
+  - Dynamic adaptive recommendations on the student dashboard targeting weakest skill areas.
+- **Comprehensive Verification & Testing**:
+  - Authored `tests/test_phase18_student_assessment_integrity.py` with 14 automated tests (100% pass).
+  - Full test suite execution: **159 passing tests** across 17 test suites (0 failures, 0 errors in 7.322s).
+  - Pre-migration database backup verified (`data/ielts_gama_phase18_backup.db`).
+  - Authored all 17 Phase 18 markdown reports in repository root.
+
+---
+
+## [v1.6.0] - 2026-11-14 (Major Release: Master Project Directive — Complete English Learning & IELTS Preparation Ecosystem)
+
+### Added & Transformed
+- **Comprehensive Database Integrity & Multi-Learner Support**:
+  - Implemented transactional SQLite migration engine in `core/database/migrations.py` managing 14 core tables with WAL mode and foreign key integrity.
+  - Added full multi-profile management (`#activeLearnerBadge`, `#learnerProfileModal`) supporting learner switching, onboarding, target band/track setup, and target exam date configuration.
+  - Added new tables: `curriculum_lessons`, `lesson_progress`, `vocabulary_vault`, `exam_sessions`, `writing_drafts`, `ai_conversations`.
+- **Personal Learning Dashboard & Dynamic Skills Radar**:
+  - Eliminated static demonstration radar metrics in favor of genuine live skill evaluations in `core/progress/analytics.py` calculated from candidate test records, evaluated writing drafts, and active mistakes.
+  - Integrated dynamic daily study plans allocating minutes across vocabulary recall, weakness drills, and core practice.
+- **English Learning Academy & CEFR Curriculum (A1–C2)**:
+  - Built full 6-level structured curriculum in `core/curriculum/curriculum_engine.py` with 18 comprehensive lessons covering grammar, linguistic mechanics, examples, guided exercises, and quizzes.
+  - Expanded `core/grammar/grammar_engine.py` with 25+ diagnostic error patterns and 30+ high-yield Cloze fill-up drills.
+  - Automatic error logging from quiz attempts directly into the learner's `MistakeBook`.
+- **IELTS Reading & Listening Examination Expansion**:
+  - Implemented comprehensive graders in `core/reading/question_types.py` for all 14 official IELTS question types (TFNG, YNNG, MCQ with distractor analysis, Matching Headings/Features/Sentence Endings, Completion).
+  - Added General Training reading passages (`gt_s1`, `gt_s2`, `gt_s3`) and full mock generator.
+  - Expanded all 4 Listening sections to 10 questions each (= full 40 questions).
+  - Enforced strict examination mode with answer key and transcript protection during testing.
+- **Writing Studio Expansion & Draft Management**:
+  - Added 18 comprehensive prompts across Academic Task 1 (Line, Bar, Pie, Table, Process, Map), General Training Task 1 (Formal, Semi-Formal, Informal Letters), and Academic/GT Task 2 (Opinion, Discussion, Advantages/Disadvantages, Causes/Solutions, Two-Part).
+  - Enforced criteria scoring rubrics (Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy) with Overview checks, objective tone verification, letter salutations/sign-offs, and underlength penalties.
+  - Integrated persistent draft autosaving and evaluation recording in SQLite `writing_drafts` and `test_results`.
+- **Speaking Examiner & Pronunciation Coach**:
+  - Built `core/speaking/pronunciation_coach.py` providing phonemic minimal pairs (/iː/ vs /ɪ/, /b/ vs /v/, /θ/ vs /s/, /r/ vs /l/, /w/ vs /v/), syllable stress shifts, connected speech, and non-simulated drill grading.
+  - Connected `SpeakingExaminer` 3-part Cambridge simulation with Band 9 models and IELTS Advantage 3-step strategy to `test_results`.
+- **AI English Teacher with Dynamic CEFR Adaptation**:
+  - Connected persistent multi-turn conversational history to SQLite `ai_conversations` table via `AIConversationRepository`.
+  - Automatically adapts pedagogical tone, vocabulary, and explanation complexity to learner's assessed CEFR level (A1 to C2).
+  - Real-time grammatical error interception with 5-point formative correction.
+- **Vocabulary Vault & Spaced Repetition (SRS)**:
+  - Built `VocabularyVault` with Academic Word List (AWL) Sublists 1-10, collocations, definitions, word families, and common pitfalls.
+  - Integrated SuperMemo SM-2 Spaced Repetition System (SRS) for flashcard scheduling and review tracking.
+- **Adaptive Study Planner**:
+  - Built `generate_adaptive_study_plan()` in `core/progress/study_planner.py` synthesizing actual radar weaknesses, target exam countdown, overdue SRS cards, and pending curriculum lessons into 4-phase adaptive milestones.
+- **UI Navigation Fix & Cross-Platform Packaging**:
+  - Restored default visibility of all module categories in sidebar navigation with quick-jumping; no buttons hidden on initial load.
+  - Synchronized static assets to Android WebView (`platform/android/app/src/main/assets/www/`).
+  - Rebuilt iOS distribution packages (`ielts-by-gama.ipa`, Apple `.mobileconfig`, OTA manifest, PWA Service Worker).
+  - Verified 100% test coverage with 71 passing tests and 0 failures.
+
+---
+
 ## [v1.5.3] - 2026-10-04 (Small Changes: Pixel-Perfect Auto Screen Calibration & Seamless Snug System Fit)
 
 ### Fixed & Improved
