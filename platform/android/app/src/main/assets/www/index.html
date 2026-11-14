@@ -66,7 +66,7 @@
           <button class="cat-filter-btn" data-filter="exam">🎓 4-Skills</button>
           <button class="cat-filter-btn" data-filter="advantage">🧭 Advantage</button>
           <button class="cat-filter-btn" data-filter="system">⚙️ System</button>
-          <button class="cat-filter-btn" data-filter="educator">👩‍🏫 Educator</button>
+          <button class="cat-filter-btn" data-filter="educator" id="educatorFilterBtn" style="display: none;">👩‍🏫 Educator</button>
         </div>
 
         <div class="sidebar-scrollable-content">
@@ -166,8 +166,8 @@
             </ul>
           </div>
 
-          <!-- Category 5: Educator, Calibration & Pilot Toolkit -->
-          <div class="nav-category-group" data-group="educator">
+          <!-- Category 5: Educator, Calibration & Pilot Toolkit (Privileged: Only visible to authorized educators/admins) -->
+          <div class="nav-category-group" data-group="educator" id="educatorNavGroup" style="display: none;">
             <div class="nav-category-header">
               <span class="cat-dot dot-educator"></span>
               <span class="cat-title">Educator &amp; Pilot Toolkit</span>
@@ -1499,9 +1499,9 @@
               <!-- Score Summary Grid -->
               <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.25rem; margin-bottom:1.5rem;">
                 <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem; text-align:center;">
-                  <div style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Overall Band Score</div>
+                  <div style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Estimated IELTS Band</div>
                   <div id="resultsOverallBand" style="font-size:3rem; font-weight:800; color:var(--primary-accent); line-height:1.2; margin:6px 0;">7.0</div>
-                  <div id="resultsConfidenceRange" style="font-size:0.85rem; color:var(--text-secondary);">Confidence Range: [6.5 – 7.5]</div>
+                  <div id="resultsConfidenceRange" style="font-size:0.82rem; color:var(--text-secondary); font-weight:500;">Practice Score • Automated Feedback</div>
                 </div>
 
                 <div id="resultsSkillBreakdownCard" style="grid-column: span 2; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; justify-content:center;">
@@ -2243,23 +2243,10 @@
         <button class="btn btn-icon btn-sm" onclick="closeAuthModal()">✕</button>
       </div>
       <p style="margin:0 0 14px 0; font-size:0.85rem; color:var(--text-secondary);">
-        Switch active identity or login with credentials. Access to Teacher review, Examiner calibration, and Administration is enforced server-side.
+        Sign in with your verified candidate or educator account. Access permissions and roles are securely authenticated server-side.
       </p>
 
-      <!-- Quick Role Selection -->
-      <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:6px;">Quick Switch Seeded User:</label>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('learner_alice', 'learner123')">👤 Learner (Alice)</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('teacher_sarah', 'teacher123')">👩‍🏫 Teacher (Sarah)</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('examiner_mark', 'examiner123')">👨‍⚖️ Examiner (Mark)</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('examiner_clara', 'examiner123')">⚖️ Senior Exam (Clara)</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('admin', 'admin123')" style="grid-column: span 2;">👑 Administrator</button>
-      </div>
-
-      <div style="position:relative; text-align:center; margin:12px 0;">
-        <hr style="border:0; border-top:1px solid var(--border-color);">
-        <span style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--bg-secondary); padding:0 8px; font-size:0.75rem; color:var(--text-muted);">OR LOGIN</span>
-      </div>
+      <div id="loginErrorAlert" style="display:none; padding:8px 12px; border-radius:6px; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; font-size:0.82rem; margin-bottom:12px;"></div>
 
       <form id="customLoginForm" onsubmit="handleCustomLogin(event)">
         <div style="margin-bottom:10px;">

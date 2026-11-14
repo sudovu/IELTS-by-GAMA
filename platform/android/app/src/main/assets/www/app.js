@@ -2015,7 +2015,14 @@ const GOAL_DEFINITIONS = {
 
 window.navigateToTab = function(tabId) {
   if (!tabId) return;
-  const cleanId = tabId.replace("tab-", "");
+  let cleanId = tabId.replace("tab-", "");
+
+  // Phase 18: Restrict educator tabs for non-educator roles
+  const user = appState.currentUser || { role: "learner" };
+  const isEducator = user && ["admin", "teacher", "examiner", "senior_examiner"].includes(user.role);
+  if (!isEducator && ["teacher", "doublemark", "beta"].includes(cleanId)) {
+    cleanId = "dashboard";
+  }
 
   // 1. Switch active content pane
   document.querySelectorAll(".tab-pane").forEach(pane => pane.classList.remove("active"));
@@ -2031,9 +2038,9 @@ window.navigateToTab = function(tabId) {
   if (navItem) {
     navItem.classList.add("active");
 
-    // Ensure target group is visible without hiding other module categories
+    // Ensure target group is visible without hiding other module categories (unless restricted)
     const group = navItem.closest(".nav-category-group");
-    if (group && group.style.display === "none") {
+    if (group && (group.id !== "educatorNavGroup" || isEducator)) {
       group.style.display = "";
     }
 
@@ -5272,8 +5279,8 @@ function renderExamResults(results) {
   const recContainer = document.getElementById("resultsRecommendationsList");
 
   if (overallEl) overallEl.textContent = Number(results.overall_band || 0.0).toFixed(1);
-  if (confEl && results.confidence_range) {
-    confEl.textContent = `Confidence Range: [${results.confidence_range[0]} – ${results.confidence_range[1]}]`;
+  if (confEl) {
+    confEl.textContent = `Estimated IELTS Band • Automated Feedback`;
   }
   if (timestampEl) timestampEl.textContent = `Completed on ${new Date().toLocaleDateString()}`;
   if (titleEl) titleEl.textContent = `${results.track || 'IELTS'} Practice Examination Results`;
@@ -5630,9 +5637,22 @@ function updateAuthPillUI() {
   if (teacherNotice) {
     teacherNotice.textContent = `${user.user_id} (${user.role.toUpperCase()})`;
   }
+
+  // Phase 18: Student-first clean UI. Hide educator tools from learners and guests.
+  const isEducator = user && ["admin", "teacher", "examiner", "senior_examiner"].includes(user.role);
+  const eduNav = document.getElementById("educatorNavGroup");
+  const eduFilter = document.getElementById("educatorFilterBtn");
+  if (eduNav) eduNav.style.display = isEducator ? "" : "none";
+  if (eduFilter) eduFilter.style.display = isEducator ? "" : "none";
 }
 
-window.quickLogin = async function(username, password) {
+window.loginWithCredentials = async function(username, password) {
+  const errEl = document.getElementById("loginErrorAlert");
+  if (errEl) {
+    errEl.style.display = "none";
+    errEl.textContent = "";
+  }
+
   try {
     const res = await fetch("/api/auth/login", {
       method: "POST",
@@ -5647,15 +5667,26 @@ window.quickLogin = async function(username, password) {
       localStorage.setItem("gama_current_user", JSON.stringify(data.user));
       updateAuthPillUI();
       closeAuthModal();
-      showToastNotification(`Signed in as ${data.user.user_id} (${data.user.role})`);
+      showToastNotification(`Signed in as ${data.user.username} (${data.user.role})`);
       if (appState.currentTab === "teacher") loadTeacherDashboard();
       if (appState.currentTab === "doublemark") loadDoubleMarkingView();
+      if (appState.currentTab === "beta") loadBetaManagement();
     } else {
-      alert("Authentication failed: " + (data.error || "Invalid credentials"));
+      const msg = data.error || data.message || "Invalid username or password.";
+      if (errEl) {
+        errEl.textContent = msg;
+        errEl.style.display = "block";
+      } else {
+        alert("Authentication failed: " + msg);
+      }
     }
   } catch (err) {
-    console.error("Login error:", err);
-    alert("Login failed: " + err.message);
+    if (errEl) {
+      errEl.textContent = "Login request failed. Check server connectivity.";
+      errEl.style.display = "block";
+    } else {
+      alert("Login request failed: " + err.message);
+    }
   }
 };
 
@@ -5663,7 +5694,7 @@ window.handleCustomLogin = async function(e) {
   e.preventDefault();
   const u = document.getElementById("loginUsername").value.trim();
   const p = document.getElementById("loginPassword").value;
-  await quickLogin(u, p);
+  await loginWithCredentials(u, p);
 };
 
 window.logoutCurrentUser = async function() {
@@ -5671,7 +5702,10 @@ window.logoutCurrentUser = async function() {
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Session-Token": appState.sessionToken
+        },
         body: JSON.stringify({ session_token: appState.sessionToken })
       });
     } catch (e) {}
@@ -5684,6 +5718,36 @@ window.logoutCurrentUser = async function() {
   closeAuthModal();
   showToastNotification("Signed out successfully");
 };
+
+async function verifyActiveSession() {
+  if (!appState.sessionToken) {
+    appState.currentUser = { user_id: "anonymous", role: "guest" };
+    updateAuthPillUI();
+    return;
+  }
+  try {
+    const res = await fetch("/api/auth/me", {
+      headers: { "X-Session-Token": appState.sessionToken }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.authenticated && data.user) {
+        appState.currentUser = data.user;
+        updateAuthPillUI();
+        return;
+      }
+    }
+    // Session is invalid or expired
+    appState.sessionToken = null;
+    appState.currentUser = { user_id: "anonymous", role: "guest" };
+    localStorage.removeItem("gama_session_token");
+    localStorage.removeItem("gama_current_user");
+    updateAuthPillUI();
+  } catch (err) {
+    // Network error: maintain cached session in offline mode
+    updateAuthPillUI();
+  }
+}
 
 // =========================================================================
 // PHASE 16: TEACHER REVIEW DASHBOARD & STUDIO
@@ -6261,6 +6325,6 @@ window.handleBetaBugSubmit = async function(e) {
 
 // Initial setup on document load
 document.addEventListener("DOMContentLoaded", () => {
-  updateAuthPillUI();
+  verifyActiveSession();
 });
 
