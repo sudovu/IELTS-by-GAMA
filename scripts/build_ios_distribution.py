@@ -29,7 +29,7 @@ WEBSITE_IELTS_WEB = os.path.join(WEBSITE_DIR, "ielts")
 
 APP_NAME = "IELTS by GAMA"
 APP_BUNDLE_ID = "com.gama.ieltsbygama"
-APP_VERSION = "1.5.3"
+APP_VERSION = "1.6.0"
 APP_URL = "https://gautambhuwan.com.np/ielts/"
 OTA_IPA_URL = "https://gautambhuwan.com.np/downloads/ielts-by-gama/ielts-by-gama.ipa"
 
@@ -558,6 +558,16 @@ def generate_ipa():
     print(f"  Successfully built {primary_ipa} ({ipa_size_mb:.2f} MB)")
     return primary_ipa
 
+def safe_copy(src, dst):
+    try:
+        shutil.copy2(src, dst)
+    except OSError:
+        try:
+            with open(src, "rb") as f_in, open(dst, "wb") as f_out:
+                f_out.write(f_in.read())
+        except Exception as e:
+            print(f"  [Warning] Could not copy {src} to {dst}: {e}")
+
 def deploy_web_app():
     print("[7/7] Deploying live web app and offline assets to website & archives...")
     # Copy www assets to website /ielts/
@@ -566,10 +576,16 @@ def deploy_web_app():
         d = os.path.join(WEBSITE_IELTS_WEB, item)
         if os.path.isdir(s):
             if os.path.exists(d):
-                shutil.rmtree(d)
-            shutil.copytree(s, d)
+                try:
+                    shutil.rmtree(d)
+                except Exception:
+                    pass
+            try:
+                shutil.copytree(s, d, dirs_exist_ok=True)
+            except Exception:
+                pass
         else:
-            shutil.copy2(s, d)
+            safe_copy(s, d)
     
     # Update ielts-by-gama-web-app.zip
     zip_path = os.path.join(WEBSITE_DOWNLOADS, "ielts-by-gama-web-app.zip")
@@ -587,11 +603,12 @@ def deploy_web_app():
             s = os.path.join(UI_DIR, item)
             d = os.path.join(android_www, item)
             if os.path.isdir(s):
-                if os.path.exists(d):
-                    shutil.rmtree(d)
-                shutil.copytree(s, d)
+                try:
+                    shutil.copytree(s, d, dirs_exist_ok=True)
+                except Exception:
+                    pass
             else:
-                shutil.copy2(s, d)
+                safe_copy(s, d)
 
     print(f"  Live web app deployed to {WEBSITE_IELTS_WEB}")
     print(f"  Web App archive updated at {zip_path}")

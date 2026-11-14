@@ -32,11 +32,14 @@
         </div>
         <div class="brand-title">
           <h1>IELTS <span class="brand-accent">by GAMA</span></h1>
-          <span class="subtext" id="screenDimensionBadge">Adaptive Multi-Platform AI Tutor • <span class="version-tag" id="headerVersionBadge">v1.5.3</span></span>
+          <span class="subtext" id="screenDimensionBadge">Adaptive Multi-Platform AI Tutor • <span class="version-tag" id="headerVersionBadge">v1.6.0</span></span>
         </div>
       </div>
 
       <div class="header-controls">
+        <div id="authRolePill" class="auth-role-pill" onclick="openAuthModal()" title="Current Active Role &amp; Session (Click to switch user)">
+          <span id="authRoleIcon">👤</span> <span id="authRoleLabel">Learner</span>: <strong id="authUsernameLabel">learner_alice</strong>
+        </div>
         <div id="connectivityBadge" class="status-badge offline" title="Network Engine Status">
           <span class="dot">●</span> <span id="statusText">OFFLINE</span>
         </div>
@@ -56,12 +59,14 @@
     <div class="app-body">
       <!-- Navigation Sidebar -->
       <nav class="sidebar">
-        <!-- Mobile Category Filter Strip (All 4 Distinct Categories) -->
+        <!-- Category Filter Strip (All Modules Visible by Default) -->
         <div class="mobile-cat-filter" id="mobileCatFilter">
-          <button class="cat-filter-btn active" data-filter="core">🎯 Strategy</button>
+          <button class="cat-filter-btn active" data-filter="all">🌐 All Modules</button>
+          <button class="cat-filter-btn" data-filter="core">🎯 Strategy</button>
           <button class="cat-filter-btn" data-filter="exam">🎓 4-Skills</button>
           <button class="cat-filter-btn" data-filter="advantage">🧭 Advantage</button>
           <button class="cat-filter-btn" data-filter="system">⚙️ System</button>
+          <button class="cat-filter-btn" data-filter="educator">👩‍🏫 Educator</button>
         </div>
 
         <div class="sidebar-scrollable-content">
@@ -84,6 +89,10 @@
                 <span class="nav-icon">💬</span> <span class="nav-label">AI Tutor Chat</span>
                 <span class="nav-badge badge-core">AI Assistant</span>
               </li>
+              <li class="nav-item" data-tab="curriculum" data-cat="core">
+                <span class="nav-icon">🎓</span> <span class="nav-label">Academy (A1-C2)</span>
+                <span class="nav-badge badge-core">Curriculum</span>
+              </li>
             </ul>
           </div>
 
@@ -94,6 +103,10 @@
               <span class="cat-title">Cambridge 4-Skills Suite</span>
             </div>
             <ul class="nav-links">
+              <li class="nav-item" data-tab="exam" data-cat="exam">
+                <span class="nav-icon">🎓</span> <span class="nav-label">Practice Exam Suite</span>
+                <span class="nav-badge badge-exam">Simulation</span>
+              </li>
               <li class="nav-item" data-tab="speaking" data-cat="exam">
                 <span class="nav-icon">🎙️</span> <span class="nav-label">Speaking Examiner</span>
                 <span class="nav-badge badge-exam">Dr. Harrison</span>
@@ -152,6 +165,28 @@
               </li>
             </ul>
           </div>
+
+          <!-- Category 5: Educator, Calibration & Pilot Toolkit -->
+          <div class="nav-category-group" data-group="educator">
+            <div class="nav-category-header">
+              <span class="cat-dot dot-educator"></span>
+              <span class="cat-title">Educator &amp; Pilot Toolkit</span>
+            </div>
+            <ul class="nav-links">
+              <li class="nav-item" data-tab="teacher" data-cat="educator">
+                <span class="nav-icon">👩‍🏫</span> <span class="nav-label">Teacher Dashboard</span>
+                <span class="nav-badge badge-educator">Scoring</span>
+              </li>
+              <li class="nav-item" data-tab="doublemark" data-cat="educator">
+                <span class="nav-icon">⚖️</span> <span class="nav-label">Double-Marking</span>
+                <span class="nav-badge badge-educator">Consensus</span>
+              </li>
+              <li class="nav-item" data-tab="beta" data-cat="educator">
+                <span class="nav-icon">🔬</span> <span class="nav-label">Beta &amp; Calibration</span>
+                <span class="nav-badge badge-educator">Cohorts &amp; N=0</span>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div class="sidebar-footer">
@@ -165,7 +200,7 @@
           </div>
           <div class="version-pill" style="margin-top: 8px; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 6px;">
             <span>Build:</span>
-            <strong style="color: var(--primary-accent);" id="appVersionBadge">v1.5.3</strong>
+            <strong style="color: var(--primary-accent);" id="appVersionBadge">v1.6.0</strong>
           </div>
         </div>
       </nav>
@@ -174,9 +209,19 @@
       <main class="content-stage">
         <!-- 1. Dashboard Tab -->
         <section id="tab-dashboard" class="tab-pane active">
-          <div class="pane-header">
-            <h2>Personal Learning Dashboard</h2>
-            <p class="subtitle" id="dailyGreetingText">Welcome back! Loading study recommendations...</p>
+          <div class="pane-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+              <h2>Personal Learning Dashboard</h2>
+              <p class="subtitle" id="dailyGreetingText">Welcome back! Loading study recommendations...</p>
+            </div>
+            <div id="activeLearnerBadge" onclick="openLearnerProfileModal()" style="cursor:pointer; display:flex; align-items:center; gap:10px; background:var(--bg-secondary); border:1px solid var(--border-color); padding:8px 14px; border-radius:12px; transition:border-color 0.2s;" title="Click to edit profile or switch learner">
+              <div style="width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg, var(--accent-primary), #6366f1); display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff;" id="learnerAvatarLetter">L</div>
+              <div>
+                <div style="font-weight:700; font-size:0.9rem;" id="dashboardLearnerName">Learner</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary);" id="dashboardLearnerTrack">Academic • Target 7.5</div>
+              </div>
+              <span style="font-size:0.85rem; opacity:0.7;">⚙️</span>
+            </div>
           </div>
 
           <!-- 1A. Daily Mission & Goal Achiever Card (v1.4.0) -->
@@ -329,7 +374,7 @@
                     </div>
                   </div>
                 </div>
-                <button class="btn btn-sm btn-hero-exam mt-2" onclick="navigateToTab('speaking')">🎙️ Practice Exam Suite</button>
+                <button class="btn btn-sm btn-hero-exam mt-2" onclick="navigateToTab('exam')">🎙️ Practice Exam Suite</button>
               </div>
 
               <!-- Category 3: Methodology & Drills -->
@@ -417,6 +462,63 @@
               <h3>Skills Performance Radar</h3>
               <div id="skillsRadarBox" class="radar-bars mt-2">
                 <!-- Radar bars injected via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 1B. English Learning Academy (CEFR A1-C2 Curriculum) -->
+        <section id="tab-curriculum" class="tab-pane">
+          <div class="pane-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+              <h2>English Learning Academy</h2>
+              <p class="subtitle">Complete CEFR Curriculum from A1 (Beginner) to C2 (Proficiency) with guided exercises and live assessment.</p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <span style="font-size:0.85rem; color:var(--text-secondary);">Level:</span>
+              <select id="curriculumLevelSelect" onchange="onCurriculumFilterChange()" class="form-control" style="padding:6px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary); font-size:0.85rem;">
+                <option value="">All CEFR Levels</option>
+                <option value="A1">A1 — Beginner</option>
+                <option value="A2">A2 — Elementary</option>
+                <option value="B1">B1 — Intermediate</option>
+                <option value="B2">B2 — Upper Intermediate</option>
+                <option value="C1">C1 — Advanced</option>
+                <option value="C2">C2 — Proficiency</option>
+              </select>
+              <span style="font-size:0.85rem; color:var(--text-secondary); margin-left:4px;">Module:</span>
+              <select id="curriculumModuleSelect" onchange="onCurriculumFilterChange()" class="form-control" style="padding:6px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary); font-size:0.85rem;">
+                <option value="">All Modules</option>
+                <option value="grammar">Grammar</option>
+                <option value="vocabulary">Vocabulary</option>
+                <option value="reading">Reading</option>
+                <option value="listening">Listening</option>
+                <option value="writing">Writing</option>
+                <option value="speaking">Speaking</option>
+                <option value="pronunciation">Pronunciation</option>
+                <option value="functional">Functional English</option>
+                <option value="review">Review &amp; Assessment</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:300px 1fr; gap:18px; margin-top:16px;" id="curriculumContainer">
+            <!-- Left Column: Lesson Directory -->
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">
+                <h4 style="margin:0; font-size:0.95rem; font-weight:700;">Lessons Directory</h4>
+                <span id="curriculumLessonCount" style="font-size:0.8rem; color:var(--text-secondary);">54 Lessons</span>
+              </div>
+              <div id="curriculumLessonList" style="display:flex; flex-direction:column; gap:8px; max-height:75vh; overflow-y:auto; padding-right:4px;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive Lesson Studio -->
+            <div id="curriculumLessonViewer" style="background:var(--bg-surface, var(--bg-secondary)); border:1px solid var(--border-color); border-radius:16px; padding:24px; min-height:500px;">
+              <div style="text-align:center; padding:60px 20px; color:var(--text-secondary);">
+                <div style="font-size:3rem; margin-bottom:12px;">📖</div>
+                <h3 style="margin-bottom:6px;">Select a lesson to begin learning</h3>
+                <p style="font-size:0.9rem;">Explore grammar mechanics, high-yield vocabulary, and exam strategies across CEFR A1 to C2.</p>
               </div>
             </div>
           </div>
@@ -815,27 +917,43 @@
 
         <!-- 7. Reading Tab -->
         <section id="tab-reading" class="tab-pane">
-          <div class="pane-header">
-            <h2>IELTS Reading Practice (Academic Passages)</h2>
-            <p class="subtitle">Complete original academic passages with True/False/Not Given, completion, and IELTS Advantage keyword-synonym mapping.</p>
+          <div class="pane-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div>
+              <h2 id="readingHeaderTitle">IELTS Reading Practice</h2>
+              <p class="subtitle">Complete original reading passages with True/False/Not Given, multiple choice, and keyword-synonym mapping.</p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span style="font-size:0.85rem; color:var(--text-secondary);">Track:</span>
+              <button class="btn btn-secondary btn-sm active" id="btnReadingTrackAcad" onclick="switchReadingTrack('Academic')">Academic</button>
+              <button class="btn btn-secondary btn-sm" id="btnReadingTrackGT" onclick="switchReadingTrack('General Training')">General Training</button>
+            </div>
           </div>
 
           <!-- Reading Passage Selector -->
           <div class="card mb-3">
             <div class="section-title-row">
-              <h3>Cambridge Academic Reading Passages</h3>
-              <button id="toggleSynonymTableBtn" class="btn btn-outline btn-sm" onclick="toggleSynonymTable()">🔍 Keyword & Synonym Table</button>
+              <h3 id="readingSubheading">Academic Reading Passages</h3>
+              <button id="toggleSynonymTableBtn" class="btn btn-outline btn-sm" onclick="toggleSynonymTable()">🔍 Keyword &amp; Synonym Table</button>
             </div>
             <div class="chip-selector-bar mt-2" id="readingPassageChips">
               <span class="chip-label">Passages:</span>
-              <button class="chip-btn active" onclick="selectReadingPassageChip('acad_p1', this)">🌊 Passage 1: Hydrothermal Ecosystems</button>
-              <button class="chip-btn" onclick="selectReadingPassageChip('acad_p2', this)">🧠 Passage 2: Bilingual Cognition</button>
-              <button class="chip-btn" onclick="selectReadingPassageChip('acad_p3', this)">🏙️ Passage 3: Urban Heat Islands</button>
+              <button class="chip-btn active" id="rchip_acad_p1" onclick="selectReadingPassageChip('acad_p1', this)">🌊 Passage 1: Hydrothermal Ecosystems</button>
+              <button class="chip-btn" id="rchip_acad_p2" onclick="selectReadingPassageChip('acad_p2', this)">🧠 Passage 2: Bilingual Cognition</button>
+              <button class="chip-btn" id="rchip_acad_p3" onclick="selectReadingPassageChip('acad_p3', this)">🏙️ Passage 3: Urban Heat Islands</button>
+            </div>
+            <div class="chip-selector-bar mt-2" id="readingPassageChipsGT" style="display:none;">
+              <span class="chip-label">Sections:</span>
+              <button class="chip-btn" id="rchip_gt_s1" onclick="selectReadingPassageChip('gt_s1', this)">🏫 Section 1: Community Education</button>
+              <button class="chip-btn" id="rchip_gt_s2" onclick="selectReadingPassageChip('gt_s2', this)">💼 Section 2: Ergonomics &amp; Hybrid Work</button>
+              <button class="chip-btn" id="rchip_gt_s3" onclick="selectReadingPassageChip('gt_s3', this)">🌉 Section 3: Suspension Bridges</button>
             </div>
             <select id="readingPassageSelect" class="form-select mt-1" style="display: none;" onchange="switchReadingPassage(this.value)">
-              <option value="acad_p1">Passage 1: Deep-Sea Hydrothermal Ecosystems (Biology & Geology)</option>
+              <option value="acad_p1">Passage 1: Deep-Sea Hydrothermal Ecosystems (Biology &amp; Geology)</option>
               <option value="acad_p2">Passage 2: Cognitive Architecture of Bilingualism (Neuroscience)</option>
-              <option value="acad_p3">Passage 3: Urban Heat Islands & Microclimates (Architecture & Ecology)</option>
+              <option value="acad_p3">Passage 3: Urban Heat Islands &amp; Microclimates (Architecture &amp; Ecology)</option>
+              <option value="gt_s1">GT Section 1: Community Education &amp; Facility Guidelines</option>
+              <option value="gt_s2">GT Section 2: Corporate Ergonomics &amp; Hybrid Telecommuting</option>
+              <option value="gt_s3">GT Section 3: The Evolution of Suspension Bridges</option>
             </select>
             <div id="synonymTableBox" class="mt-3" style="display: none;">
               <!-- Synonym Table Injected -->
@@ -1152,6 +1270,670 @@
             </div>
           </div>
         </section>
+        <!-- ================================================================= -->
+        <!-- TAB: IELTS FULL PRACTICE EXAMINATION SUITE                        -->
+        <!-- ================================================================= -->
+        <section id="tab-exam" class="tab-pane">
+          <!-- 1. EXAM LOBBY VIEW -->
+          <div id="examLobbyView" class="exam-suite-container">
+            <div class="exam-hero-card">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+                <div>
+                  <h2 style="margin:0 0 6px 0; font-size:1.6rem; color:var(--text-primary);">🎓 IELTS Practice Examination Suite</h2>
+                  <p class="subtitle" style="margin:0; max-width:700px; color:var(--text-secondary);">
+                    Complete timed simulation of official Computer-Delivered IELTS examinations with automatic answer saving, real-time question navigators, and rigorous criteria grading.
+                  </p>
+                </div>
+                <div style="display:flex; gap:10px;">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="showExamInstructionsModal()">📖 Test Instructions</button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="loadExamHistory()">📜 Past Attempts</button>
+                </div>
+              </div>
+
+              <!-- Active Session Resumption Banner (Populated via JS if in-progress) -->
+              <div id="examActiveSessionBanner" class="exam-active-banner" style="display:none; margin-top:1.25rem;">
+                <div>
+                  <strong style="color:var(--warning-color); font-size:1.05rem;">⚠️ Active Examination Session Detected</strong>
+                  <div id="examActiveBannerDetails" style="font-size:0.9rem; color:var(--text-secondary); margin-top:2px;">
+                    Academic Full Mock • Remaining: 54m 12s
+                  </div>
+                </div>
+                <div style="display:flex; gap:8px;">
+                  <button type="button" class="btn btn-sm btn-primary" onclick="resumeActiveExam()">▶️ Resume Examination</button>
+                  <button type="button" class="btn btn-sm btn-outline" onclick="abandonActiveExam()">Cancel Session</button>
+                </div>
+              </div>
+
+              <!-- Track Selector -->
+              <div class="exam-track-selector">
+                <button type="button" class="exam-track-btn active" id="trackBtnAcademic" onclick="selectExamTrack('Academic')">
+                  <span style="font-size:1.2rem;">🎓</span>
+                  <span>IELTS Academic</span>
+                  <small style="opacity:0.75; font-size:0.75rem;">(University &amp; Professional)</small>
+                </button>
+                <button type="button" class="exam-track-btn" id="trackBtnGeneral" onclick="selectExamTrack('General Training')">
+                  <span style="font-size:1.2rem;">🌐</span>
+                  <span>IELTS General Training</span>
+                  <small style="opacity:0.75; font-size:0.75rem;">(Work &amp; Migration)</small>
+                </button>
+              </div>
+
+              <!-- Available Exam Cards Grid -->
+              <div class="exam-card-grid">
+                <!-- Featured 4-Skill Mock -->
+                <div class="exam-mode-card featured-mock">
+                  <div>
+                    <div class="exam-mode-header">
+                      <div>
+                        <span class="badge" style="background:var(--cat-exam-bg); color:var(--cat-exam-accent); border:1px solid var(--cat-exam-border); font-size:0.75rem; padding:3px 8px; border-radius:4px; font-weight:700;">RECOMMENDED MOCK</span>
+                        <h3 class="exam-mode-title" style="margin:8px 0 4px 0;" id="fullMockCardTitle">IELTS Academic Full 4-Skill Examination</h3>
+                      </div>
+                      <span style="font-size:1.8rem;">🏛️</span>
+                    </div>
+                    <div class="exam-mode-meta">
+                      <span>⏱️ 164 Minutes</span>
+                      <span>•</span>
+                      <span>📝 82 Graded Items</span>
+                      <span>•</span>
+                      <span>🎧 Listening + 📖 Reading + ✍️ Writing + 🎙️ Speaking</span>
+                    </div>
+                    <p style="font-size:0.9rem; color:var(--text-secondary); margin:0 0 1rem 0;">
+                      Complete simulation replicating official test day conditions. Timed sequential progression across all four language skills with composite band score diagnostic.
+                    </p>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.82rem; color:var(--text-muted);">Autosave &amp; Recovery Active</span>
+                    <button type="button" class="btn btn-primary" onclick="launchExamSession('full_mock')">Start Full Examination</button>
+                  </div>
+                </div>
+
+                <!-- Skill 1: Reading -->
+                <div class="exam-mode-card">
+                  <div>
+                    <div class="exam-mode-header">
+                      <h4 class="exam-mode-title" style="margin:0;">📖 Reading Practice Examination</h4>
+                      <span style="font-size:1.4rem;">📑</span>
+                    </div>
+                    <div class="exam-mode-meta">
+                      <span>⏱️ 60 Mins</span> • <span>40 Questions</span> • <span>3 Passages / Sections</span>
+                    </div>
+                    <p style="font-size:0.86rem; color:var(--text-secondary); margin:0 0 1rem 0;">
+                      True/False/Not Given, Summary Completion, Matching Headings, and Multiple Choice questions under strict 60-minute countdown.
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="launchExamSession('reading')">Start Reading Exam</button>
+                </div>
+
+                <!-- Skill 2: Listening -->
+                <div class="exam-mode-card">
+                  <div>
+                    <div class="exam-mode-header">
+                      <h4 class="exam-mode-title" style="margin:0;">🎧 Listening Practice Examination</h4>
+                      <span style="font-size:1.4rem;">🔊</span>
+                    </div>
+                    <div class="exam-mode-meta">
+                      <span>⏱️ 32 Mins</span> • <span>40 Questions</span> • <span>4 Sections</span>
+                    </div>
+                    <p style="font-size:0.86rem; color:var(--text-secondary); margin:0 0 1rem 0;">
+                      Real-time audio dialogue playback with concealed transcripts. Note completion, form filling, and fast-paced academic lectures.
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="launchExamSession('listening')">Start Listening Exam</button>
+                </div>
+
+                <!-- Skill 3: Writing -->
+                <div class="exam-mode-card">
+                  <div>
+                    <div class="exam-mode-header">
+                      <h4 class="exam-mode-title" style="margin:0;">✍️ Writing Practice Examination</h4>
+                      <span style="font-size:1.4rem;">📝</span>
+                    </div>
+                    <div class="exam-mode-meta">
+                      <span>⏱️ 60 Mins</span> • <span>Task 1 &amp; Task 2</span> • <span>Official 1/3 + 2/3 Weight</span>
+                    </div>
+                    <p style="font-size:0.86rem; color:var(--text-secondary); margin:0 0 1rem 0;">
+                      Timed essay studio with live word counters, draft recovery, and comprehensive Task Achievement, Cohesion, Lexical, and Grammar rubrics.
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="launchExamSession('writing')">Start Writing Exam</button>
+                </div>
+
+                <!-- Skill 4: Speaking -->
+                <div class="exam-mode-card">
+                  <div>
+                    <div class="exam-mode-header">
+                      <h4 class="exam-mode-title" style="margin:0;">🎙️ Speaking Practice Examination</h4>
+                      <span style="font-size:1.4rem;">🗣️</span>
+                    </div>
+                    <div class="exam-mode-meta">
+                      <span>⏱️ 14 Mins</span> • <span>Parts 1, 2 &amp; 3</span> • <span>60s Prep Timer</span>
+                    </div>
+                    <p style="font-size:0.86rem; color:var(--text-secondary); margin:0 0 1rem 0;">
+                      Sequential 3-stage speaking interview simulation. Individual long turn cue card with preparation countdown and speech recognition analysis.
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="launchExamSession('speaking')">Start Speaking Exam</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Past Attempts History Table Section -->
+            <div class="exam-hero-card" id="examHistorySection" style="margin-top:1rem;">
+              <h3 style="margin:0 0 1rem 0; font-size:1.2rem;">📜 Examination History &amp; Score Logs</h3>
+              <div id="examHistoryTableContainer" style="overflow-x:auto;">
+                <p style="color:var(--text-muted); font-size:0.9rem;">No completed examination sessions yet. Choose an exam above to begin!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. ACTIVE EXAM WORKSPACE (Shown while in_progress) -->
+          <div id="examActiveWorkspace" class="exam-active-workspace" style="display:none;">
+            <!-- Header bar -->
+            <div class="exam-header-bar">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span class="badge" id="examActiveTrackBadge" style="background:var(--cat-exam-bg); color:var(--cat-exam-accent); font-weight:700; font-size:0.8rem; padding:4px 8px; border-radius:4px;">Academic</span>
+                <strong id="examActiveTitle" style="font-size:1rem; color:var(--text-primary);">Academic Reading Examination 1</strong>
+                <span id="examActiveSectionIndicator" style="font-size:0.85rem; color:var(--text-muted);">(Passage 1 of 3)</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:16px;">
+                <!-- Autosave pill -->
+                <span id="examAutosaveIndicator" style="font-size:0.8rem; color:var(--success-color); display:flex; align-items:center; gap:4px;">
+                  <span>🟢</span> <span>All answers saved</span>
+                </span>
+                <!-- Timer display -->
+                <div id="examTimerDisplay" class="exam-timer-display">
+                  <span>⏱️</span> <span id="examTimerDigits">59:59</span>
+                </div>
+                <!-- Action controls -->
+                <button type="button" class="btn btn-sm btn-outline" id="examFlagToggleBtn" onclick="toggleCurrentQuestionFlag()">🚩 Flag Question</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="confirmExitExam()">🚪 Exit</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="confirmSubmitExam()" style="font-weight:700;">📥 Submit Exam</button>
+              </div>
+            </div>
+
+            <!-- Split testing area -->
+            <div class="exam-split-container">
+              <!-- Left stimulus pane -->
+              <div id="examStimulusPane" class="exam-stimulus-pane">
+                <!-- Dynamically populated: Reading passage / Audio player & script notes / Writing prompts / Speaking cue card -->
+              </div>
+
+              <!-- Right interaction pane -->
+              <div id="examInteractionPane" class="exam-interaction-pane">
+                <!-- Dynamically populated: Question prompt, input controls, word counters, STT buttons -->
+              </div>
+            </div>
+
+            <!-- Bottom palette and navigation -->
+            <div class="exam-bottom-bar">
+              <button type="button" class="btn btn-sm btn-outline" id="examPrevBtn" onclick="navigateExamQuestion(-1)">⬅️ Previous</button>
+              
+              <!-- Horizontal scrollable question palette -->
+              <div id="examPaletteContainer" class="exam-palette-container">
+                <!-- Buttons 1..40 populated via JS -->
+              </div>
+
+              <div id="examPaletteSummary" style="font-size:0.85rem; color:var(--text-secondary); white-space:nowrap;">
+                Question 1 of 40 (0 Answered)
+              </div>
+
+              <button type="button" class="btn btn-sm btn-primary" id="examNextBtn" onclick="navigateExamQuestion(1)">Next ➡️</button>
+            </div>
+          </div>
+
+          <!-- 3. POST-EXAM RESULTS VIEW -->
+          <div id="examResultsView" class="exam-suite-container" style="display:none;">
+            <div class="exam-hero-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:1.5rem;">
+                <div>
+                  <span class="badge" style="background:rgba(16, 185, 129, 0.15); color:#10b981; font-weight:700; padding:4px 10px; border-radius:4px; font-size:0.8rem;">EXAMINATION COMPLETE</span>
+                  <h2 style="margin:6px 0 2px 0;" id="resultsExamTitle">IELTS Academic Full Examination Results</h2>
+                  <div style="font-size:0.85rem; color:var(--text-muted);" id="resultsExamTimestamp">Completed on Nov 14, 2026</div>
+                </div>
+                <div style="display:flex; gap:10px;">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="returnToExamLobby()">🔄 Return to Exam Suite</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="navigateToTab('mistakes')">📖 Review in Mistake Book</button>
+                </div>
+              </div>
+
+              <!-- Score Summary Grid -->
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.25rem; margin-bottom:1.5rem;">
+                <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem; text-align:center;">
+                  <div style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; letter-spacing:0.5px;">Overall Band Score</div>
+                  <div id="resultsOverallBand" style="font-size:3rem; font-weight:800; color:var(--primary-accent); line-height:1.2; margin:6px 0;">7.0</div>
+                  <div id="resultsConfidenceRange" style="font-size:0.85rem; color:var(--text-secondary);">Confidence Range: [6.5 – 7.5]</div>
+                </div>
+
+                <div id="resultsSkillBreakdownCard" style="grid-column: span 2; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; justify-content:center;">
+                  <div style="font-size:0.85rem; color:var(--text-muted); text-transform:uppercase; font-weight:600; margin-bottom:10px;">Skill Score Breakdown</div>
+                  <div id="resultsSkillBandsGrid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; text-align:center;">
+                    <!-- Skill band pills populated via JS -->
+                  </div>
+                </div>
+              </div>
+
+              <div id="resultsDisclaimerBox" style="background:rgba(56, 189, 248, 0.08); border:1px solid rgba(56, 189, 248, 0.25); border-radius:8px; padding:0.85rem 1rem; font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem;">
+                <strong>Official Assessment Disclaimer:</strong> Practice estimate only. This is not an official IELTS score certified by Cambridge Assessment English, IDP: IELTS Australia, or the British Council.
+              </div>
+
+              <!-- Question-by-Question Detailed Review -->
+              <h3 style="margin:1.5rem 0 1rem 0; font-size:1.2rem;">Detailed Answer Review &amp; Explanations</h3>
+              <div id="resultsDetailedQuestionsContainer" style="display:flex; flex-direction:column; gap:12px;">
+                <!-- Detailed questions review list -->
+              </div>
+
+              <!-- Weak Areas and Recommendations -->
+              <div id="resultsRecommendationsContainer" style="margin-top:2rem; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem;">
+                <h4 style="margin:0 0 10px 0;">Targeted Next Steps &amp; Recommendations</h4>
+                <div id="resultsRecommendationsList" style="font-size:0.9rem; color:var(--text-secondary); line-height:1.6;">
+                  <!-- Dynamically populated recommendations -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB: TEACHER DASHBOARD & REVIEW STUDIO (PHASE 16)                -->
+        <!-- ================================================================= -->
+        <section id="tab-teacher" class="tab-pane">
+          <div class="educator-hero">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+              <div>
+                <h2 style="margin:0 0 6px 0; font-size:1.6rem; color:var(--text-primary);">👩‍🏫 Teacher Review Dashboard &amp; Studio</h2>
+                <p class="subtitle" style="margin:0; color:var(--text-secondary); max-width:700px;">
+                  Official assessment workspace for certified teachers and examiners. Evaluate Writing (TR, CC, LR, GRA) and Speaking (FC, LR, GRA, P) submissions with revision tracking, draft auto-saving, and rubric-calibrated scoring.
+                </p>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <button class="btn btn-primary btn-sm" onclick="openNewAssignmentModal()">+ Assign New Submission</button>
+                <button class="btn btn-outline btn-sm" onclick="loadTeacherDashboard()">🔄 Refresh Queue</button>
+              </div>
+            </div>
+            <div id="teacherRbacNotice" style="margin-top:12px; padding:8px 12px; border-radius:8px; font-size:0.85rem; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.25); display:flex; justify-content:space-between; align-items:center;">
+              <span>Active Reviewer: <strong id="teacherActiveUserBadge">teacher_sarah (Teacher)</strong></span>
+              <span style="font-size:0.75rem; color:var(--text-muted);">Role-Based Access Control Active</span>
+            </div>
+          </div>
+
+          <!-- Quick Filter Bar -->
+          <div style="display:flex; gap:10px; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center;">
+            <label style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">Skill Filter:</label>
+            <select id="teacherSkillFilter" class="form-control" style="width:auto; padding:6px 12px; border-radius:6px; background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color);" onchange="filterTeacherQueue()">
+              <option value="all">All Skills</option>
+              <option value="writing">Writing Studio</option>
+              <option value="speaking">Speaking Examiner</option>
+            </select>
+            <label style="font-size:0.85rem; font-weight:600; color:var(--text-secondary); margin-left:10px;">Status Filter:</label>
+            <select id="teacherStatusFilter" class="form-control" style="width:auto; padding:6px 12px; border-radius:6px; background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color);" onchange="filterTeacherQueue()">
+              <option value="all">All Statuses</option>
+              <option value="assigned">Assigned / In Queue</option>
+              <option value="in_review">In Review (Drafts)</option>
+              <option value="submitted">Submitted (Completed)</option>
+            </select>
+          </div>
+
+          <!-- Assignment Split View: Queue & Review Studio -->
+          <div style="display:grid; grid-template-columns:360px 1fr; gap:1.5rem; align-items:start;">
+            <!-- Left: Assignment Queue -->
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem;">
+              <h4 style="margin:0 0 12px 0; font-size:1.05rem; display:flex; justify-content:space-between;">
+                <span>Review Assignments</span>
+                <span id="teacherQueueCountBadge" class="nav-badge badge-educator">0 items</span>
+              </h4>
+              <div id="teacherAssignmentList" style="display:flex; flex-direction:column; gap:10px; max-height:600px; overflow-y:auto;">
+                <!-- Dynamically loaded assignment cards -->
+                <div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.85rem;">
+                  Loading review assignments...
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Interactive Review Studio Pane -->
+            <div id="teacherReviewStudioPane" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.5rem;">
+              <div id="teacherStudioEmptyState" style="text-align:center; padding:4rem 2rem; color:var(--text-muted);">
+                <div style="font-size:3rem; margin-bottom:1rem;">📝</div>
+                <h3 style="margin:0 0 8px 0; color:var(--text-primary);">Select an Assignment to Review</h3>
+                <p style="margin:0; font-size:0.9rem;">Choose a pending candidate submission from the queue on the left to grade, annotate, and submit calibrated examiner marks.</p>
+              </div>
+
+              <div id="teacherStudioActiveForm" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem; border-bottom:1px solid var(--border-color); padding-bottom:1rem;">
+                  <div>
+                    <span id="studioSkillBadge" class="nav-badge badge-exam">Writing Task 2</span>
+                    <h3 id="studioTaskTitle" style="margin:6px 0 2px 0; font-size:1.3rem;">Candidate Submission</h3>
+                    <div style="font-size:0.82rem; color:var(--text-muted);">
+                      Candidate: <strong id="studioCandidateId" style="color:var(--text-primary);">-</strong> • Submitted: <span id="studioSubmissionDate">-</span> • Revision: <span id="studioRevisionBadge" style="font-family:var(--font-mono); color:var(--primary-accent);">v1</span>
+                    </div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Overall Band</div>
+                    <div id="studioOverallScoreDisplay" style="font-family:var(--font-mono); font-size:2rem; font-weight:800; color:var(--cat-educator-accent);">6.5</div>
+                  </div>
+                </div>
+
+                <!-- Learner Stimulus & Submission View -->
+                <div style="margin-bottom:1.5rem;">
+                  <h4 style="margin:0 0 8px 0; font-size:0.95rem;">Prompt / Topic</h4>
+                  <div id="studioPromptContent" style="background:var(--bg-card); padding:10px 14px; border-radius:8px; border:1px solid var(--border-color); font-size:0.9rem; margin-bottom:12px; line-height:1.5;"></div>
+                  
+                  <div id="studioSpeakingModalitySection" style="display:none; margin-bottom:12px; background:rgba(99,102,241,0.08); padding:10px 14px; border-radius:8px; border:1px solid rgba(99,102,241,0.25);">
+                    <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:6px;">Speaking Assessment Modality (Cambridge Compliant):</label>
+                    <select id="studioAssessmentMode" class="form-control" style="width:auto; padding:5px 10px; font-size:0.85rem; border-radius:6px; background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color);">
+                      <option value="both">Acoustic Audio + Text Transcript (Full Speaking)</option>
+                      <option value="audio">Audio Only</option>
+                      <option value="transcript">Transcript Only (Note: Pronunciation cannot be acoustic)</option>
+                    </select>
+                  </div>
+
+                  <h4 style="margin:0 0 8px 0; font-size:0.95rem;">Learner's Original Response</h4>
+                  <div id="studioSubmissionContent" style="background:var(--bg-card); padding:14px; border-radius:8px; border:1px solid var(--border-color); font-family:var(--font-mono); font-size:0.88rem; line-height:1.6; max-height:220px; overflow-y:auto; white-space:pre-wrap;"></div>
+                </div>
+
+                <!-- 4 Criteria Scoring Form -->
+                <h4 style="margin:0 0 12px 0; font-size:1rem; border-bottom:1px solid var(--border-color); padding-bottom:6px;">Official Criteria Assessment (0.5 Step Increments)</h4>
+                
+                <div id="studioCriteriaContainer" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1.5rem;">
+                  <!-- Dynamically populated criteria sliders/inputs -->
+                </div>
+
+                <!-- Qualitative Feedback Form -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:1.5rem;">
+                  <div>
+                    <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px; color:var(--success-color);">Observed Strengths</label>
+                    <textarea id="studioStrengthsInput" class="form-control" rows="3" style="width:100%; padding:8px 12px; border-radius:8px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="e.g. Accurate paragraph cohesion and clear topic sentence in Body 1..."></textarea>
+                  </div>
+                  <div>
+                    <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px; color:var(--warning-color);">Priority Growth Areas</label>
+                    <textarea id="studioImprovementsInput" class="form-control" rows="3" style="width:100%; padding:8px 12px; border-radius:8px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="e.g. Ensure task response directly addresses both views before stating opinion..."></textarea>
+                  </div>
+                </div>
+
+                <div style="margin-bottom:1.5rem;">
+                  <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Examiner / Teacher Detailed Comments</label>
+                  <textarea id="studioFeedbackInput" class="form-control" rows="3" style="width:100%; padding:8px 12px; border-radius:8px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="Comprehensive instructional remarks for the learner..."></textarea>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:1rem;">
+                  <button type="button" class="btn btn-outline" onclick="saveTeacherDraft()">💾 Save Working Draft</button>
+                  <button type="button" class="btn btn-primary" onclick="submitTeacherEvaluation()" style="padding:10px 24px; font-weight:700;">✅ Submit Official Evaluation</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB: BLIND DOUBLE-MARKING & RECONCILIATION (PHASE 16)            -->
+        <!-- ================================================================= -->
+        <section id="tab-doublemark" class="tab-pane">
+          <div class="educator-hero">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+              <div>
+                <h2 style="margin:0 0 6px 0; font-size:1.6rem; color:var(--text-primary);">⚖️ Blind Double-Marking &amp; Senior Examiner Reconciliation</h2>
+                <p class="subtitle" style="margin:0; color:var(--text-secondary); max-width:720px;">
+                  Independent double-marking protocol for assessment reliability and benchmark calibration. In accordance with high-stakes exam standards, peer marks remain strictly blind until both examiners submit. Any inter-rater criterion divergence exceeding 0.5 band triggers senior reconciliation.
+                </p>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="loadDoubleMarkingView()">🔄 Refresh Pairs</button>
+            </div>
+          </div>
+
+          <!-- Double-Marking Paired Container -->
+          <div style="display:grid; grid-template-columns:360px 1fr; gap:1.5rem; align-items:start;">
+            <!-- Left: Double-Marking Paired Assignments List -->
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem;">
+              <h4 style="margin:0 0 12px 0; font-size:1.05rem; display:flex; justify-content:space-between;">
+                <span>Paired Submissions</span>
+                <span id="doubleMarkPairCountBadge" class="nav-badge badge-educator">0 pairs</span>
+              </h4>
+              <div id="doubleMarkPairsList" style="display:flex; flex-direction:column; gap:10px; max-height:600px; overflow-y:auto;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Right: Disagreement Matrix & Senior Reconciliation Workspace -->
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.5rem;">
+              <div id="doubleMarkEmptyState" style="text-align:center; padding:4rem 2rem; color:var(--text-muted);">
+                <div style="font-size:3rem; margin-bottom:1rem;">⚖️</div>
+                <h3 style="margin:0 0 8px 0; color:var(--text-primary);">Select a Paired Double-Marking Assignment</h3>
+                <p style="margin:0; font-size:0.9rem;">View independent examiner marks, inspect criterion divergence matrices, and record Senior Examiner consensus determinations.</p>
+              </div>
+
+              <div id="doubleMarkActiveWorkspace" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; border-bottom:1px solid var(--border-color); padding-bottom:1rem;">
+                  <div>
+                    <span id="dmSkillBadge" class="nav-badge badge-exam">Writing</span>
+                    <h3 id="dmSubmissionTitle" style="margin:6px 0 2px 0; font-size:1.3rem;">Submission #101</h3>
+                    <div style="font-size:0.82rem; color:var(--text-muted);">Paired Review ID: <span id="dmPairIdBadge" style="font-family:var(--font-mono); color:var(--primary-accent);">-</span></div>
+                  </div>
+                  <div id="dmGateStatusBadge" style="padding:6px 12px; border-radius:8px; font-size:0.82rem; font-weight:700;">
+                    STATUS
+                  </div>
+                </div>
+
+                <!-- Blind Protection Notice -->
+                <div id="dmBlindProtectionAlert" style="display:none; padding:12px 16px; border-radius:8px; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.3); margin-bottom:1.5rem;">
+                  <strong style="color:var(--warning-color);">🔒 Blind Double-Marking Protection Active</strong>
+                  <p style="margin:4px 0 0 0; font-size:0.85rem; color:var(--text-secondary);">
+                    Peer examiner marks are concealed until your independent evaluation is submitted to eliminate cognitive anchoring bias.
+                  </p>
+                </div>
+
+                <!-- Inter-Rater Disagreement Matrix -->
+                <div id="dmMatrixContainer" style="margin-bottom:1.5rem;">
+                  <h4 style="margin:0 0 8px 0; font-size:1rem;">Inter-Rater Criterion Disagreement Matrix</h4>
+                  <table class="disagreement-matrix-table" id="dmMatrixTable">
+                    <thead>
+                      <tr>
+                        <th>Assessment Criterion</th>
+                        <th id="dmColExaminer1">Examiner 1</th>
+                        <th id="dmColExaminer2">Examiner 2</th>
+                        <th>Absolute Difference (Δ)</th>
+                        <th>Reconciliation Threshold</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dmMatrixTableBody">
+                      <!-- Dynamically rendered -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Senior Examiner Reconciliation Form -->
+                <div id="dmReconciliationSection" style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:10px; padding:1.25rem;">
+                  <h4 style="margin:0 0 8px 0; font-size:1rem; color:var(--cat-educator-accent);">👑 Senior Examiner Reconciliation</h4>
+                  <p style="margin:0 0 12px 0; font-size:0.85rem; color:var(--text-secondary);">
+                    Senior Examiner reconciliation preserves both original marks in the audit ledger and establishes the definitive consensus band for calibration.
+                  </p>
+
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <div>
+                      <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Reconciled Overall Band (0.5 Increments)</label>
+                      <select id="dmReconciledBandSelect" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color);">
+                        <option value="5.0">Band 5.0</option>
+                        <option value="5.5">Band 5.5</option>
+                        <option value="6.0">Band 6.0</option>
+                        <option value="6.5" selected>Band 6.5</option>
+                        <option value="7.0">Band 7.0</option>
+                        <option value="7.5">Band 7.5</option>
+                        <option value="8.0">Band 8.0</option>
+                        <option value="8.5">Band 8.5</option>
+                        <option value="9.0">Band 9.0</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Senior Examiner Auth ID</label>
+                      <input type="text" id="dmReconcilerIdInput" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color);" value="examiner_clara" readonly>
+                    </div>
+                  </div>
+
+                  <div style="margin-bottom:14px;">
+                    <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Reconciliation Rationale &amp; Audit Commentary</label>
+                    <textarea id="dmReconciliationNotesInput" class="form-control" rows="3" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="Explain reason for final consensus resolution based on IELTS descriptor evidence..."></textarea>
+                  </div>
+
+                  <button type="button" class="btn btn-primary" onclick="submitSeniorReconciliation()" style="padding:10px 24px; font-weight:700;">
+                    ⚖️ Commit Senior Examiner Reconciliation
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- TAB: BETA PILOT & ASSESSMENT CALIBRATION (PHASE 16)               -->
+        <!-- ================================================================= -->
+        <section id="tab-beta" class="tab-pane">
+          <div class="educator-hero">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+              <div>
+                <h2 style="margin:0 0 6px 0; font-size:1.6rem; color:var(--text-primary);">🔬 Supervised Beta Pilot &amp; Assessment Calibration</h2>
+                <p class="subtitle" style="margin:0; color:var(--text-secondary); max-width:720px;">
+                  Controlled participant management across 4 pilot cohorts, real-time AI vs human calibration monitoring, and structured qualitative feedback channels.
+                </p>
+              </div>
+              <div style="display:flex; gap:10px;">
+                <button class="btn btn-primary btn-sm" onclick="openEnrollParticipantModal()">+ Enroll Participant</button>
+                <button class="btn btn-outline btn-sm" onclick="loadBetaManagement()">🔄 Refresh Metrics</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assessment Calibration Metric Dashboard (N=0 Zero-State Transparently Displayed) -->
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem; margin-bottom:1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+              <div>
+                <h3 style="margin:0 0 4px 0; font-size:1.15rem;">Assessment Calibration Engine (AI vs Human Consensus)</h3>
+                <span style="font-size:0.82rem; color:var(--text-muted);">Algorithm Version: <strong style="color:var(--primary-accent);">v1.6.0</strong> • Scoring Target: Cambridge IELTS Bands</span>
+              </div>
+              <span id="calibrationStateBadge" class="nav-badge" style="background:rgba(245,158,11,0.15); color:var(--warning-color); border:1px solid rgba(245,158,11,0.3); font-weight:700;">
+                PENDING HUMAN CALIBRATION
+              </span>
+            </div>
+
+            <!-- Honest Zero-State Transparency Banner -->
+            <div style="padding:10px 14px; border-radius:8px; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.25); font-size:0.85rem; line-height:1.5; margin-bottom:1.25rem;">
+              📢 <strong>Assessment Transparency &amp; Integrity Policy:</strong> Automated Writing and Speaking scores are practice estimates produced by calibrated heuristics (v1.6.0). In strict compliance with assessment standards, <strong>zero artificial benchmark scores are fabricated</strong>. Calibration metrics below will calculate dynamically as verified double-marked human evaluations are reconciled.
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">
+              <div class="calibration-metric-card">
+                <div class="calibration-metric-sub">VALID BENCHMARKS</div>
+                <div class="calibration-metric-num" id="calibMetricN">0</div>
+                <div class="calibration-metric-sub">Reconciled human records</div>
+              </div>
+              <div class="calibration-metric-card">
+                <div class="calibration-metric-sub">MEAN ABSOLUTE ERROR</div>
+                <div class="calibration-metric-num" id="calibMetricMae">--</div>
+                <div class="calibration-metric-sub">MAE vs human consensus</div>
+              </div>
+              <div class="calibration-metric-card">
+                <div class="calibration-metric-sub">MEAN SIGNED BIAS</div>
+                <div class="calibration-metric-num" id="calibMetricBias">--</div>
+                <div class="calibration-metric-sub">+ Over- / - Under-marking</div>
+              </div>
+              <div class="calibration-metric-card">
+                <div class="calibration-metric-sub">WITHIN ±0.5 BAND</div>
+                <div class="calibration-metric-num" id="calibMetricAgreement05">--</div>
+                <div class="calibration-metric-sub">Near-consensus rate</div>
+              </div>
+              <div class="calibration-metric-card">
+                <div class="calibration-metric-sub">WITHIN ±1.0 BAND</div>
+                <div class="calibration-metric-num" id="calibMetricAgreement10">--</div>
+                <div class="calibration-metric-sub">Broad agreement rate</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pilot Cohorts Overview -->
+          <h3 style="margin:0 0 12px 0; font-size:1.2rem;">Supervised Beta Pilot Cohorts</h3>
+          <div class="beta-cohort-grid" id="betaCohortsContainer">
+            <!-- Dynamically populated cohort cards -->
+          </div>
+
+          <!-- Pilot Feedback & Bug Reporting Forms -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start;">
+            <!-- Structured Feedback Form -->
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem;">
+              <h4 style="margin:0 0 10px 0; font-size:1.05rem;">📝 Candidate / Teacher Pilot Feedback</h4>
+              <p style="margin:0 0 14px 0; font-size:0.85rem; color:var(--text-secondary);">Submit structured qualitative feedback across the 11 pilot assessment dimensions.</p>
+
+              <form id="betaFeedbackForm" onsubmit="handleBetaFeedbackSubmit(event)">
+                <div style="margin-bottom:12px;">
+                  <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Participant ID</label>
+                  <input type="text" id="feedbackParticipantId" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" value="learner_alice" required>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+                  <div>
+                    <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Feedback Category</label>
+                    <select id="feedbackCategory" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);">
+                      <option value="scoring_accuracy">Scoring Accuracy</option>
+                      <option value="content_depth">Content Depth</option>
+                      <option value="clarity">Instructional Clarity</option>
+                      <option value="task_response">Task Response Quality</option>
+                      <option value="timing">Exam Timing &amp; Pacing</option>
+                      <option value="ui_usability">UI &amp; Usability</option>
+                      <option value="mobile_experience">Mobile / Tablet Experience</option>
+                      <option value="audio_quality">Audio / Speaking Quality</option>
+                      <option value="accessibility">Accessibility (A11y)</option>
+                      <option value="stability">System Stability</option>
+                      <option value="other">Other Observations</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Likert Rating (1-5)</label>
+                    <select id="feedbackRating" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);">
+                      <option value="5">⭐⭐⭐⭐⭐ 5 - Excellent</option>
+                      <option value="4" selected>⭐⭐⭐⭐ 4 - Good</option>
+                      <option value="3">⭐⭐⭐ 3 - Neutral</option>
+                      <option value="2">⭐⭐ 2 - Needs Work</option>
+                      <option value="1">⭐ 1 - Unsatisfactory</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="margin-bottom:14px;">
+                  <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Feedback Comments</label>
+                  <textarea id="feedbackText" class="form-control" rows="3" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="Describe what worked well and what requires pedagogical refinement..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%; font-weight:700;">Submit Feedback</button>
+              </form>
+            </div>
+
+            <!-- Defect / Bug Reporting Form -->
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:1.25rem;">
+              <h4 style="margin:0 0 10px 0; font-size:1.05rem;">🐛 Pilot Defect &amp; Bug Report</h4>
+              <p style="margin:0 0 14px 0; font-size:0.85rem; color:var(--text-secondary);">Log technical defects, exam anomalies, or display errors with severity classification.</p>
+
+              <form id="betaBugForm" onsubmit="handleBetaBugSubmit(event)">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+                  <div>
+                    <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Reporter ID</label>
+                    <input type="text" id="bugReporterId" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" value="learner_alice" required>
+                  </div>
+                  <div>
+                    <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Defect Severity</label>
+                    <select id="bugSeverity" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);">
+                      <option value="trivial">Trivial (Cosmetic)</option>
+                      <option value="minor" selected>Minor (Non-blocking)</option>
+                      <option value="major">Major (Feature impaired)</option>
+                      <option value="critical">Critical (Crash / Data loss)</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="margin-bottom:12px;">
+                  <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Defect Title</label>
+                  <input type="text" id="bugTitle" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="e.g. Timer displays NaN on quick refresh" required>
+                </div>
+                <div style="margin-bottom:14px;">
+                  <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Steps to Reproduce &amp; Description</label>
+                  <textarea id="bugDescription" class="form-control" rows="3" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="1. Start Academic Reading... 2. Click Passage 2... Observed behavior..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-outline" style="width:100%; font-weight:700; color:var(--danger-color); border-color:var(--danger-color);">Log Defect</button>
+              </form>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   </div>
@@ -1322,6 +2104,265 @@
         </a>
         <button onclick="closeIosInstallModal()" class="btn btn-secondary" style="padding:6px 16px;">Close</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Learner Profile & Onboarding Modal -->
+  <div id="learnerProfileModal" class="modal-overlay" style="display:none; z-index:99999;">
+    <div class="modal-content" style="max-width:640px; width:92%; max-height:92vh; overflow-y:auto; border-radius:18px; padding:24px; box-shadow:0 25px 60px rgba(0,0,0,0.6);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:14px; margin-bottom:18px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg, var(--accent-primary), #6366f1); display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+            👤
+          </div>
+          <div>
+            <h3 style="margin:0; font-size:1.2rem; font-weight:700;" id="learnerModalTitle">Learner Profile &amp; Preferences</h3>
+            <span style="font-size:0.82rem; color:var(--text-secondary);">Personalize your IELTS target, CEFR level, and daily study schedule</span>
+          </div>
+        </div>
+        <button onclick="closeLearnerProfileModal()" class="btn btn-icon btn-sm" style="font-size:1.1rem; border-radius:50%;" title="Close">✕</button>
+      </div>
+
+      <!-- Modal Tabs: Profile Edit vs Switch Learner -->
+      <div style="display:flex; gap:8px; margin-bottom:18px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+        <button class="btn btn-secondary btn-sm active" id="tabBtnActiveProfile" onclick="switchProfileModalTab('active')" style="font-weight:600;">Current Profile</button>
+        <button class="btn btn-secondary btn-sm" id="tabBtnSwitchLearner" onclick="switchProfileModalTab('switch')" style="font-weight:600;">Switch / Add Learner</button>
+      </div>
+
+      <!-- Tab 1: Current Profile Form -->
+      <div id="profileFormTabContent">
+        <form id="learnerProfileForm" onsubmit="saveLearnerProfile(event)" style="display:flex; flex-direction:column; gap:14px;">
+          <input type="hidden" id="inputLearnerId" value="default_learner">
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Learner Full Name</label>
+              <input type="text" id="inputLearnerName" required class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);" placeholder="e.g. Bhuwan Gautam">
+            </div>
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Native Language</label>
+              <input type="text" id="inputLearnerNativeLang" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);" placeholder="e.g. Nepali, Spanish, Hindi">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">IELTS Track</label>
+              <select id="selectLearnerTrack" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);">
+                <option value="Academic">IELTS Academic (University &amp; Professional)</option>
+                <option value="General Training">IELTS General Training (Migration &amp; Work)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">CEFR English Level</label>
+              <select id="selectLearnerCEFR" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);">
+                <option value="A1">A1 — Beginner</option>
+                <option value="A2">A2 — Elementary</option>
+                <option value="B1">B1 — Intermediate</option>
+                <option value="B2" selected>B2 — Upper Intermediate</option>
+                <option value="C1">C1 — Advanced</option>
+                <option value="C2">C2 — Proficiency</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Target Band</label>
+              <select id="selectLearnerTargetBand" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);">
+                <option value="5.5">Band 5.5</option>
+                <option value="6.0">Band 6.0</option>
+                <option value="6.5">Band 6.5</option>
+                <option value="7.0">Band 7.0</option>
+                <option value="7.5" selected>Band 7.5</option>
+                <option value="8.0">Band 8.0</option>
+                <option value="8.5">Band 8.5</option>
+                <option value="9.0">Band 9.0 (Expert)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Current Band</label>
+              <select id="selectLearnerCurrentBand" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);">
+                <option value="4.5">Band 4.5</option>
+                <option value="5.0">Band 5.0</option>
+                <option value="5.5">Band 5.5</option>
+                <option value="6.0" selected>Band 6.0</option>
+                <option value="6.5">Band 6.5</option>
+                <option value="7.0">Band 7.0</option>
+                <option value="7.5">Band 7.5</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Daily Study Time</label>
+              <select id="selectLearnerDailyMinutes" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);">
+                <option value="15">15 Minutes / Day</option>
+                <option value="30" selected>30 Minutes / Day</option>
+                <option value="45">45 Minutes / Day</option>
+                <option value="60">60 Minutes / Day</option>
+                <option value="90">90 Minutes / Day</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Target Examination Date (Optional)</label>
+              <input type="date" id="inputLearnerExamDate" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);">
+            </div>
+            <div>
+              <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:4px;">Personal Study Notes / Focus</label>
+              <input type="text" id="inputLearnerNotes" class="form-control" style="width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-primary);" placeholder="e.g. Focus on Task 2 PEEL cohesion">
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; border-top:1px solid var(--border-color); padding-top:14px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="closeLearnerProfileModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="padding:8px 22px; font-weight:700;">Save &amp; Apply Profile</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab 2: Switch / Add Learner Tab Content -->
+      <div id="profileSwitchTabContent" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h4 style="margin:0;">Registered Learner Profiles</h4>
+          <button class="btn btn-primary btn-sm" onclick="prepareNewLearnerProfile()">+ New Learner</button>
+        </div>
+        <div id="learnerProfilesList" style="display:flex; flex-direction:column; gap:10px; max-height:280px; overflow-y:auto;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTH & ROLE SWITCHER MODAL (PHASE 16) -->
+  <div id="authModal" class="goal-modal-overlay" style="display:none;">
+    <div class="goal-modal-card" style="max-width:480px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="margin:0; font-size:1.25rem;">🔐 User Authentication &amp; RBAC</h3>
+        <button class="btn btn-icon btn-sm" onclick="closeAuthModal()">✕</button>
+      </div>
+      <p style="margin:0 0 14px 0; font-size:0.85rem; color:var(--text-secondary);">
+        Switch active identity or login with credentials. Access to Teacher review, Examiner calibration, and Administration is enforced server-side.
+      </p>
+
+      <!-- Quick Role Selection -->
+      <label style="font-size:0.82rem; font-weight:600; display:block; margin-bottom:6px;">Quick Switch Seeded User:</label>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('learner_alice', 'learner123')">👤 Learner (Alice)</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('teacher_sarah', 'teacher123')">👩‍🏫 Teacher (Sarah)</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('examiner_mark', 'examiner123')">👨‍⚖️ Examiner (Mark)</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('examiner_clara', 'examiner123')">⚖️ Senior Exam (Clara)</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="quickLogin('admin', 'admin123')" style="grid-column: span 2;">👑 Administrator</button>
+      </div>
+
+      <div style="position:relative; text-align:center; margin:12px 0;">
+        <hr style="border:0; border-top:1px solid var(--border-color);">
+        <span style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--bg-secondary); padding:0 8px; font-size:0.75rem; color:var(--text-muted);">OR LOGIN</span>
+      </div>
+
+      <form id="customLoginForm" onsubmit="handleCustomLogin(event)">
+        <div style="margin-bottom:10px;">
+          <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Username</label>
+          <input type="text" id="loginUsername" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="username" required>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Password</label>
+          <input type="password" id="loginPassword" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" placeholder="password" required>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="logoutCurrentUser()">Sign Out</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="padding:8px 20px;">Sign In</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- NEW ASSIGNMENT MODAL (PHASE 16) -->
+  <div id="newAssignmentModal" class="goal-modal-overlay" style="display:none;">
+    <div class="goal-modal-card" style="max-width:520px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="margin:0; font-size:1.25rem;">+ Assign Submission for Review</h3>
+        <button class="btn btn-icon btn-sm" onclick="closeNewAssignmentModal()">✕</button>
+      </div>
+      <form id="newAssignmentForm" onsubmit="handleCreateAssignment(event)">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Skill</label>
+            <select id="assignSkill" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);">
+              <option value="writing">Writing</option>
+              <option value="speaking">Speaking</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Assigned Reviewer ID</label>
+            <input type="text" id="assignReviewerId" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" value="teacher_sarah" required>
+          </div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Learner ID</label>
+          <input type="text" id="assignLearnerId" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" value="learner_alice" required>
+        </div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Task Title / Prompt</label>
+          <input type="text" id="assignPrompt" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" value="Writing Task 2: Some people believe that technology reduces human interaction. Discuss both views and give your opinion." required>
+        </div>
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Learner Submission Text</label>
+          <textarea id="assignSubmissionText" class="form-control" rows="4" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" required>In modern times, technological progress has transformed the way people communicate. While some argue that screens diminish direct social connections, others believe that technology creates global communities. In my opinion, although digital devices can create superficial interactions, they fundamentally broaden communication opportunities when used thoughtfully.</textarea>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeNewAssignmentModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Create Assignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ENROLL PARTICIPANT MODAL (PHASE 16) -->
+  <div id="enrollParticipantModal" class="goal-modal-overlay" style="display:none;">
+    <div class="goal-modal-card" style="max-width:480px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="margin:0; font-size:1.25rem;">+ Enroll Beta Pilot Participant</h3>
+        <button class="btn btn-icon btn-sm" onclick="closeEnrollParticipantModal()">✕</button>
+      </div>
+      <form id="enrollParticipantForm" onsubmit="handleEnrollParticipant(event)">
+        <div style="margin-bottom:10px;">
+          <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Select Cohort</label>
+          <select id="enrollCohortSelect" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);">
+            <option value="cohort_acad_1">Academic Batch 1 (Target: 6.5–7.5)</option>
+            <option value="cohort_gt_1">General Training Batch 1 (Target: 7.0+)</option>
+            <option value="cohort_acad_a1_b1">Foundation A1–B1 (Target: 5.0–6.0)</option>
+            <option value="cohort_acad_b2_c2">Advanced B2–C2 (Target: 7.5–9.0)</option>
+          </select>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">User ID</label>
+            <input type="text" id="enrollUserId" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" value="learner_alice" required>
+          </div>
+          <div>
+            <label style="font-size:0.8rem; font-weight:600; display:block; margin-bottom:3px;">Target Band</label>
+            <select id="enrollTargetBand" class="form-control" style="width:100%; padding:8px 12px; border-radius:6px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);">
+              <option value="6.5">Band 6.5</option>
+              <option value="7.0" selected>Band 7.0</option>
+              <option value="7.5">Band 7.5</option>
+              <option value="8.0">Band 8.0</option>
+            </select>
+          </div>
+        </div>
+        <!-- Mandatory Informed Consent -->
+        <div style="margin-bottom:14px; padding:10px 12px; border-radius:8px; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.25);">
+          <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.8rem; cursor:pointer;">
+            <input type="checkbox" id="enrollConsentCheckbox" style="margin-top:2px;" required>
+            <span><strong>Mandatory Informed Consent:</strong> I agree to participate in the supervised beta pilot and grant permission for my anonymized practice writing and speaking submissions to be reviewed by calibrated teachers for educational calibration. Consent can be revoked at any time.</span>
+          </label>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeEnrollParticipantModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Enroll Participant</button>
+        </div>
+      </form>
     </div>
   </div>
 

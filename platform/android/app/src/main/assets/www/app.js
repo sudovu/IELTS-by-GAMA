@@ -6,7 +6,7 @@
  */
 
 const API_BASE = "";
-const APP_VERSION = "1.5.3";
+const APP_VERSION = "1.6.0";
 
 // Global State
 let appState = {
@@ -14,6 +14,8 @@ let appState = {
   currentTab: "dashboard",
   connectivity: "OFFLINE",
   forcedOffline: false,
+  sessionToken: localStorage.getItem("gama_session_token") || null,
+  currentUser: JSON.parse(localStorage.getItem("gama_current_user") || "null") || { user_id: "learner_alice", role: "learner" },
   srsDeck: [],
   currentCardIdx: 0,
   currentListeningSection: "sec_1",
@@ -45,20 +47,107 @@ let appState = {
 // Offline Standalone Client Engine (for Android APK & No-Server runtimes)
 // -------------------------------------------------------------
 const OfflineLocalEngine = {
+  getLearners() {
+    const raw = localStorage.getItem("gama_learners");
+    if (raw) {
+      try { return JSON.parse(raw); } catch (e) {}
+    }
+    const def = this.getProfile();
+    return [def];
+  },
+  getActiveLearnerId() {
+    return localStorage.getItem("gama_active_learner_id") || "default_learner";
+  },
   getProfile() {
+    const activeId = this.getActiveLearnerId();
+    const rawList = localStorage.getItem("gama_learners");
+    if (rawList) {
+      try {
+        const list = JSON.parse(rawList);
+        const found = list.find(l => l.id === activeId);
+        if (found) return found;
+      } catch (e) {}
+    }
     const raw = localStorage.getItem("gama_profile");
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      try {
+        const p = JSON.parse(raw);
+        p.id = p.id || activeId;
+        return p;
+      } catch (e) {}
+    }
     return {
+      id: "default_learner",
       name: "Learner",
       current_band: 6.0,
       target_band: 7.5,
       cefr_level: "B2",
       daily_minutes: 30,
-      track: "Academic"
+      track: "Academic",
+      native_language: "English",
+      target_exam_date: null,
+      notes: ""
     };
   },
   saveProfile(p) {
+    p.id = p.id || this.getActiveLearnerId();
     localStorage.setItem("gama_profile", JSON.stringify(p));
+    let list = [];
+    try {
+      list = JSON.parse(localStorage.getItem("gama_learners") || "[]");
+    } catch (e) { list = []; }
+    const idx = list.findIndex(l => l.id === p.id);
+    if (idx >= 0) {
+      list[idx] = { ...list[idx], ...p };
+    } else {
+      list.push(p);
+    }
+    localStorage.setItem("gama_learners", JSON.stringify(list));
+  },
+  computeDynamicRadar(prof) {
+    const cefrMap = { A1: 3.0, A2: 4.0, B1: 5.0, B2: 6.0, C1: 7.5, C2: 8.5 };
+    const baseBand = Number(prof.current_band) || cefrMap[prof.cefr_level] || 6.0;
+    
+    let activities = [];
+    try {
+      activities = JSON.parse(localStorage.getItem("gama_practice_activity") || "[]");
+    } catch (e) {}
+    
+    const getBand = (type) => {
+      const filtered = activities.filter(a => a.type === type && a.score);
+      if (!filtered.length) return baseBand;
+      const sum = filtered.reduce((acc, a) => acc + Number(a.score), 0);
+      return Math.round((sum / filtered.length) * 10) / 10;
+    };
+
+    const reading = getBand("reading");
+    const listening = getBand("listening");
+    const writing = getBand("writing");
+    const speaking = getBand("speaking");
+
+    const mistakes = this.getMistakes();
+    const activeGrammar = mistakes.filter(m => m.skill === "grammar" && m.status !== "mastered").length;
+    const grammarPenalty = Math.min(1.5, activeGrammar * 0.1);
+    const grammar = Math.max(3.0, Math.round((baseBand - grammarPenalty) * 10) / 10);
+
+    const srs = this.getSRS();
+    const masteredSRS = srs.filter(s => s.repetition >= 2).length;
+    const vocabBonus = Math.min(1.0, masteredSRS * 0.05);
+    const vocabulary = Math.min(9.0, Math.round((baseBand + vocabBonus) * 10) / 10);
+
+    const fluency = Math.round(baseBand * 10) / 10;
+    const pronunciation = Math.round(baseBand * 10) / 10;
+
+    return {
+      "Reading": reading,
+      "Listening": listening,
+      "Writing": writing,
+      "Speaking": speaking,
+      "Grammar": grammar,
+      "Vocabulary": vocabulary,
+      "Fluency": fluency,
+      "Pronunciation": pronunciation
+    };
   },
   getMistakes() {
     const raw = localStorage.getItem("gama_mistakes");
@@ -245,8 +334,318 @@ const OfflineLocalEngine = {
     localStorage.setItem("gama_srs", JSON.stringify(deck));
   },
 
+  getCurriculumProgress() {
+    const raw = localStorage.getItem("gama_curriculum_progress");
+    return raw ? JSON.parse(raw) : {};
+  },
+  saveCurriculumProgress(prog) {
+    localStorage.setItem("gama_curriculum_progress", JSON.stringify(prog));
+  },
+  getStarterLessons() {
+    return [
+      {
+        id: "curric_a1_gram_present_simple", cefr_level: "A1", module_type: "grammar", title: "Present Simple & Subject-Verb Concord", order_index: 1,
+        objectives: ["Understand when to use the Present Simple for habits and routines", "Master third-person singular inflection ('-s'/'-es')", "Formulate accurate negative sentences using 'does not'"],
+        explanation_markdown: "The Present Simple expresses habits, daily routines, and universal truths. Third person singular (he/she/it) adds -s/-es. Negatives use do/does not + base verb.",
+        examples: [{ text: "She studies English for forty minutes every evening.", notes: "Third-person singular 'she' requires 'studies'." }],
+        guided_exercises: [{ id: "a1_ge_1", prompt: "My brother _____ (work) in a hospital in Manchester.", answer: "works", explanation: "'My brother' is third-person singular (he), requiring '-s'." }],
+        interactive_practice: [{ id: "a1_ip_1", question: "Which sentence demonstrates correct third-person concord?", options: ["He watch documentary films.", "He watches documentary films.", "He is watches films."], correct_index: 1, explanation: "Verbs ending in '-ch' take '-es': 'watches'." }],
+        assessment: [{ id: "a1_as_1", question: "Choose the correct negative form: 'Sarah _____ coffee after dinner.'", options: ["doesn't drinks", "don't drink", "doesn't drink", "not drinks"], correct_index: 2, explanation: "'Sarah' (she) takes 'doesn't' + base verb 'drink'." }]
+      },
+      {
+        id: "curric_a1_vocab_everyday_essentials", cefr_level: "A1", module_type: "vocabulary", title: "Everyday Essentials: Numbers, Family & Time", order_index: 2,
+        objectives: ["Learn essential vocabulary for time, dates, and family relationships", "Use prepositions of time ('at', 'in', 'on') accurately"],
+        explanation_markdown: "Prepositions of time: AT for specific hours (at 7:00), ON for days and dates (on Friday), IN for months, years, and seasons (in July, in 2026).",
+        examples: [{ text: "The lecture begins at nine o'clock on Monday.", notes: "'At' for specific time, 'on' for day." }],
+        guided_exercises: [{ id: "a1_v_ge_1", prompt: "The examination takes place _____ Tuesday afternoon.", answer: "on", explanation: "Days of the week take 'on'." }],
+        interactive_practice: [{ id: "a1_v_ip_1", question: "Select the correct preposition: 'The flight departs _____ midnight.'", options: ["in", "on", "at"], correct_index: 2, explanation: "Points of time like 'midnight' require 'at'." }],
+        assessment: [{ id: "a1_v_as_1", question: "Which phrase correctly states a morning schedule?", options: ["The class begins at 8:00 AM on Friday.", "The class begins in 8:00 AM at Friday."], correct_index: 0, explanation: "'At' for hour, 'on' for day." }]
+      },
+      {
+        id: "curric_a1_speak_introductions", cefr_level: "A1", module_type: "speaking", title: "Self-Introductions & Personal Information", order_index: 3,
+        objectives: ["Introduce oneself clearly in formal interviews", "State nationality, origin, and occupation accurately"],
+        explanation_markdown: "Formula: 'Good morning, my name is [Name]. I come from [City], and I work as a / am an undergraduate student majoring in [Field].'",
+        examples: [{ text: "Good morning. My name is Bhuwan Gautam, and I come from Kathmandu, Nepal.", notes: "Clear and professional." }],
+        guided_exercises: [{ id: "a1_sp_ge_1", prompt: "Complete: 'I am _____ from Pokhara, Nepal.'", answer: "originally", explanation: "'Originally' indicates hometown origin." }],
+        interactive_practice: [{ id: "a1_sp_ip_1", question: "Natural answer to 'Where are you from?'", options: ["I am coming from Spain.", "I am from Valencia, which is on the eastern coast of Spain."], correct_index: 1, explanation: "Gives origin and brief context." }],
+        assessment: [{ id: "a1_sp_as_1", question: "Introduce occupation properly:", options: ["I work like an accountant.", "I am working as an accountant at an international firm."], correct_index: 1, explanation: "'Work as a/an [profession]' is the idiomatic standard." }]
+      },
+      {
+        id: "curric_a2_gram_past_simple", cefr_level: "A2", module_type: "grammar", title: "Past Simple & Completed Actions", order_index: 1,
+        objectives: ["Use Past Simple to narrate finished past events", "Master negative and question forms with auxiliary 'did'"],
+        explanation_markdown: "Past Simple denotes completed actions at definite times. Negatives use didn't + base verb ('didn't go', NOT 'didn't went').",
+        examples: [{ text: "The committee published their findings yesterday.", notes: "Regular past with time marker 'yesterday'." }],
+        guided_exercises: [{ id: "a2_ge_1", prompt: "Yesterday, they _____ (see) an informative documentary.", answer: "saw", explanation: "Irregular past of 'see' is 'saw'." }],
+        interactive_practice: [{ id: "a2_ip_1", question: "Identify the correct past negative:", options: ["He didn't went yesterday.", "He didn't go yesterday."], correct_index: 1, explanation: "Auxiliary didn't requires base verb 'go'." }],
+        assessment: [{ id: "a2_as_1", question: "Choose the correct past question:", options: ["Did she finished the report?", "Did she finish the report?"], correct_index: 1, explanation: "'Did' + subject + base form 'finish'." }]
+      },
+      {
+        id: "curric_a2_vocab_travel_transport", cefr_level: "A2", module_type: "vocabulary", title: "Travel, Commuting & Urban Geography", order_index: 2,
+        objectives: ["Expand transit vocabulary: commute, congestion, fare, network"],
+        explanation_markdown: "Commute: daily travel to work. Congestion: heavy traffic blocking roads. Fare: price paid for travel ticket.",
+        examples: [{ text: "Urban professionals commute by underground train to avoid congestion.", notes: "High-frequency transport vocabulary." }],
+        guided_exercises: [{ id: "a2_v_ge_1", prompt: "Traffic _____ causes significant delays.", answer: "congestion", explanation: "'Congestion' specifically describes traffic jams." }],
+        interactive_practice: [{ id: "a2_v_ip_1", question: "Daily journey people make to their workplace?", options: ["Voyage", "Commute", "Expedition"], correct_index: 1, explanation: "'Commute' specifically refers to travel to and from work." }],
+        assessment: [{ id: "a2_v_as_1", question: "Public transport ticket prices are called:", options: ["fares", "debts", "penalties"], correct_index: 0, explanation: "Transport tickets are 'fares'." }]
+      },
+      {
+        id: "curric_a2_read_scanning_notices", cefr_level: "A2", module_type: "reading", title: "Scanning Notices & Informational Announcements", order_index: 3,
+        objectives: ["Distinguish skimming for gist from scanning for facts", "Locate dates, eligibility, and fees rapidly"],
+        explanation_markdown: "Scanning is moving your eyes across text to locate specific keywords, dates, or numbers without reading every word.",
+        examples: [{ text: "Notice: 'Submissions accepted until 5:00 PM on Friday.' Scanning for deadline -> Friday.", notes: "Direct keyword location." }],
+        guided_exercises: [{ id: "a2_r_ge_1", prompt: "Members enter free; others pay £12. Member fee? (Answer: free)", answer: "free", explanation: "Targeted scanning directly yields 'free'." }],
+        interactive_practice: [{ id: "a2_r_ip_1", question: "Difference between skimming and scanning?", options: ["Skimming captures gist; scanning finds specific data.", "They are identical."], correct_index: 0, explanation: "Skimming gives overview; scanning extracts target points." }],
+        assessment: [{ id: "a2_r_as_1", question: "Facility closed alternate Mondays. Is it open every Monday?", options: ["Yes", "No"], correct_index: 1, explanation: "'Alternate' means every other, so not every Monday." }]
+      },
+      {
+        id: "curric_b1_gram_present_perfect", cefr_level: "B1", module_type: "grammar", title: "Present Perfect vs. Past Simple Distinction", order_index: 1,
+        objectives: ["Distinguish unfinished time (Present Perfect) from finished time (Past Simple)", "Use 'for' (duration) and 'since' (starting point) accurately"],
+        explanation_markdown: "Present Perfect (have/has + participle) connects past to present. Never combine it with finished past time expressions like 'yesterday' or 'in 2020'.",
+        examples: [{ text: "Researchers have investigated solar cells for over a decade.", notes: "Ongoing inquiry spanning past into present." }],
+        guided_exercises: [{ id: "b1_ge_1", prompt: "She has lived here _____ three years. (for / since)", answer: "for", explanation: "'Three years' is duration, requiring 'for'." }],
+        interactive_practice: [{ id: "b1_ip_1", question: "Which sentence contains an error?", options: ["I visited London two months ago.", "I have visited London two months ago."], correct_index: 1, explanation: "'Two months ago' is finished time and cannot use Present Perfect." }],
+        assessment: [{ id: "b1_as_1", question: "Select correct sentence:", options: ["The company released three patches last month.", "The company has released three patches last month."], correct_index: 0, explanation: "'Last month' requires Past Simple 'released'." }]
+      },
+      {
+        id: "curric_b1_vocab_workplace_education", cefr_level: "B1", module_type: "vocabulary", title: "Workplace Dynamics, Careers & Higher Education", order_index: 2,
+        objectives: ["Learn tertiary education and vocational terminology", "Form academic word families"],
+        explanation_markdown: "Tertiary education refers to university studies. Vocational education refers to practical job training. Curriculum is the academic courses offered.",
+        examples: [{ text: "Tertiary education equips graduates with specialized technical competencies.", notes: "Band 7+ lexis." }],
+        guided_exercises: [{ id: "b1_v_ge_1", prompt: "Practical job training is known as _____ education. (vocational / theoretical)", answer: "vocational", explanation: "'Vocational' refers to trade and technical training." }],
+        interactive_practice: [{ id: "b1_v_ip_1", question: "University-level education is termed:", options: ["Primary education", "Tertiary education"], correct_index: 1, explanation: "'Tertiary' is the standard academic term." }],
+        assessment: [{ id: "b1_v_as_1", question: "Collocation: 'Update their academic _____ to reflect changes.'", options: ["curriculum", "commute", "fare"], correct_index: 0, explanation: "'Academic curriculum' is the standard pairing." }]
+      },
+      {
+        id: "curric_b1_write_cohesion_linkers", cefr_level: "B1", module_type: "writing", title: "Paragraph Architecture & Cohesive Discourse Linkers", order_index: 3,
+        objectives: ["Construct clear topic sentences", "Deploy contrast (However), addition (Furthermore), and consequence (Therefore) correctly"],
+        explanation_markdown: "Cohesive linkers signpost logic: However (contrast), Consequently/Therefore (result), Furthermore/Moreover (addition). Precede with a semicolon or start sentence with a comma.",
+        examples: [{ text: "Renewable energy requires capital investment. Consequently, subsidies are vital.", notes: "Cause and effect signposting." }],
+        guided_exercises: [{ id: "b1_w_ge_1", prompt: "Electric cars produce zero emissions. _____, their batteries require rare minerals. (However / Furthermore)", answer: "However", explanation: "Contrasts advantage with drawback." }],
+        interactive_practice: [{ id: "b1_w_ip_1", question: "Which connector introduces a logical consequence?", options: ["In addition", "Therefore", "Whereas"], correct_index: 1, explanation: "'Therefore' signals logical outcome." }],
+        assessment: [{ id: "b1_w_as_1", question: "Punctuate correctly:", options: ["Furthermore strict penalties deter polluters.", "Furthermore, strict penalties deter polluters."], correct_index: 1, explanation: "Sentence-initial conjunctive adverbs require a comma." }]
+      },
+      {
+        id: "curric_b2_gram_conditionals", cefr_level: "B2", module_type: "grammar", title: "Hypothetical Conditionals & Mixed Forms in Academic Arguments", order_index: 1,
+        objectives: ["Master Second, Third, and Mixed Conditionals", "Apply hypothetical subjunctive ('If governments were to...')"],
+        explanation_markdown: "Second conditional (unreal present/future): If + past, would + verb. Third conditional (unreal past): If + had + participle, would have + participle. Mixed: If + had + participle, would + base verb.",
+        examples: [{ text: "If municipal councils were to invest in light rail, inner-city pollution would decline substantially.", notes: "Subjunctive hypothetical proposal." }],
+        guided_exercises: [{ id: "b2_ge_1", prompt: "If scientists _____ (not / develop) mRNA vaccines, recovery would have been delayed.", answer: "had not developed", explanation: "Third conditional unreal past requires 'had not developed'." }],
+        interactive_practice: [{ id: "b2_ip_1", question: "Correct mixed conditional:", options: ["If she had studied medicine, she would be a doctor today.", "If she studied medicine, she would be a doctor today."], correct_index: 0, explanation: "Past condition producing present ongoing state." }],
+        assessment: [{ id: "b2_as_1", question: "Identify the flawed sentence:", options: ["If taxes were increased, spending would fall.", "If taxes would be increased, spending would fall."], correct_index: 1, explanation: "Never place 'would' inside the if-clause." }]
+      },
+      {
+        id: "curric_b2_vocab_academic_word_list", cefr_level: "B2", module_type: "vocabulary", title: "Academic Word List (AWL) Sublist 1 Mastery", order_index: 2,
+        objectives: ["Deploy high-frequency AWL terms: analyze, derive, establish, constituent", "Replace informal verbs with academic equivalents"],
+        explanation_markdown: "Analyze (examine methodically), Derive (obtain from source), Establish (demonstrate conclusively), Constituent (essential component).",
+        examples: [{ text: "Statistical analysis establishes a definitive correlation between diet and wellness.", notes: "Band 8 academic usage." }],
+        guided_exercises: [{ id: "b2_v_ge_1", prompt: "Scholars continue to _____ (analyze / look at) the socioeconomic implications.", answer: "analyze", explanation: "'Analyze' replaces informal 'look at'." }],
+        interactive_practice: [{ id: "b2_v_ip_1", question: "Academic synonym for 'got' in: 'Researchers _____ conclusions from empirical data.'", options: ["got", "derived", "grabbed"], correct_index: 1, explanation: "'Derived' signifies extracting evidence-based findings." }],
+        assessment: [{ id: "b2_v_as_1", question: "Collocation: 'Surveys have _____ a clear link between screen time and sleep.'", options: ["established", "built", "fixed"], correct_index: 0, explanation: "'Establish a link' is an essential collocation." }]
+      },
+      {
+        id: "curric_b2_write_peel_paragraph_technique", cefr_level: "B2", module_type: "writing", title: "PEEL Paragraph Architecture for IELTS Writing Task 2", order_index: 3,
+        objectives: ["Structure body paragraphs with Point, Explanation, Evidence, and Link (PEEL)", "Develop ideas deeply rather than listing superficial points"],
+        explanation_markdown: "PEEL: Point (assertive topic sentence) -> Explanation (mechanics and reasons) -> Evidence (concrete example or case study) -> Link (synthesize back to thesis).",
+        examples: [{ text: "P: Renewable investment accelerates diversification. E: It reduces reliance on volatile imports. E: Uruguay reached 98% clean grid power in 10 years. L: Hence, it safeguards fiscal stability.", notes: "Complete PEEL progression." }],
+        guided_exercises: [{ id: "b2_w_ge_1", prompt: "In PEEL, the second 'E' stands for Evidence or _____? (Answer: Example)", answer: "Example", explanation: "'Example' or 'Evidence' grounds the explanation." }],
+        interactive_practice: [{ id: "b2_w_ip_1", question: "Function of the Link sentence?", options: ["Introduce a new topic", "Tie the paragraph back to the overall essay thesis"], correct_index: 1, explanation: "Unites specific reasoning back to main thesis." }],
+        assessment: [{ id: "b2_w_as_1", question: "Best Topic Sentence (Point):", options: ["There are good and bad things about phones.", "Ubiquitous smartphone use has compromised productivity by fragmenting concentration."], correct_index: 1, explanation: "Assertive, focused topic sentence." }]
+      },
+      {
+        id: "curric_c1_gram_inversion", cefr_level: "C1", module_type: "grammar", title: "Negative & Restrictive Adverbial Inversion", order_index: 1,
+        objectives: ["Deploy negative adverbials ('Seldom', 'Rarely', 'Not only') at sentence onset", "Invert subject and auxiliary verb accurately for dramatic emphasis"],
+        explanation_markdown: "Formula: Negative Adverbial + Auxiliary Verb + Subject + Main Verb. Example: 'Seldom have economists witnessed such rapid reallocation.' 'Not only does automation lower cost, but it also improves safety.'",
+        examples: [{ text: "Rarely do modern educational systems cultivate autonomous critical thinking alongside rote learning.", notes: "Inverted rhetorical opening." }],
+        guided_exercises: [{ id: "c1_ge_1", prompt: "Seldom _____ (have / do / are) climatologists recorded such rapid retreat.", answer: "have", explanation: "Perfect aspect inversion requires 'have'." }],
+        interactive_practice: [{ id: "c1_ip_1", question: "Correct inversion structure:", options: ["Not only automation lowers cost, but it creates jobs.", "Not only does automation lower cost, but it also creates jobs."], correct_index: 1, explanation: "Requires auxiliary 'does' immediately following 'Not only'." }],
+        assessment: [{ id: "c1_as_1", question: "Rewrite with inversion: 'We rarely see such scholarship.'", options: ["Rarely we see such scholarship.", "Rarely do we see such scholarship."], correct_index: 1, explanation: "'Rarely' + auxiliary 'do' + subject 'we'." }]
+      },
+      {
+        id: "curric_c1_vocab_academic_collocations", cefr_level: "C1", module_type: "vocabulary", title: "Nuanced Academic Collocations & Collocational Chains", order_index: 2,
+        objectives: ["Master collocational pairings: mitigate risk, exert influence, exacerbate disparities", "Avoid unidiomatic literal translations"],
+        explanation_markdown: "Collocations are words that naturally co-occur in formal registers: exacerbate disparities (worsen inequalities), mitigate deleterious effects (reduce harm), exert influence.",
+        examples: [{ text: "Failure to regulate algorithms risks exacerbating existing socioeconomic disparities.", notes: "Band 8.5 lexical precision." }],
+        guided_exercises: [{ id: "c1_v_ge_1", prompt: "Subsidies are designed to _____ (mitigate / heal) economic shocks.", answer: "mitigate", explanation: "'Mitigate' collocates with shock, impact, and risk." }],
+        interactive_practice: [{ id: "c1_v_ip_1", question: "Collocation: 'Algorithms _____ a profound influence over behavior.'", options: ["make", "exert", "do"], correct_index: 1, explanation: "'Exert influence' is the standard collocation." }],
+        assessment: [{ id: "c1_v_as_1", question: "Collocation for worsening a condition: 'Inadequate drainage will _____ the flooding.'", options: ["exacerbate", "enlarge", "multiply"], correct_index: 0, explanation: "'Exacerbate severity' is the academic standard." }]
+      },
+      {
+        id: "curric_c1_speak_discourse_markers", cefr_level: "C1", module_type: "speaking", title: "Spoken Fluency Discourse Markers & Epistemic Stance", order_index: 3,
+        objectives: ["Deploy framing markers: 'From an economic standpoint', 'Broadly speaking'", "Qualify generalizations with academic hedging"],
+        explanation_markdown: "Perspective signposts frame thoughts: 'From a sociological vantage point...', 'While that position holds merit, one cannot overlook...'. Hedging avoids sweeping absolutes.",
+        examples: [{ text: "Well, from a sociological vantage point, urbanization is something of a double-edged sword.", notes: "Sophisticated framing." }],
+        guided_exercises: [{ id: "c1_sp_ge_1", prompt: "Complete: 'From a technological _____ (point / standpoint), AI accelerates diagnosis.'", answer: "standpoint", explanation: "'From a [domain] standpoint' frames perspectives." }],
+        interactive_practice: [{ id: "c1_sp_ip_1", question: "Natural concession before counter-critique?", options: ["I hate this opinion, so I think...", "While that argument undoubtedly holds merit, it fails to account for..."], correct_index: 1, explanation: "Respectful academic concession demonstrates C1 spoken mastery." }],
+        assessment: [{ id: "c1_sp_as_1", question: "Best way to hedge a generalization in speaking:", options: ["Everyone in the world always does this.", "The empirical evidence tends to indicate that this pattern is predominant."], correct_index: 1, explanation: "'Tends to indicate' avoids unsubstantiated absolutes." }]
+      },
+      {
+        id: "curric_c2_gram_cleft_sentences", cefr_level: "C2", module_type: "grammar", title: "Cleft Sentences & Discourse Topicalization", order_index: 1,
+        objectives: ["Formulate it-clefts ('It was the lack of...') and wh-clefts ('What we require is...')", "Foreground critical arguments stylistically"],
+        explanation_markdown: "Cleft sentences divide a proposition into two clauses to emphasize focus. It-cleft: It was [focus] that [clause]. Wh-cleft: What [clause] is [focus].",
+        examples: [{ text: "What is particularly striking is the sheer velocity of oceanic temperature elevation.", notes: "Wh-cleft structural focus." }],
+        guided_exercises: [{ id: "c2_ge_1", prompt: "It was human negligence _____ caused the disaster. (that / which)", answer: "that", explanation: "'It was [focus] that...' is the it-cleft formula." }],
+        interactive_practice: [{ id: "c2_ip_1", question: "Authentic wh-cleft structure:", options: ["What policy makers must recognize is that growth cannot occur in isolation.", "Policy makers must recognize what growth is."], correct_index: 0, explanation: "'What [clause] is [proposition]' forms a wh-cleft." }],
+        assessment: [{ id: "c2_as_1", question: "Targeting causation with an it-cleft:", options: ["It was precisely because transit was privatized that fares skyrocketed.", "It was precisely because transit was privatized which fares skyrocketed."], correct_index: 0, explanation: "'It was [cause] that [consequence]' is grammatically exact." }]
+      },
+      {
+        id: "curric_c2_vocab_idiomatic_register", cefr_level: "C2", module_type: "vocabulary", title: "Stylistic Register & Idiomatic Sophistication", order_index: 2,
+        objectives: ["Deploy refined idioms: watershed moment, sea change, double-edged sword, quintessential", "Harmonize elevated register across scholarly prose"],
+        explanation_markdown: "Watershed moment: decisive turning point. Sea change: profound, sweeping transformation. Double-edged sword: carrying both benefits and latent perils.",
+        examples: [{ text: "The advent of AI represents a watershed moment in digital pedagogy.", notes: "Eloquent conceptualization." }],
+        guided_exercises: [{ id: "c2_v_ge_1", prompt: "A decisive turning point is a _____ (watershed / waterfall) moment.", answer: "watershed", explanation: "'Watershed moment' is the standard idiom." }],
+        interactive_practice: [{ id: "c2_v_ip_1", question: "Idiom for a profound transformation:", options: ["A lake change", "A sea change"], correct_index: 1, explanation: "'A sea change' denotes radical transformation." }],
+        assessment: [{ id: "c2_v_as_1", question: "Sentence with flawless C2 register:", options: ["The new law was super good and changed lots of stuff.", "The landmark legislation represented a watershed moment that catalyzed a sea change in consumer privacy."], correct_index: 1, explanation: "Exemplifies elevated academic and stylistic precision." }]
+      },
+      {
+        id: "curric_c2_read_implicit_author_stance", cefr_level: "C2", module_type: "reading", title: "Deconstructing Irony, Hedging & Implicit Author Stance", order_index: 3,
+        objectives: ["Detect subtle authorial skepticism through reporting verbs ('purports', 'alleges')", "Deconstruct complex True/False/Not Given questions"],
+        explanation_markdown: "Authors signal skepticism through verbs like 'purports to' or 'alleges', and scare quotes around terms like 'breakthrough'. Concessive adverbials like 'plausible as this conjecture may seem' precede rebuttals.",
+        examples: [{ text: "'While proponents herald the reform, corroborating telemetry remains sparse.' Stance: Skeptical.", notes: "Signals clear doubt." }],
+        guided_exercises: [{ id: "c2_r_ge_1", prompt: "A theory 'purports to explain consciousness'. Does author fully endorse it? (Yes / No)", answer: "No", explanation: "'Purports to' implies doubt and unproven claims." }],
+        interactive_practice: [{ id: "c2_r_ip_1", question: "Author: 'It is arguably premature to dismantle traditional frameworks.' Stance?", options: ["Cautious and advising against rapid abandonment", "Strongly in favor of immediate abolition"], correct_index: 0, explanation: "'Premature to dismantle' explicitly advises caution." }],
+        assessment: [{ id: "c2_r_as_1", question: "Sentence: 'The reform proved to be little more than rhetorical window-dressing.' Tone:", options: ["Enthusiastic", "Skeptical and dismissive"], correct_index: 1, explanation: "'Rhetorical window-dressing' conveys dismissive skepticism." }]
+      }
+    ];
+  },
+
+  getCurriculumLessons(level = null, moduleType = null) {
+    let lessons = this.getStarterLessons();
+    if (level) lessons = lessons.filter(l => l.cefr_level.toUpperCase() === level.toUpperCase());
+    if (moduleType) lessons = lessons.filter(l => l.module_type.toLowerCase() === moduleType.toLowerCase());
+
+    const progressMap = this.getCurriculumProgress();
+    const activeLid = this.getActiveLearnerId();
+    const learnerProg = progressMap[activeLid] || {};
+
+    return lessons.map(l => {
+      const p = learnerProg[l.id] || { status: "not_started", score: 0.0, attempts: 0 };
+      return {
+        id: l.id,
+        cefr_level: l.cefr_level,
+        module_type: l.module_type,
+        title: l.title,
+        order_index: l.order_index,
+        status: p.status,
+        score: p.score,
+        attempts: p.attempts
+      };
+    });
+  },
+
+  getCurriculumLesson(lessonId) {
+    const lessons = this.getStarterLessons();
+    const lesson = lessons.find(l => l.id === lessonId);
+    if (!lesson) return null;
+
+    const copy = JSON.parse(JSON.stringify(lesson));
+    const progressMap = this.getCurriculumProgress();
+    const activeLid = this.getActiveLearnerId();
+    const learnerProg = progressMap[activeLid] || {};
+    copy.learner_progress = learnerProg[lessonId] || { status: "not_started", score: 0.0, attempts: 0 };
+    return copy;
+  },
+
+  evaluateCurriculumSubmission(body) {
+    const lessonId = body?.lesson_id;
+    const answers = body?.answers || {};
+    const lesson = this.getCurriculumLesson(lessonId);
+    if (!lesson) return { success: false, error: "Lesson not found" };
+
+    const questions = (lesson.assessment && lesson.assessment.length) ? lesson.assessment : (lesson.interactive_practice || []);
+    let correct = 0;
+    const feedback = [];
+
+    questions.forEach(q => {
+      const userAns = answers[q.id];
+      const isCorrect = (userAns !== undefined && parseInt(userAns, 10) === q.correct_index);
+      if (isCorrect) correct++;
+
+      feedback.push({
+        question_id: q.id,
+        is_correct: isCorrect,
+        user_answer: userAns,
+        correct_answer: q.correct_index,
+        explanation: q.explanation || (isCorrect ? "Correct!" : "Incorrect.")
+      });
+
+      if (!isCorrect) {
+        const userText = (q.options && userAns !== undefined && q.options[parseInt(userAns, 10)]) ? q.options[parseInt(userAns, 10)] : "Unanswered";
+        const correctText = (q.options && q.options[q.correct_index]) ? q.options[q.correct_index] : "Correct Option";
+        this.addMistake(lesson.module_type || "grammar", lesson.title, userText, correctText, q.explanation || "");
+      }
+    });
+
+    const scorePct = questions.length ? Math.round((correct / questions.length) * 100) : 100;
+    const status = scorePct >= 80 ? "mastered" : (scorePct >= 60 ? "completed" : "needs_review");
+
+    // Save progress
+    const activeLid = this.getActiveLearnerId();
+    const progressMap = this.getCurriculumProgress();
+    if (!progressMap[activeLid]) progressMap[activeLid] = {};
+    const existing = progressMap[activeLid][lessonId] || { attempts: 0, score: 0 };
+    progressMap[activeLid][lessonId] = {
+      status: status,
+      score: Math.max(existing.score, scorePct),
+      attempts: existing.attempts + 1,
+      completed_at: new Date().toISOString()
+    };
+    this.saveCurriculumProgress(progressMap);
+
+    return {
+      success: true,
+      lesson_id: lessonId,
+      cefr_level: lesson.cefr_level,
+      score: scorePct,
+      status: status,
+      total_questions: questions.length,
+      correct_count: correct,
+      feedback: feedback
+    };
+  },
+
   handleRequest(url, method = "GET", body = null) {
     const p = url.replace(API_BASE, "");
+
+    if (p === "/api/learners" && method === "GET") {
+      return {
+        learners: this.getLearners(),
+        active_learner_id: this.getActiveLearnerId()
+      };
+    }
+
+    if (p === "/api/learners/current" && method === "GET") {
+      return {
+        learner: this.getProfile()
+      };
+    }
+
+    if (p === "/api/learners/switch" && method === "POST") {
+      const newId = body?.learner_id || "default_learner";
+      localStorage.setItem("gama_active_learner_id", newId);
+      return { success: true, active_learner_id: newId };
+    }
+
+    if (p === "/api/learners/save" && method === "POST") {
+      const learnerData = body || {};
+      if (!learnerData.id) {
+        learnerData.id = "learner_" + Date.now().toString(36);
+      }
+      this.saveProfile(learnerData);
+      localStorage.setItem("gama_active_learner_id", learnerData.id);
+      return { success: true, learner: learnerData };
+    }
+
+    if (p === "/api/learners/delete" && method === "POST") {
+      const targetId = body?.learner_id;
+      if (targetId && targetId !== "default_learner") {
+        let list = this.getLearners().filter(l => l.id !== targetId);
+        localStorage.setItem("gama_learners", JSON.stringify(list));
+        if (this.getActiveLearnerId() === targetId) {
+          localStorage.setItem("gama_active_learner_id", "default_learner");
+        }
+      }
+      return { success: true };
+    }
 
     if (p === "/api/status") {
       const isTablet = window.innerWidth >= 768;
@@ -264,6 +663,7 @@ const OfflineLocalEngine = {
       const mistakes = this.getMistakes();
       const srs = this.getSRS();
       const activeMistakes = mistakes.filter(m => m.status !== "mastered");
+      const dynamicRadar = this.computeDynamicRadar(prof);
       return {
         dashboard: {
           learner_profile: prof,
@@ -271,16 +671,7 @@ const OfflineLocalEngine = {
           target_band: prof.target_band,
           cefr_level: prof.cefr_level,
           track: prof.track,
-          skills_radar: {
-            "Grammar": 7.0,
-            "Vocabulary": 7.0,
-            "Reading": 6.5,
-            "Listening": 7.0,
-            "Writing": prof.current_band,
-            "Speaking": 6.5,
-            "Fluency": 6.5,
-            "Pronunciation": 7.0
-          },
+          skills_radar: dynamicRadar,
           mistake_book_metrics: {
             active_mistakes_count: activeMistakes.length,
             mastered_count: mistakes.length - activeMistakes.length,
@@ -1028,6 +1419,34 @@ const OfflineLocalEngine = {
       };
     }
 
+    if (p.startsWith("/api/curriculum/lessons")) {
+      const qIndex = p.indexOf("?");
+      let level = null;
+      let mod = null;
+      if (qIndex >= 0) {
+        const queryStr = p.slice(qIndex + 1);
+        queryStr.split("&").forEach(pair => {
+          const [k, v] = pair.split("=");
+          if (k === "level" || k === "cefr_level") level = v;
+          if (k === "module" || k === "module_type") mod = v;
+        });
+      }
+      return {
+        lessons: this.getCurriculumLessons(level, mod),
+        active_learner_id: this.getActiveLearnerId()
+      };
+    }
+
+    if (p.startsWith("/api/curriculum/lesson/")) {
+      const lid = p.replace("/api/curriculum/lesson/", "").split("?")[0].trim();
+      const lesson = this.getCurriculumLesson(lid);
+      return lesson ? { lesson: lesson } : { error: "Lesson not found" };
+    }
+
+    if (p === "/api/curriculum/submit" && method === "POST") {
+      return this.evaluateCurriculumSubmission(body);
+    }
+
     if (p === "/api/chat") {
       const msg = (body.message || "").toLowerCase();
       let reply = "I am ready to help you prepare for IELTS. What would you like to practice: IELTS Advantage Question Analysis, Grammar Fill-Up Clozes, Topic Vocabulary Vault, Reading, Writing, or Speaking?";
@@ -1056,6 +1475,9 @@ async function callApi(url, method = "GET", body = null) {
 
   try {
     const opts = { method: method, headers: { "Content-Type": "application/json" } };
+    if (appState.sessionToken) {
+      opts.headers["X-Session-Token"] = appState.sessionToken;
+    }
     if (body && (method === "POST" || method === "PUT")) {
       opts.body = JSON.stringify(body);
     }
@@ -1399,8 +1821,8 @@ function initMobileCategoryFilter() {
     });
   });
 
-  // Apply initial filter matching starting tab (core for dashboard)
-  applyCategoryFilter("core");
+  // Apply initial filter showing all modules by default
+  applyCategoryFilter("all");
 }
 
 // Quick AI Tutor Chat Prompt helper
@@ -1609,8 +2031,11 @@ window.navigateToTab = function(tabId) {
   if (navItem) {
     navItem.classList.add("active");
 
-    const cat = navItem.getAttribute("data-cat") || "core";
-    applyCategoryFilter(cat);
+    // Ensure target group is visible without hiding other module categories
+    const group = navItem.closest(".nav-category-group");
+    if (group && group.style.display === "none") {
+      group.style.display = "";
+    }
 
     try {
       navItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
@@ -1620,12 +2045,14 @@ window.navigateToTab = function(tabId) {
   // 3. Tab-specific data initializers
   try {
     if (cleanId === "dashboard") loadDashboard();
+    if (cleanId === "curriculum") initCurriculum();
     if (cleanId === "diagnostic") initDiagnostic();
     if (cleanId === "grammar") initGrammar();
     if (cleanId === "vocab") initVocabulary();
     if (cleanId === "reading") loadReading();
     if (cleanId === "listening") loadListening();
     if (cleanId === "writing") initWriting();
+    if (cleanId === "exam") initExamSuite();
     if (cleanId === "speaking") {
       if (typeof onSpeakingSetChanged === "function") {
         onSpeakingSetChanged(appState.currentSpeakingSetIdx || 0);
@@ -1633,6 +2060,9 @@ window.navigateToTab = function(tabId) {
     }
     if (cleanId === "mistakes") loadMistakes();
     if (cleanId === "advantage") loadAdvantagePrompt("stem");
+    if (cleanId === "teacher") loadTeacherDashboard();
+    if (cleanId === "doublemark") loadDoubleMarkingView();
+    if (cleanId === "beta") loadBetaManagement();
   } catch (err) {
     console.warn(`[Tab Nav Data Init Warning]:`, err);
   }
@@ -2008,6 +2438,18 @@ async function loadDashboard() {
   if (!data) return;
 
   const dash = data.dashboard;
+  const prof = dash.learner_profile || {};
+
+  // Update learner badge in header
+  const learnerNameEl = document.getElementById("dashboardLearnerName");
+  if (learnerNameEl) learnerNameEl.innerText = prof.name || "Learner";
+  
+  const learnerAvatarEl = document.getElementById("learnerAvatarLetter");
+  if (learnerAvatarEl) learnerAvatarEl.innerText = (prof.name || "L").charAt(0).toUpperCase();
+
+  const learnerTrackEl = document.getElementById("dashboardLearnerTrack");
+  if (learnerTrackEl) learnerTrackEl.innerText = `${dash.track || "Academic"} • Target ${dash.target_band || 7.5}`;
+
   document.getElementById("currentBandMetric").innerText = dash.overall_band_estimate;
   document.getElementById("cefrMetric").innerText = `CEFR Level: ${dash.cefr_level}`;
   document.getElementById("targetBandMetric").innerText = dash.target_band;
@@ -2045,7 +2487,209 @@ async function loadDashboard() {
   // Render Daily Goal & Category Progress
   renderDailyGoal();
   renderCategoryProgress();
+
+  // First-launch onboarding check
+  if (!localStorage.getItem("gama_onboarded")) {
+    setTimeout(() => {
+      openLearnerProfileModal(true);
+    }, 400);
+  }
 }
+
+// -------------------------------------------------------------
+// Learner Profile & Multi-Learner Onboarding Manager
+// -------------------------------------------------------------
+async function openLearnerProfileModal(isOnboarding = false) {
+  const modal = document.getElementById("learnerProfileModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+
+  const titleEl = document.getElementById("learnerModalTitle");
+  if (titleEl) {
+    titleEl.innerText = isOnboarding ? "Welcome! Set Up Your Learning Profile" : "Learner Profile & Preferences";
+  }
+
+  await loadLearnerProfile();
+}
+
+function closeLearnerProfileModal() {
+  const modal = document.getElementById("learnerProfileModal");
+  if (modal) modal.style.display = "none";
+}
+
+function switchProfileModalTab(tab) {
+  const tabActive = document.getElementById("tabBtnActiveProfile");
+  const tabSwitch = document.getElementById("tabBtnSwitchLearner");
+  const contentForm = document.getElementById("profileFormTabContent");
+  const contentSwitch = document.getElementById("profileSwitchTabContent");
+
+  if (tab === "active") {
+    if (tabActive) tabActive.classList.add("active");
+    if (tabSwitch) tabSwitch.classList.remove("active");
+    if (contentForm) contentForm.style.display = "block";
+    if (contentSwitch) contentSwitch.style.display = "none";
+  } else {
+    if (tabActive) tabActive.classList.remove("active");
+    if (tabSwitch) tabSwitch.classList.add("active");
+    if (contentForm) contentForm.style.display = "none";
+    if (contentSwitch) contentSwitch.style.display = "block";
+    renderLearnersList();
+  }
+}
+
+async function loadLearnerProfile() {
+  const res = await callApi("/api/learners/current");
+  const p = res?.learner || {};
+
+  const idEl = document.getElementById("inputLearnerId");
+  if (idEl) idEl.value = p.id || "default_learner";
+
+  const nameEl = document.getElementById("inputLearnerName");
+  if (nameEl) nameEl.value = p.name || "";
+
+  const langEl = document.getElementById("inputLearnerNativeLang");
+  if (langEl) langEl.value = p.native_language || "English";
+
+  const trackEl = document.getElementById("selectLearnerTrack");
+  if (trackEl && p.track) trackEl.value = p.track;
+
+  const cefrEl = document.getElementById("selectLearnerCEFR");
+  if (cefrEl && p.cefr_level) cefrEl.value = p.cefr_level;
+
+  const targetEl = document.getElementById("selectLearnerTargetBand");
+  if (targetEl && p.target_band) targetEl.value = Number(p.target_band).toFixed(1);
+
+  const currentEl = document.getElementById("selectLearnerCurrentBand");
+  if (currentEl && p.current_band) currentEl.value = Number(p.current_band).toFixed(1);
+
+  const minsEl = document.getElementById("selectLearnerDailyMinutes");
+  if (minsEl && p.daily_minutes) minsEl.value = String(p.daily_minutes);
+
+  const examEl = document.getElementById("inputLearnerExamDate");
+  if (examEl) examEl.value = p.target_exam_date || "";
+
+  const notesEl = document.getElementById("inputLearnerNotes");
+  if (notesEl) notesEl.value = p.notes || "";
+}
+
+async function saveLearnerProfile(e) {
+  if (e && e.preventDefault) e.preventDefault();
+
+  const learnerId = document.getElementById("inputLearnerId")?.value || "default_learner";
+  const name = document.getElementById("inputLearnerName")?.value.trim() || "Learner";
+  const nativeLang = document.getElementById("inputLearnerNativeLang")?.value.trim() || "English";
+  const track = document.getElementById("selectLearnerTrack")?.value || "Academic";
+  const cefr = document.getElementById("selectLearnerCEFR")?.value || "B2";
+  const targetBand = parseFloat(document.getElementById("selectLearnerTargetBand")?.value || "7.5");
+  const currentBand = parseFloat(document.getElementById("selectLearnerCurrentBand")?.value || "6.0");
+  const dailyMins = parseInt(document.getElementById("selectLearnerDailyMinutes")?.value || "30", 10);
+  const examDate = document.getElementById("inputLearnerExamDate")?.value || null;
+  const notes = document.getElementById("inputLearnerNotes")?.value.trim() || "";
+
+  const payload = {
+    id: learnerId,
+    name: name,
+    native_language: nativeLang,
+    track: track,
+    cefr_level: cefr,
+    target_band: targetBand,
+    current_band: currentBand,
+    daily_minutes: dailyMins,
+    target_exam_date: examDate,
+    notes: notes
+  };
+
+  const res = await callApi("/api/learners/save", "POST", payload);
+  if (res && (res.success || res.learner)) {
+    localStorage.setItem("gama_onboarded", "true");
+    closeLearnerProfileModal();
+    await loadDashboard();
+    showBandToast("✅ Profile Updated", `Active learner set to ${name} (${track} Track)`);
+  } else {
+    alert("Failed to save learner profile. Please try again.");
+  }
+}
+
+function prepareNewLearnerProfile() {
+  switchProfileModalTab("active");
+  const idEl = document.getElementById("inputLearnerId");
+  if (idEl) idEl.value = "learner_" + Date.now().toString(36);
+
+  const nameEl = document.getElementById("inputLearnerName");
+  if (nameEl) {
+    nameEl.value = "";
+    nameEl.focus();
+  }
+  const notesEl = document.getElementById("inputLearnerNotes");
+  if (notesEl) notesEl.value = "";
+
+  const examEl = document.getElementById("inputLearnerExamDate");
+  if (examEl) examEl.value = "";
+}
+
+async function renderLearnersList() {
+  const container = document.getElementById("learnerProfilesList");
+  if (!container) return;
+  container.innerHTML = `<p style="color:var(--text-secondary); font-size:0.85rem;">Loading profiles...</p>`;
+
+  const data = await callApi("/api/learners");
+  if (!data || !data.learners) {
+    container.innerHTML = `<p style="color:var(--text-secondary);">No profiles available.</p>`;
+    return;
+  }
+
+  const activeId = data.active_learner_id;
+  container.innerHTML = "";
+
+  data.learners.forEach(l => {
+    const isCurrent = l.id === activeId;
+    const item = document.createElement("div");
+    item.style.cssText = `display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-radius:10px; border:1px solid ${isCurrent ? "var(--accent-primary)" : "var(--border-color)"}; background:${isCurrent ? "rgba(79, 70, 229, 0.08)" : "var(--bg-secondary)"};`;
+
+    item.innerHTML = `
+      <div>
+        <div style="font-weight:700; font-size:0.95rem;">${l.name || "Learner"} ${isCurrent ? '<span style="font-size:0.75rem; background:var(--accent-primary); color:#fff; padding:2px 6px; border-radius:6px; margin-left:6px;">ACTIVE</span>' : ''}</div>
+        <div style="font-size:0.78rem; color:var(--text-secondary); margin-top:2px;">
+          ${l.track || "Academic"} • Current: ${l.current_band || 6.0} • Target: ${l.target_band || 7.5} • CEFR: ${l.cefr_level || "B2"}
+        </div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        ${!isCurrent ? `<button class="btn btn-primary btn-sm" onclick="switchActiveLearner('${l.id}')">Switch</button>` : `<button class="btn btn-secondary btn-sm" onclick="switchProfileModalTab('active')">Edit</button>`}
+        ${!isCurrent && l.id !== "default_learner" ? `<button class="btn btn-outline btn-sm" onclick="deleteLearnerProfile('${l.id}')" style="color:var(--danger, #ef4444);" title="Delete profile">🗑️</button>` : ''}
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+async function switchActiveLearner(learnerId) {
+  const res = await callApi("/api/learners/switch", "POST", { learner_id: learnerId });
+  if (res && res.success) {
+    await loadLearnerProfile();
+    switchProfileModalTab("active");
+    closeLearnerProfileModal();
+    await loadDashboard();
+    showBandToast("🔄 Learner Switched", "Dashboard and records updated for active profile.");
+  }
+}
+
+async function deleteLearnerProfile(learnerId) {
+  if (!confirm("Are you sure you want to delete this learner profile?")) return;
+  const res = await callApi("/api/learners/delete", "POST", { learner_id: learnerId });
+  if (res && res.success) {
+    await renderLearnersList();
+    showBandToast("🗑️ Profile Deleted", "Learner profile has been removed.");
+  }
+}
+
+window.openLearnerProfileModal = openLearnerProfileModal;
+window.closeLearnerProfileModal = closeLearnerProfileModal;
+window.switchProfileModalTab = switchProfileModalTab;
+window.loadLearnerProfile = loadLearnerProfile;
+window.saveLearnerProfile = saveLearnerProfile;
+window.prepareNewLearnerProfile = prepareNewLearnerProfile;
+window.switchActiveLearner = switchActiveLearner;
+window.deleteLearnerProfile = deleteLearnerProfile;
 
 // -------------------------------------------------------------
 // 2. AI Tutor Chat Module
@@ -2108,6 +2752,334 @@ function initChat() {
     });
   }
 }
+
+// -------------------------------------------------------------
+// English Learning Academy (CEFR A1 - C2 Curriculum) Module
+// -------------------------------------------------------------
+let activeCurriculumLessonId = null;
+
+async function initCurriculum() {
+  await loadCurriculumLessons();
+}
+
+async function onCurriculumFilterChange() {
+  const level = document.getElementById("curriculumLevelSelect")?.value || "";
+  const mod = document.getElementById("curriculumModuleSelect")?.value || "";
+  await loadCurriculumLessons(level, mod);
+}
+
+async function loadCurriculumLessons(level = "", moduleType = "") {
+  const listEl = document.getElementById("curriculumLessonList");
+  if (!listEl) return;
+
+  listEl.innerHTML = `<p style="color:var(--text-secondary); font-size:0.85rem; padding:8px;">Loading lessons...</p>`;
+
+  let query = "";
+  const params = [];
+  if (level) params.push(`level=${encodeURIComponent(level)}`);
+  if (moduleType) params.push(`module=${encodeURIComponent(moduleType)}`);
+  if (params.length) query = "?" + params.join("&");
+
+  const data = await callApi(`/api/curriculum/lessons${query}`);
+  if (!data || !data.lessons) {
+    listEl.innerHTML = `<p style="color:var(--text-secondary); padding:8px;">No lessons found matching filters.</p>`;
+    return;
+  }
+
+  const lessons = data.lessons;
+  const countEl = document.getElementById("curriculumLessonCount");
+  if (countEl) countEl.innerText = `${lessons.length} Lesson${lessons.length === 1 ? '' : 's'}`;
+
+  listEl.innerHTML = "";
+  lessons.forEach(l => {
+    const isSelected = l.id === activeCurriculumLessonId;
+    const card = document.createElement("div");
+    card.className = "curriculum-card";
+    card.style.cssText = `
+      cursor:pointer; padding:12px 14px; border-radius:12px;
+      border:1px solid ${isSelected ? "var(--accent-primary)" : "var(--border-color)"};
+      background:${isSelected ? "rgba(79, 70, 229, 0.12)" : "var(--bg-secondary)"};
+      transition:all 0.2s ease;
+    `;
+
+    const statusBadge = l.status === "mastered"
+      ? '<span style="font-size:0.75rem; background:#10b981; color:#fff; padding:2px 6px; border-radius:6px;">⭐ Mastered</span>'
+      : (l.status === "completed"
+        ? '<span style="font-size:0.75rem; background:#3b82f6; color:#fff; padding:2px 6px; border-radius:6px;">✓ Done</span>'
+        : '<span style="font-size:0.75rem; background:rgba(255,255,255,0.08); color:var(--text-secondary); padding:2px 6px; border-radius:6px;">Not Started</span>');
+
+    const scoreDisplay = l.score ? `<span style="font-size:0.75rem; font-weight:700; color:var(--accent-primary); margin-left:6px;">${l.score}%</span>` : '';
+
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <div style="display:flex; gap:6px; align-items:center;">
+          <span style="font-weight:700; font-size:0.78rem; background:var(--accent-primary); color:#fff; padding:2px 6px; border-radius:4px;">${l.cefr_level}</span>
+          <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-secondary); font-weight:600;">${l.module_type}</span>
+        </div>
+        <div style="display:flex; align-items:center;">
+          ${statusBadge}
+          ${scoreDisplay}
+        </div>
+      </div>
+      <div style="font-weight:700; font-size:0.88rem; line-height:1.3; color:var(--text-primary); margin-top:4px;">
+        ${l.title}
+      </div>
+    `;
+
+    card.addEventListener("click", () => selectCurriculumLesson(l.id));
+    listEl.appendChild(card);
+  });
+
+  // If no active lesson, select the first lesson automatically
+  if (!activeCurriculumLessonId && lessons.length > 0) {
+    selectCurriculumLesson(lessons[0].id);
+  }
+}
+
+async function selectCurriculumLesson(lessonId) {
+  activeCurriculumLessonId = lessonId;
+
+  // Highlight selected card
+  document.querySelectorAll("#curriculumLessonList .curriculum-card").forEach(c => {
+    c.style.borderColor = "var(--border-color)";
+    c.style.background = "var(--bg-secondary)";
+  });
+
+  const viewer = document.getElementById("curriculumLessonViewer");
+  if (!viewer) return;
+  viewer.innerHTML = `<div style="text-align:center; padding:60px 20px; color:var(--text-secondary);">Loading lesson content...</div>`;
+
+  const res = await callApi(`/api/curriculum/lesson/${lessonId}`);
+  if (!res || !res.lesson) {
+    viewer.innerHTML = `<p style="color:var(--danger, #ef4444);">Failed to load lesson.</p>`;
+    return;
+  }
+
+  renderCurriculumLesson(res.lesson);
+}
+
+function renderCurriculumLesson(lesson) {
+  const viewer = document.getElementById("curriculumLessonViewer");
+  if (!viewer) return;
+
+  const prog = lesson.learner_progress || { status: "not_started", score: 0 };
+  const objectivesHtml = (lesson.objectives || []).map(o => `<li style="margin-bottom:6px;">${o}</li>`).join("");
+
+  const examplesHtml = (lesson.examples || []).map(ex => `
+    <div style="background:var(--bg-secondary); border-left:3px solid var(--accent-primary); padding:10px 14px; border-radius:0 8px 8px 0; margin-bottom:8px;">
+      <div style="font-style:italic; font-weight:600; color:var(--text-primary); font-size:0.92rem;">"${ex.text}"</div>
+      ${ex.notes ? `<div style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">ℹ️ ${ex.notes}</div>` : ''}
+    </div>
+  `).join("");
+
+  const guidedHtml = (lesson.guided_exercises || []).map((ge, idx) => `
+    <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; padding:12px 14px; margin-bottom:10px;">
+      <div style="font-weight:600; font-size:0.9rem; margin-bottom:6px;">Exercise ${idx + 1}: ${ge.prompt}</div>
+      <button class="btn btn-outline btn-sm" onclick="toggleGuidedAnswer('${ge.id}')" id="btn_ge_${ge.id}" style="font-size:0.8rem; padding:4px 10px;">Reveal Answer &amp; Analysis</button>
+      <div id="ans_ge_${ge.id}" style="display:none; margin-top:8px; padding-top:8px; border-top:1px dashed var(--border-color);">
+        <div style="font-weight:700; color:#10b981; font-size:0.88rem;">Answer: ${ge.answer}</div>
+        <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:2px;">${ge.explanation}</div>
+      </div>
+    </div>
+  `).join("");
+
+  const quizQuestions = (lesson.assessment && lesson.assessment.length) ? lesson.assessment : (lesson.interactive_practice || []);
+  const quizHtml = quizQuestions.map((q, qIdx) => `
+    <div class="curriculum-quiz-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:12px; padding:16px; margin-bottom:14px;">
+      <div style="font-weight:700; font-size:0.92rem; margin-bottom:10px;">
+        Question ${qIdx + 1}: ${q.question}
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        ${(q.options || []).map((opt, optIdx) => `
+          <label style="display:flex; align-items:center; gap:10px; cursor:pointer; padding:8px 12px; border-radius:8px; border:1px solid var(--border-color); background:rgba(255,255,255,0.02); transition:all 0.2s;" class="quiz-option-label">
+            <input type="radio" name="curr_q_${q.id}" value="${optIdx}" style="accent-color:var(--accent-primary);">
+            <span style="font-size:0.88rem;">${opt}</span>
+          </label>
+        `).join("")}
+      </div>
+      <div id="quiz_feedback_${q.id}" style="display:none; margin-top:10px; padding:8px 12px; border-radius:8px; font-size:0.85rem;"></div>
+    </div>
+  `).join("");
+
+  const explanationParagraphs = (lesson.explanation_markdown || "").replace(/\n\n/g, "<br><br>").replace(/### (.*)/g, "<h4 style='margin-top:14px; margin-bottom:8px;'>$1</h4>").replace(/#### (.*)/g, "<h5 style='margin-top:12px; margin-bottom:6px;'>$1</h5>");
+
+  viewer.innerHTML = `
+    <!-- Lesson Header -->
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--border-color); padding-bottom:16px; margin-bottom:18px;">
+      <div>
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+          <span style="font-weight:800; font-size:0.82rem; background:var(--accent-primary); color:#fff; padding:3px 8px; border-radius:6px;">CEFR ${lesson.cefr_level}</span>
+          <span style="font-size:0.82rem; text-transform:uppercase; color:var(--text-secondary); font-weight:700;">${lesson.module_type} MODULE</span>
+        </div>
+        <h3 style="margin:0; font-size:1.35rem; font-weight:800;">${lesson.title}</h3>
+      </div>
+      <div style="text-align:right;">
+        <span style="font-size:0.8rem; color:var(--text-secondary);">Status</span>
+        <div style="font-weight:700; font-size:0.95rem; text-transform:capitalize; margin-top:2px;">
+          ${prog.status === "mastered" ? "⭐ Mastered" : (prog.status === "completed" ? "✓ Completed" : "Not Started")}
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. Learning Objectives -->
+    <div style="margin-bottom:20px; background:rgba(79, 70, 229, 0.05); border:1px solid rgba(79, 70, 229, 0.2); border-radius:12px; padding:14px 18px;">
+      <h4 style="margin:0 0 8px 0; font-size:0.95rem; color:var(--accent-primary);">🎯 Learning Objectives</h4>
+      <ul style="margin:0; padding-left:20px; font-size:0.88rem; color:var(--text-primary); line-height:1.5;">
+        ${objectivesHtml}
+      </ul>
+    </div>
+
+    <!-- 2. Linguistic Explanation -->
+    <div style="margin-bottom:24px;">
+      <h4 style="font-size:1.05rem; margin-bottom:10px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">📖 Rules &amp; Linguistic Mechanics</h4>
+      <div style="font-size:0.92rem; line-height:1.6; color:var(--text-primary);">
+        ${explanationParagraphs}
+      </div>
+    </div>
+
+    <!-- 3. Authentic Examples -->
+    ${lesson.examples && lesson.examples.length ? `
+      <div style="margin-bottom:24px;">
+        <h4 style="font-size:1.05rem; margin-bottom:10px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">💡 Real-World Models &amp; Collocations</h4>
+        <div>${examplesHtml}</div>
+      </div>
+    ` : ''}
+
+    <!-- 4. Guided Exercises -->
+    ${lesson.guided_exercises && lesson.guided_exercises.length ? `
+      <div style="margin-bottom:24px;">
+        <h4 style="font-size:1.05rem; margin-bottom:10px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">🛠️ Guided Practice</h4>
+        <div>${guidedHtml}</div>
+      </div>
+    ` : ''}
+
+    <!-- 5. Interactive Assessment Quiz -->
+    ${quizQuestions.length ? `
+      <div style="margin-top:28px; border-top:1px solid var(--border-color); padding-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div>
+            <h4 style="margin:0; font-size:1.05rem;">📝 Interactive Assessment (${quizQuestions.length} Questions)</h4>
+            <span style="font-size:0.82rem; color:var(--text-secondary);">Select the best answer for each question and submit for instant scoring and mistake tracking.</span>
+          </div>
+          <div id="quizScoreBadge" style="display:none; font-weight:700; font-size:1rem; padding:4px 12px; border-radius:8px;"></div>
+        </div>
+
+        <form id="curriculumQuizForm" onsubmit="submitCurriculumAssessment(event, '${lesson.id}')">
+          ${quizHtml}
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+            <button type="submit" class="btn btn-primary" id="btnSubmitCurriculumQuiz" style="padding:10px 24px; font-weight:700;">
+              Submit Assessment &amp; Record Score
+            </button>
+            <div id="quizSummaryFeedback" style="font-size:0.88rem; font-weight:600;"></div>
+          </div>
+        </form>
+      </div>
+    ` : ''}
+  `;
+}
+
+function toggleGuidedAnswer(geId) {
+  const ansBox = document.getElementById(`ans_ge_${geId}`);
+  const btn = document.getElementById(`btn_ge_${geId}`);
+  if (!ansBox) return;
+
+  if (ansBox.style.display === "none") {
+    ansBox.style.display = "block";
+    if (btn) btn.innerText = "Hide Answer";
+  } else {
+    ansBox.style.display = "none";
+    if (btn) btn.innerText = "Reveal Answer & Analysis";
+  }
+}
+
+async function submitCurriculumAssessment(e, lessonId) {
+  if (e && e.preventDefault) e.preventDefault();
+
+  const answers = {};
+  const checkedInputs = document.querySelectorAll("#curriculumQuizForm input[type='radio']:checked");
+  checkedInputs.forEach(inp => {
+    const qid = inp.name.replace("curr_q_", "");
+    answers[qid] = parseInt(inp.value, 10);
+  });
+
+  const submitBtn = document.getElementById("btnSubmitCurriculumQuiz");
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Evaluating...";
+  }
+
+  const res = await callApi("/api/curriculum/submit", "POST", {
+    lesson_id: lessonId,
+    answers: answers
+  });
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Re-Submit Assessment";
+  }
+
+  if (!res || !res.success) {
+    alert("Evaluation failed. Please try again.");
+    return;
+  }
+
+  (res.feedback || []).forEach(f => {
+    const fbBox = document.getElementById(`quiz_feedback_${f.question_id}`);
+    if (fbBox) {
+      fbBox.style.display = "block";
+      if (f.is_correct) {
+        fbBox.style.background = "rgba(16, 185, 129, 0.12)";
+        fbBox.style.border = "1px solid rgba(16, 185, 129, 0.3)";
+        fbBox.style.color = "#10b981";
+        fbBox.innerHTML = `<strong>✓ Correct!</strong> ${f.explanation}`;
+      } else {
+        fbBox.style.background = "rgba(239, 68, 68, 0.12)";
+        fbBox.style.border = "1px solid rgba(239, 68, 68, 0.3)";
+        fbBox.style.color = "#ef4444";
+        fbBox.innerHTML = `<strong>✗ Incorrect.</strong> ${f.explanation}`;
+      }
+    }
+  });
+
+  const scoreBadge = document.getElementById("quizScoreBadge");
+  if (scoreBadge) {
+    scoreBadge.style.display = "inline-block";
+    scoreBadge.innerText = `Score: ${res.score}% (${res.correct_count}/${res.total_questions})`;
+    if (res.score >= 80) {
+      scoreBadge.style.background = "#10b981";
+      scoreBadge.style.color = "#fff";
+    } else if (res.score >= 60) {
+      scoreBadge.style.background = "#3b82f6";
+      scoreBadge.style.color = "#fff";
+    } else {
+      scoreBadge.style.background = "#ef4444";
+      scoreBadge.style.color = "#fff";
+    }
+  }
+
+  const summary = document.getElementById("quizSummaryFeedback");
+  if (summary) {
+    summary.innerHTML = res.score >= 80
+      ? `<span style="color:#10b981;">🎉 Mastered! Lesson progress saved to your profile.</span>`
+      : (res.score >= 60
+        ? `<span style="color:#3b82f6;">✓ Completed. Review incorrect questions to reach mastery.</span>`
+        : `<span style="color:#ef4444;">Needs review. Logged to your Mistake Book.</span>`);
+  }
+
+  showBandToast("📚 Lesson Evaluated", `Scored ${res.score}% • Status: ${res.status.toUpperCase()}`);
+
+  await loadCurriculumLessons(
+    document.getElementById("curriculumLevelSelect")?.value || "",
+    document.getElementById("curriculumModuleSelect")?.value || ""
+  );
+}
+
+window.initCurriculum = initCurriculum;
+window.onCurriculumFilterChange = onCurriculumFilterChange;
+window.loadCurriculumLessons = loadCurriculumLessons;
+window.selectCurriculumLesson = selectCurriculumLesson;
+window.toggleGuidedAnswer = toggleGuidedAnswer;
+window.submitCurriculumAssessment = submitCurriculumAssessment;
 
 // -------------------------------------------------------------
 // 3. 12-Question Diagnostic Test
@@ -2647,14 +3619,50 @@ async function gradeCard(grade) {
 // -------------------------------------------------------------
 // 7. Reading Practice Module (Passages 1, 2, 3)
 // -------------------------------------------------------------
+let currentReadingTrack = "Academic";
+
+function switchReadingTrack(track) {
+  currentReadingTrack = track;
+  const isAcad = track === "Academic";
+  const btnAcad = document.getElementById("btnReadingTrackAcad");
+  const btnGT = document.getElementById("btnReadingTrackGT");
+  const chipsAcad = document.getElementById("readingPassageChips");
+  const chipsGT = document.getElementById("readingPassageChipsGT");
+  const subheading = document.getElementById("readingSubheading");
+
+  if (isAcad) {
+    if (btnAcad) btnAcad.classList.add("active");
+    if (btnGT) btnGT.classList.remove("active");
+    if (chipsAcad) chipsAcad.style.display = "flex";
+    if (chipsGT) chipsGT.style.display = "none";
+    if (subheading) subheading.innerText = "Academic Reading Passages";
+    switchReadingPassage("acad_p1");
+  } else {
+    if (btnAcad) btnAcad.classList.remove("active");
+    if (btnGT) btnGT.classList.add("active");
+    if (chipsAcad) chipsAcad.style.display = "none";
+    if (chipsGT) chipsGT.style.display = "flex";
+    if (subheading) subheading.innerText = "General Training Sections";
+    switchReadingPassage("gt_s1");
+  }
+}
+window.switchReadingTrack = switchReadingTrack;
+
 async function loadReading() {
-  await switchReadingPassage(appState.currentReadingPassage);
+  await switchReadingPassage(appState.currentReadingPassage || "acad_p1");
 }
 
 async function switchReadingPassage(passageId) {
   appState.currentReadingPassage = passageId;
   const p = await callApi(`/api/reading?passage_id=${passageId}`);
   if (!p) return;
+
+  // Update active chip UI
+  document.querySelectorAll("#readingPassageChips .chip-btn, #readingPassageChipsGT .chip-btn").forEach(b => {
+    b.classList.remove("active");
+  });
+  const activeBtn = document.getElementById(`rchip_${passageId}`);
+  if (activeBtn) activeBtn.classList.add("active");
 
   document.getElementById("readingTitle").innerText = p.title;
   document.getElementById("readingText").innerText = p.text;
@@ -2675,25 +3683,46 @@ async function switchReadingPassage(passageId) {
     `;
   }
 
-  // Render Questions
+  // Render Questions across all types
   const qList = document.getElementById("readingQuestionsList");
   qList.innerHTML = "";
   p.questions.forEach(q => {
     const qDiv = document.createElement("div");
-    qDiv.className = "mb-3";
-    if (q.type === "TFNG") {
+    qDiv.className = "mb-3 reading-q-block";
+    qDiv.style.cssText = "padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; background:var(--bg-secondary);";
+
+    if (q.type === "TFNG" || q.type === "True/False/Not Given") {
       qDiv.innerHTML = `
-        <p><strong>Q${q.num}:</strong> ${q.prompt}</p>
-        <div style="margin-top: 4px;">
-          <label style="margin-right: 12px;"><input type="radio" name="rq_${q.num}" value="True"> True</label>
-          <label style="margin-right: 12px;"><input type="radio" name="rq_${q.num}" value="False"> False</label>
-          <label><input type="radio" name="rq_${q.num}" value="Not Given"> Not Given</label>
+        <p style="margin-bottom:6px;"><strong>Q${q.num} (${q.type}):</strong> ${q.prompt}</p>
+        <div style="display:flex; gap:16px; margin-top:6px;">
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="True" style="accent-color:var(--accent-primary);"> True</label>
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="False" style="accent-color:var(--accent-primary);"> False</label>
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="Not Given" style="accent-color:var(--accent-primary);"> Not Given</label>
+        </div>
+      `;
+    } else if (q.type === "YNNG" || q.type === "Yes/No/Not Given") {
+      qDiv.innerHTML = `
+        <p style="margin-bottom:6px;"><strong>Q${q.num} (${q.type}):</strong> ${q.prompt}</p>
+        <div style="display:flex; gap:16px; margin-top:6px;">
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="Yes" style="accent-color:var(--accent-primary);"> Yes</label>
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="No" style="accent-color:var(--accent-primary);"> No</label>
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="Not Given" style="accent-color:var(--accent-primary);"> Not Given</label>
+        </div>
+      `;
+    } else if (q.type === "MCQ" || q.type === "Multiple Choice") {
+      qDiv.innerHTML = `
+        <p style="margin-bottom:6px;"><strong>Q${q.num} (Multiple Choice):</strong> ${q.prompt}</p>
+        <div style="display:flex; gap:14px; margin-top:6px;">
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="A" style="accent-color:var(--accent-primary);"> Option A</label>
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="B" style="accent-color:var(--accent-primary);"> Option B</label>
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="C" style="accent-color:var(--accent-primary);"> Option C</label>
+          <label style="cursor:pointer;"><input type="radio" name="rq_${q.num}" value="D" style="accent-color:var(--accent-primary);"> Option D</label>
         </div>
       `;
     } else {
       qDiv.innerHTML = `
-        <p><strong>Q${q.num}:</strong> ${q.prompt}</p>
-        <input type="text" id="rq_input_${q.num}" class="cloze-input mt-1" placeholder="Type answer here..." />
+        <p style="margin-bottom:6px;"><strong>Q${q.num} (Completion):</strong> ${q.prompt}</p>
+        <input type="text" id="rq_input_${q.num}" class="cloze-input mt-1" style="width:100%; max-width:360px;" placeholder="Max ${q.max_words || 2} word(s)..." />
       `;
     }
     qList.appendChild(qDiv);
@@ -2708,33 +3737,53 @@ function toggleSynonymTable() {
     btn.innerText = "Hide Keyword & Synonym Table";
   } else {
     box.style.display = "none";
-    btn.innerText = "🔍 Show Keyword & Synonym Mapping Table";
+    btn.innerText = "🔍 Keyword & Synonym Table";
   }
 }
 
 document.getElementById("submitReadingBtn").addEventListener("click", async () => {
   const answers = {};
-  [1, 2, 3, 4].forEach(num => {
-    const radio = document.querySelector(`input[name="rq_${num}"]:checked`);
-    const input = document.getElementById(`rq_input_${num}`);
-    if (radio) answers[num] = radio.value;
-    else if (input) answers[num] = input.value;
+  
+  // Collect radio answers
+  document.querySelectorAll("#readingQuestionsList input[type='radio']:checked").forEach(r => {
+    const num = r.name.replace("rq_", "");
+    answers[num] = r.value;
+  });
+
+  // Collect text completion answers
+  document.querySelectorAll("#readingQuestionsList input[type='text']").forEach(inp => {
+    const num = inp.id.replace("rq_input_", "");
+    if (inp.value.trim()) answers[num] = inp.value.trim();
   });
 
   const rep = await callApi("/api/reading/submit", "POST", { passage_id: appState.currentReadingPassage, answers: answers });
   if (rep) {
     const box = document.getElementById("readingScoreReport");
     box.style.display = "block";
+
+    let detailedHtml = "";
+    (rep.results || []).forEach(r => {
+      detailedHtml += `
+        <div style="padding:8px 12px; margin-top:6px; border-radius:8px; background:${r.is_correct ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)'}; font-size:0.85rem;">
+          <strong>Q${r.question_num}:</strong> ${r.is_correct ? '<span style="color:#10b981;">✓ Correct</span>' : '<span style="color:#ef4444;">✗ Incorrect</span>'}
+          <div style="margin-top:2px;">Your answer: <strong>${r.user_answer || '(blank)'}</strong> | Correct: <strong>${r.correct_answer}</strong></div>
+          <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">${r.explanation}</div>
+        </div>
+      `;
+    });
+
     box.innerHTML = `
       <h3>Estimated Reading Band: Band ${rep.estimated_band}</h3>
-      <p>Score: <strong>${rep.correct_answers}</strong> of <strong>${rep.total_questions}</strong> correct.</p>
-      <div class="callout-card mt-2">
+      <p>Score: <strong>${rep.correct_answers}</strong> of <strong>${rep.total_questions}</strong> correct (${rep.track} Track).</p>
+      <div style="margin-top:12px;">${detailedHtml}</div>
+      <div class="callout-card mt-3">
         <strong>IELTS Advantage Reading Strategy:</strong>
-        <p>Success in IELTS Reading depends on mapping keywords in questions to precise synonyms in text. Notice how 'solar radiation' mapped to 'solar photosynthesis', and 'ephemeral' meant 'shut down within decades'.</p>
+        <p>Success in IELTS Reading depends on mapping keywords in questions to precise synonyms in text. Review the detailed breakdown above to analyze distractor traps.</p>
       </div>
-      <p class="mt-2"><em>${rep.disclaimer}</em></p>
+      <p class="mt-2" style="font-size:0.75rem;"><em>${rep.disclaimer}</em></p>
     `;
     recordPracticeActivity("reading", rep.estimated_band, `${rep.correct_answers}/${rep.total_questions} correct`);
+    loadDashboard();
   }
 });
 
@@ -2742,7 +3791,7 @@ document.getElementById("submitReadingBtn").addEventListener("click", async () =
 // 8. Listening Module
 // -------------------------------------------------------------
 async function loadListening() {
-  await switchListeningSection(appState.currentListeningSection);
+  await switchListeningSection(appState.currentListeningSection || "sec_1");
 }
 
 async function switchListeningSection(secId) {
@@ -2752,21 +3801,22 @@ async function switchListeningSection(secId) {
     if (b) b.className = id === secId ? "chip-btn active" : "chip-btn";
   });
 
-  const sec = await callApi(`/api/listening?sec_id=${secId}`);
+  const sec = await callApi(`/api/listening?sec_id=${secId}&show_transcript=true`);
   if (!sec) return;
 
   document.getElementById("listeningTitle").innerText = sec.title;
-  document.getElementById("listeningTranscriptBox").innerText = sec.audio_script;
+  document.getElementById("listeningTranscriptBox").innerText = sec.audio_script || "Transcript hidden during active examination.";
   document.getElementById("listeningScoreReport").style.display = "none";
 
   const qList = document.getElementById("listeningQuestionsList");
   qList.innerHTML = "";
-  sec.questions.forEach(q => {
+  (sec.questions || []).forEach(q => {
     const qDiv = document.createElement("div");
-    qDiv.className = "mb-3";
+    qDiv.className = "mb-3 listening-q-block";
+    qDiv.style.cssText = "padding:10px 14px; border:1px solid var(--border-color); border-radius:10px; background:var(--bg-secondary);";
     qDiv.innerHTML = `
-      <p><strong>Q${q.num}:</strong> ${q.prompt}</p>
-      <input type="text" id="lq_input_${q.num}" class="cloze-input mt-1" placeholder="Type answer..." />
+      <p style="margin-bottom:6px;"><strong>Q${q.num}:</strong> ${q.prompt}</p>
+      <input type="text" id="lq_input_${q.num}" class="cloze-input mt-1" style="width:100%; max-width:360px;" placeholder="Max ${q.max_words || 1} word(s)..." />
     `;
     qList.appendChild(qDiv);
   });
@@ -2782,21 +3832,35 @@ document.getElementById("toggleTranscriptBtn").addEventListener("click", () => {
 
 document.getElementById("submitListeningBtn").addEventListener("click", async () => {
   const answers = {};
-  [1, 2, 3, 4].forEach(num => {
-    const input = document.getElementById(`lq_input_${num}`);
-    if (input) answers[num] = input.value;
+  document.querySelectorAll("#listeningQuestionsList input[type='text']").forEach(inp => {
+    const num = inp.id.replace("lq_input_", "");
+    if (inp.value.trim()) answers[num] = inp.value.trim();
   });
 
   const rep = await callApi("/api/listening/submit", "POST", { section_id: appState.currentListeningSection, answers: answers });
   if (rep) {
     const box = document.getElementById("listeningScoreReport");
     box.style.display = "block";
+
+    let detailedHtml = "";
+    (rep.results || []).forEach(r => {
+      detailedHtml += `
+        <div style="padding:8px 12px; margin-top:6px; border-radius:8px; background:${r.is_correct ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)'}; font-size:0.85rem;">
+          <strong>Q${r.question_num}:</strong> ${r.is_correct ? '<span style="color:#10b981;">✓ Correct</span>' : '<span style="color:#ef4444;">✗ Incorrect</span>'}
+          <div style="margin-top:2px;">Your answer: <strong>${r.user_answer || '(blank)'}</strong> | Correct: <strong>${r.correct_answer}</strong></div>
+          <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:2px;">Distractor Note: ${r.distractor_analysis}</div>
+        </div>
+      `;
+    });
+
     box.innerHTML = `
       <h3>Estimated Listening Band: Band ${rep.estimated_band}</h3>
       <p>Score: <strong>${rep.correct_answers}</strong> of <strong>${rep.total_questions}</strong> correct.</p>
-      <p class="mt-2"><em>${rep.disclaimer}</em></p>
+      <div style="margin-top:12px;">${detailedHtml}</div>
+      <p class="mt-2" style="font-size:0.75rem;"><em>${rep.disclaimer}</em></p>
     `;
     recordPracticeActivity("listening", rep.estimated_band, `${rep.correct_answers}/${rep.total_questions} correct`);
+    loadDashboard();
   }
 });
 
@@ -3499,6 +4563,7 @@ document.addEventListener("DOMContentLoaded", () => {
   safeInit("initIOSAudioUnlock", initIOSAudioUnlock);
   safeInit("initWindowsShortcuts", initWindowsShortcuts);
   safeInit("initNavigation", initNavigation);
+  safeInit("initCurriculum", initCurriculum);
   safeInit("initChat", initChat);
   safeInit("initDiagnostic", initDiagnostic);
   safeInit("initWriting", initWriting);
@@ -3516,3 +4581,1686 @@ document.addEventListener("DOMContentLoaded", () => {
   const setVal = document.getElementById("settingsVersionValue");
   if (setVal) setVal.textContent = "v" + APP_VERSION + " Production";
 });
+
+// ============================================================================
+// PHASE 14 — FULL IELTS EXAMINATION SUITE CONTROLLER
+// ============================================================================
+
+const examSuiteState = {
+  currentTrack: "Academic",
+  activeSessionId: null,
+  activeExamId: null,
+  activePackage: null,
+  activeQuestions: [], // Flattened list of questions for uniform navigation
+  currentIndex: 0,
+  answers: {},
+  flagged: new Set(),
+  timerInterval: null,
+  remainingSeconds: 3600,
+  totalTimeSeconds: 3600,
+  autosaveTimer: null,
+  prepTimerInterval: null,
+  isListeningPlaying: false
+};
+
+async function initExamSuite() {
+  const activeLearnerId = (typeof appState !== "undefined" && appState.currentLearner && appState.currentLearner.id) || "default_learner";
+
+  // Check for any active in-progress session
+  try {
+    const res = await fetch(`/api/exam/session?learner_id=${encodeURIComponent(activeLearnerId)}`);
+    if (res.ok) {
+      const data = await res.json();
+      const sess = data.active_session;
+      const banner = document.getElementById("examActiveSessionBanner");
+      const details = document.getElementById("examActiveBannerDetails");
+
+      if (sess && sess.status === "in_progress") {
+        examSuiteState.activeSessionId = sess.session_id;
+        examSuiteState.activeExamId = sess.exam_id;
+        examSuiteState.currentTrack = sess.track || "Academic";
+        examSuiteState.remainingSeconds = sess.remaining_seconds || 3600;
+        examSuiteState.totalTimeSeconds = sess.time_limit_seconds || 3600;
+        examSuiteState.answers = sess.answers || {};
+        examSuiteState.flagged = new Set(sess.flagged || []);
+
+        if (details) {
+          const mins = Math.floor(sess.remaining_seconds / 60);
+          const secs = sess.remaining_seconds % 60;
+          details.textContent = `${sess.track} ${sess.module.toUpperCase()} • Remaining Time: ${mins}m ${secs < 10 ? "0" : ""}${secs}s`;
+        }
+        if (banner) banner.style.display = "flex";
+      } else {
+        if (banner) banner.style.display = "none";
+      }
+    }
+  } catch (e) {
+    console.warn("[ExamSuite] Failed to check active session:", e);
+  }
+
+  loadExamHistory();
+}
+
+function selectExamTrack(track) {
+  examSuiteState.currentTrack = track;
+  const btnAcad = document.getElementById("trackBtnAcademic");
+  const btnGen = document.getElementById("trackBtnGeneral");
+  const fullMockTitle = document.getElementById("fullMockCardTitle");
+
+  if (track === "Academic") {
+    if (btnAcad) btnAcad.classList.add("active");
+    if (btnGen) btnGen.classList.remove("active");
+    if (fullMockTitle) fullMockTitle.textContent = "IELTS Academic Full 4-Skill Examination";
+  } else {
+    if (btnGen) btnGen.classList.add("active");
+    if (btnAcad) btnAcad.classList.remove("active");
+    if (fullMockTitle) fullMockTitle.textContent = "IELTS General Training Full 4-Skill Examination";
+  }
+}
+
+async function launchExamSession(module) {
+  const activeLearnerId = (typeof appState !== "undefined" && appState.currentLearner && appState.currentLearner.id) || "default_learner";
+  const track = examSuiteState.currentTrack;
+
+  try {
+    const res = await fetch("/api/exam/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonStringifySafe({
+        learner_id: activeLearnerId,
+        track: track,
+        module: module
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      alert(`Could not start exam: ${err.error || "Unknown error"}`);
+      return;
+    }
+
+    const data = await res.json();
+    setupExamWorkspace(data);
+  } catch (e) {
+    console.error("[ExamSuite] Launch failed:", e);
+    alert("Connection error starting examination.");
+  }
+}
+
+async function resumeActiveExam() {
+  const activeLearnerId = (typeof appState !== "undefined" && appState.currentLearner && appState.currentLearner.id) || "default_learner";
+  try {
+    const res = await fetch(`/api/exam/session?learner_id=${encodeURIComponent(activeLearnerId)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.active_session) {
+        setupExamWorkspace(data.active_session);
+      }
+    }
+  } catch (e) {
+    console.error("[ExamSuite] Resume failed:", e);
+  }
+}
+
+async function abandonActiveExam() {
+  if (!confirm("Are you sure you want to cancel and abandon this examination session? All current unsaved answers will be discarded.")) {
+    return;
+  }
+  const banner = document.getElementById("examActiveSessionBanner");
+  if (banner) banner.style.display = "none";
+  examSuiteState.activeSessionId = null;
+  examSuiteState.answers = {};
+  examSuiteState.flagged.clear();
+  clearInterval(examSuiteState.timerInterval);
+}
+
+function setupExamWorkspace(sessionData) {
+  examSuiteState.activeSessionId = sessionData.session_id;
+  examSuiteState.activeExamId = sessionData.exam_id;
+  examSuiteState.currentTrack = sessionData.track || "Academic";
+  examSuiteState.remainingSeconds = sessionData.remaining_seconds || sessionData.time_limit_seconds || 3600;
+  examSuiteState.totalTimeSeconds = sessionData.time_limit_seconds || 3600;
+  examSuiteState.activePackage = sessionData.exam_package;
+  examSuiteState.answers = sessionData.answers || {};
+  examSuiteState.flagged = new Set(sessionData.flagged || []);
+  examSuiteState.currentIndex = (sessionData.current_question || 1) - 1;
+
+  // Flatten questions into a uniform list
+  flattenExamQuestions(sessionData.exam_package, sessionData.module);
+
+  // Switch views
+  const lobby = document.getElementById("examLobbyView");
+  const workspace = document.getElementById("examActiveWorkspace");
+  const results = document.getElementById("examResultsView");
+
+  if (lobby) lobby.style.display = "none";
+  if (results) results.style.display = "none";
+  if (workspace) workspace.style.display = "flex";
+
+  // Update headers
+  const titleEl = document.getElementById("examActiveTitle");
+  const badgeEl = document.getElementById("examActiveTrackBadge");
+  if (titleEl) titleEl.textContent = sessionData.exam_package ? sessionData.exam_package.title : "IELTS Examination";
+  if (badgeEl) badgeEl.textContent = sessionData.track;
+
+  // Build question palette
+  renderExamPalette();
+
+  // Start countdown timer
+  startExamTimer();
+
+  // Render first question
+  renderCurrentExamQuestion();
+}
+
+function flattenExamQuestions(pkg, module) {
+  const list = [];
+  if (!pkg) return;
+
+  // 1. Reading
+  if (pkg.passages) {
+    pkg.passages.forEach((p, pIdx) => {
+      (p.questions || []).forEach(q => {
+        list.push({
+          skill: "reading",
+          sectionTitle: `Passage ${p.passage_number}: ${p.title}`,
+          stimulusText: p.text,
+          passageId: p.id,
+          questionKey: `read_${q.num}`,
+          data: q
+        });
+      });
+    });
+  } else if (pkg.sections && module === "reading") {
+    pkg.sections.forEach((s, sIdx) => {
+      (s.questions || []).forEach(q => {
+        list.push({
+          skill: "reading",
+          sectionTitle: `Section ${s.section_number}: ${s.title}`,
+          stimulusText: s.text,
+          questionKey: `read_${q.num}`,
+          data: q
+        });
+      });
+    });
+  }
+
+  // 2. Listening
+  if (pkg.sections && module === "listening") {
+    pkg.sections.forEach(s => {
+      (s.questions || []).forEach(q => {
+        list.push({
+          skill: "listening",
+          sectionTitle: `Section ${s.section_number}: ${s.title}`,
+          stimulusAudioScript: s.audio_script,
+          questionKey: `listen_${q.num}`,
+          data: q
+        });
+      });
+    });
+  }
+
+  // 3. Writing
+  if (pkg.task_1 && pkg.task_2) {
+    list.push({
+      skill: "writing",
+      sectionTitle: `Writing Task 1: ${pkg.task_1.title}`,
+      stimulusText: pkg.task_1.prompt,
+      questionKey: "writing_task_1",
+      minWords: pkg.task_1.min_words || 150,
+      data: { num: 1, type: "Writing Task 1", prompt: pkg.task_1.prompt }
+    });
+    list.push({
+      skill: "writing",
+      sectionTitle: `Writing Task 2: ${pkg.task_2.title}`,
+      stimulusText: pkg.task_2.prompt,
+      questionKey: "writing_task_2",
+      minWords: pkg.task_2.min_words || 250,
+      data: { num: 2, type: "Writing Task 2", prompt: pkg.task_2.prompt }
+    });
+  }
+
+  // 4. Speaking
+  if (pkg.part_1 && pkg.part_2 && pkg.part_3) {
+    list.push({
+      skill: "speaking",
+      sectionTitle: "Speaking Part 1: Introduction & Interview",
+      stimulusText: (pkg.part_1.questions || []).map(q => q.text).join("\n"),
+      questionKey: "speaking_part_1",
+      data: { num: 1, type: "Speaking Part 1", prompt: "Respond to the Part 1 introductory questions." }
+    });
+    list.push({
+      skill: "speaking",
+      sectionTitle: "Speaking Part 2: Individual Long Turn",
+      cueCard: pkg.part_2.cue_card,
+      questionKey: "speaking_part_2",
+      prepSeconds: pkg.part_2.preparation_seconds || 60,
+      data: { num: 2, type: "Speaking Part 2", prompt: pkg.part_2.cue_card ? pkg.part_2.cue_card.task : "Part 2" }
+    });
+    list.push({
+      skill: "speaking",
+      sectionTitle: "Speaking Part 3: Two-way Discussion",
+      stimulusText: (pkg.part_3.questions || []).map(q => q.text).join("\n"),
+      questionKey: "speaking_part_3",
+      data: { num: 3, type: "Speaking Part 3", prompt: "Respond in depth to Part 3 abstract discussion questions." }
+    });
+  }
+
+  // 5. Full 4-Skill Mock (combining listening, reading, writing, speaking)
+  if (pkg.skills) {
+    if (pkg.skills.listening) flattenExamQuestions(pkg.skills.listening, "listening");
+    if (pkg.skills.reading) flattenExamQuestions(pkg.skills.reading, "reading");
+    if (pkg.skills.writing) flattenExamQuestions(pkg.skills.writing, "writing");
+    if (pkg.skills.speaking) flattenExamQuestions(pkg.skills.speaking, "speaking");
+    return;
+  }
+
+  examSuiteState.activeQuestions = list;
+}
+
+function renderExamPalette() {
+  const container = document.getElementById("examPaletteContainer");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const total = examSuiteState.activeQuestions.length;
+  for (let i = 0; i < total; i++) {
+    const item = examSuiteState.activeQuestions[i];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "exam-palette-btn";
+    btn.textContent = (i + 1);
+
+    if (i === examSuiteState.currentIndex) {
+      btn.classList.add("active");
+    }
+    if (examSuiteState.answers[item.questionKey] && examSuiteState.answers[item.questionKey].trim().length > 0) {
+      btn.classList.add("answered");
+    }
+    if (examSuiteState.flagged.has(i)) {
+      btn.classList.add("flagged");
+    }
+
+    btn.onclick = () => jumpToExamQuestion(i);
+    container.appendChild(btn);
+  }
+
+  updatePaletteSummary();
+}
+
+function updatePaletteSummary() {
+  const summaryEl = document.getElementById("examPaletteSummary");
+  if (!summaryEl) return;
+  const total = examSuiteState.activeQuestions.length;
+  let answeredCount = 0;
+
+  for (let i = 0; i < total; i++) {
+    const item = examSuiteState.activeQuestions[i];
+    if (examSuiteState.answers[item.questionKey] && examSuiteState.answers[item.questionKey].trim().length > 0) {
+      answeredCount++;
+    }
+  }
+
+  summaryEl.textContent = `Question ${examSuiteState.currentIndex + 1} of ${total} (${answeredCount} Answered, ${total - answeredCount} Remaining)`;
+}
+
+function startExamTimer() {
+  clearInterval(examSuiteState.timerInterval);
+  const digits = document.getElementById("examTimerDigits");
+  const container = document.getElementById("examTimerDisplay");
+
+  examSuiteState.timerInterval = setInterval(() => {
+    examSuiteState.remainingSeconds--;
+
+    if (examSuiteState.remainingSeconds <= 0) {
+      clearInterval(examSuiteState.timerInterval);
+      alert("⏱️ Examination time has expired! Your work will be submitted automatically.");
+      submitExamFinal();
+      return;
+    }
+
+    const mins = Math.floor(examSuiteState.remainingSeconds / 60);
+    const secs = examSuiteState.remainingSeconds % 60;
+    if (digits) {
+      digits.textContent = `${mins < 10 ? "0" : ""}${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    }
+
+    if (container) {
+      if (examSuiteState.remainingSeconds <= 300) {
+        container.className = "exam-timer-display timer-critical";
+      } else if (examSuiteState.remainingSeconds <= 600) {
+        container.className = "exam-timer-display timer-warning";
+      } else {
+        container.className = "exam-timer-display";
+      }
+    }
+  }, 1000);
+}
+
+function renderCurrentExamQuestion() {
+  if (examSuiteState.activeQuestions.length === 0) return;
+  const item = examSuiteState.activeQuestions[examSuiteState.currentIndex];
+  if (!item) return;
+
+  const stimPane = document.getElementById("examStimulusPane");
+  const intPane = document.getElementById("examInteractionPane");
+  const secIndicator = document.getElementById("examActiveSectionIndicator");
+  const flagBtn = document.getElementById("examFlagToggleBtn");
+
+  if (secIndicator) secIndicator.textContent = `(${item.sectionTitle})`;
+  if (flagBtn) {
+    flagBtn.textContent = examSuiteState.flagged.has(examSuiteState.currentIndex) ? "🚩 Flagged" : "🏳️ Flag Question";
+  }
+
+  // 1. Render Left Stimulus Pane
+  if (stimPane) {
+    if (item.skill === "reading") {
+      stimPane.innerHTML = `
+        <div style="font-size:0.85rem; font-weight:700; color:var(--primary-accent); text-transform:uppercase; margin-bottom:8px;">${escapeHtml(item.sectionTitle)}</div>
+        <div style="font-size:0.95rem; line-height:1.75; color:var(--text-primary); white-space:pre-wrap;">${escapeHtml(item.stimulusText || "")}</div>
+      `;
+    } else if (item.skill === "listening") {
+      stimPane.innerHTML = `
+        <div style="font-size:0.85rem; font-weight:700; color:var(--primary-accent); text-transform:uppercase; margin-bottom:8px;">${escapeHtml(item.sectionTitle)}</div>
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; padding:1.25rem; margin-bottom:1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <strong style="color:var(--text-primary);">Audio Simulation (Web Speech Synthesizer)</strong>
+            <span class="badge" style="background:rgba(56, 189, 248, 0.15); color:var(--cat-exam-accent); font-size:0.75rem;">Concealed Transcript</span>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 12px 0;">
+            In official computer-delivered IELTS, audio recordings are played once. Transcripts remain concealed during test-taking.
+          </p>
+          <div style="display:flex; gap:10px;">
+            <button type="button" class="btn btn-sm btn-primary" id="examPlayAudioBtn" onclick="toggleExamAudioPlayback()">▶️ Play Audio</button>
+            <button type="button" class="btn btn-sm btn-outline" onclick="stopExamAudioPlayback()">⏹️ Stop</button>
+          </div>
+        </div>
+        <div style="font-size:0.85rem; color:var(--text-muted);">
+          <em>Tip: Preview the question prompt carefully and anticipate word classes or numbers before listening.</em>
+        </div>
+      `;
+    } else if (item.skill === "writing") {
+      stimPane.innerHTML = `
+        <div style="font-size:0.85rem; font-weight:700; color:var(--primary-accent); text-transform:uppercase; margin-bottom:8px;">${escapeHtml(item.sectionTitle)}</div>
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; padding:1.25rem;">
+          <h4 style="margin:0 0 10px 0; color:var(--text-primary); font-size:1.05rem;">Task Requirements:</h4>
+          <p style="font-size:0.95rem; line-height:1.7; color:var(--text-primary); white-space:pre-wrap; margin:0 0 1rem 0;">${escapeHtml(item.stimulusText || "")}</p>
+          <div style="display:flex; gap:12px; font-size:0.85rem; color:var(--text-muted); border-top:1px solid var(--border-color); padding-top:10px;">
+            <span>Minimum Target: <strong>${item.minWords} words</strong></span>
+            <span>•</span>
+            <span>Recommended Time: <strong>${item.minWords === 150 ? "20" : "40"} mins</strong></span>
+          </div>
+        </div>
+      `;
+    } else if (item.skill === "speaking") {
+      if (item.cueCard) {
+        stimPane.innerHTML = `
+          <div style="font-size:0.85rem; font-weight:700; color:var(--primary-accent); text-transform:uppercase; margin-bottom:8px;">Speaking Part 2: Task Card</div>
+          <div style="background:var(--bg-secondary); border:2px dashed var(--primary-accent); border-radius:12px; padding:1.5rem; margin-bottom:1rem;">
+            <h4 style="margin:0 0 10px 0; color:var(--text-primary);">${escapeHtml(item.cueCard.task)}</h4>
+            <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:8px;">You should say:</p>
+            <ul style="padding-left:20px; font-size:0.9rem; color:var(--text-primary); line-height:1.6;">
+              ${(item.cueCard.points || []).map(pt => `<li>${escapeHtml(pt)}</li>`).join("")}
+            </ul>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; background:var(--bg-card); padding:1rem; border-radius:10px; border:1px solid var(--border-color);">
+            <button type="button" class="btn btn-sm btn-outline" id="startPrepTimerBtn" onclick="startSpeakingPrepCountdown(60)">⏱️ Start 1-Min Prep Timer</button>
+            <span id="prepTimerDisplay" style="font-family:monospace; font-weight:700; font-size:1rem; color:var(--warning-color);">01:00</span>
+          </div>
+        `;
+      } else {
+        stimPane.innerHTML = `
+          <div style="font-size:0.85rem; font-weight:700; color:var(--primary-accent); text-transform:uppercase; margin-bottom:8px;">${escapeHtml(item.sectionTitle)}</div>
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; padding:1.25rem;">
+            <h4 style="margin:0 0 8px 0;">Examiner Spoken Questions:</h4>
+            <div style="font-size:0.95rem; line-height:1.8; color:var(--text-primary); white-space:pre-wrap;">${escapeHtml(item.stimulusText || "")}</div>
+          </div>
+        `;
+      }
+    }
+  }
+
+  // 2. Render Right Interaction Pane
+  if (intPane) {
+    const qData = item.data;
+    const currentVal = examSuiteState.answers[item.questionKey] || "";
+
+    if (item.skill === "writing") {
+      const words = currentVal.trim().length > 0 ? currentVal.trim().split(/\s+/).length : 0;
+      intPane.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h4 style="margin:0; font-size:1.05rem;">Your Written Response:</h4>
+          <span style="font-size:0.85rem; font-weight:600;" id="examWordCountBadge">
+            Word Count: <strong id="examWordCountNumber" style="color:${words >= item.minWords ? 'var(--success-color)' : 'var(--warning-color)'};">${words}</strong> / ${item.minWords} min
+          </span>
+        </div>
+        <textarea id="examWritingTextarea" class="form-control" style="flex:1; width:100%; min-height:280px; padding:12px; font-size:0.95rem; line-height:1.6; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary); resize:vertical;" placeholder="Type your response here..." oninput="recordExamAnswer('${item.questionKey}', this.value)">${escapeHtml(currentVal)}</textarea>
+      `;
+    } else if (item.skill === "speaking") {
+      intPane.innerHTML = `
+        <div>
+          <h4 style="margin:0 0 8px 0; font-size:1.05rem;">Spoken Transcript / Response Entry:</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 12px 0;">
+            Use the microphone to record your answer via Speech-to-Text or type your exact spoken response.
+          </p>
+          <div style="display:flex; gap:10px; margin-bottom:12px;">
+            <button type="button" class="btn btn-sm btn-outline" id="examRecordVoiceBtn" onclick="toggleExamVoiceRecognition('${item.questionKey}')">🎙️ Record Speech</button>
+          </div>
+          <textarea id="examSpeakingTextarea" class="form-control" style="width:100%; min-height:180px; padding:12px; font-size:0.95rem; line-height:1.6; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary); resize:vertical;" placeholder="Spoken transcript will appear here (or type manually)..." oninput="recordExamAnswer('${item.questionKey}', this.value)">${escapeHtml(currentVal)}</textarea>
+        </div>
+      `;
+    } else {
+      // Objective Question (MCQ, TFNG, YNNG, Completion, Matching)
+      let inputHtml = "";
+
+      if (qData.options && Array.isArray(qData.options)) {
+        inputHtml = `
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+            ${qData.options.map((opt, oIdx) => `
+              <label style="display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); cursor:pointer; font-size:0.92rem;">
+                <input type="radio" name="opt_${item.questionKey}" value="${escapeHtml(opt)}" ${currentVal === opt ? 'checked' : ''} onchange="recordExamAnswer('${item.questionKey}', this.value)">
+                <span>${escapeHtml(opt)}</span>
+              </label>
+            `).join("")}
+          </div>
+        `;
+      } else if (qData.type === "TFNG" || qData.type === "True/False/Not Given") {
+        inputHtml = `
+          <div style="display:flex; gap:10px; margin-top:12px;">
+            ${["True", "False", "Not Given"].map(val => `
+              <label style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); cursor:pointer;">
+                <input type="radio" name="opt_${item.questionKey}" value="${val}" ${currentVal.toLowerCase() === val.toLowerCase() ? 'checked' : ''} onchange="recordExamAnswer('${item.questionKey}', this.value)">
+                <span>${val}</span>
+              </label>
+            `).join("")}
+          </div>
+        `;
+      } else if (qData.type === "YNNG" || qData.type === "Yes/No/Not Given") {
+        inputHtml = `
+          <div style="display:flex; gap:10px; margin-top:12px;">
+            ${["Yes", "No", "Not Given"].map(val => `
+              <label style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-secondary); cursor:pointer;">
+                <input type="radio" name="opt_${item.questionKey}" value="${val}" ${currentVal.toLowerCase() === val.toLowerCase() ? 'checked' : ''} onchange="recordExamAnswer('${item.questionKey}', this.value)">
+                <span>${val}</span>
+              </label>
+            `).join("")}
+          </div>
+        `;
+      } else {
+        // Text completion
+        inputHtml = `
+          <div style="margin-top:14px;">
+            <label style="font-size:0.85rem; color:var(--text-muted); display:block; margin-bottom:6px;">
+              Enter your answer (NO MORE THAN ${qData.max_words || 2} WORDS):
+            </label>
+            <input type="text" class="form-control" style="width:100%; padding:10px 14px; font-size:1rem; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-primary);" value="${escapeHtml(currentVal)}" placeholder="Type answer here..." oninput="recordExamAnswer('${item.questionKey}', this.value)">
+          </div>
+        `;
+      }
+
+      intPane.innerHTML = `
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span class="badge" style="background:var(--cat-exam-bg); color:var(--cat-exam-accent); font-weight:700;">Question ${examSuiteState.currentIndex + 1}</span>
+            <span style="font-size:0.82rem; color:var(--text-muted);">${escapeHtml(qData.type || "Completion")}</span>
+          </div>
+          <div style="font-size:1.05rem; font-weight:600; color:var(--text-primary); line-height:1.5;">${escapeHtml(qData.prompt || "")}</div>
+          ${inputHtml}
+        </div>
+      `;
+    }
+  }
+
+  // Update palette visual states
+  renderExamPalette();
+}
+
+function recordExamAnswer(key, value) {
+  examSuiteState.answers[key] = value;
+
+  // Update writing word count badge live if active
+  const wordBadge = document.getElementById("examWordCountNumber");
+  if (wordBadge && (key === "writing_task_1" || key === "writing_task_2")) {
+    const words = value.trim().length > 0 ? value.trim().split(/\s+/).length : 0;
+    wordBadge.textContent = words;
+  }
+
+  // Debounced autosave
+  clearTimeout(examSuiteState.autosaveTimer);
+  const indicator = document.getElementById("examAutosaveIndicator");
+  if (indicator) {
+    indicator.innerHTML = '<span>🟡</span> <span>Saving...</span>';
+  }
+
+  examSuiteState.autosaveTimer = setTimeout(() => {
+    executeAutosave();
+  }, 1200);
+
+  updatePaletteSummary();
+}
+
+async function executeAutosave() {
+  if (!examSuiteState.activeSessionId) return;
+  const activeLearnerId = (typeof appState !== "undefined" && appState.currentLearner && appState.currentLearner.id) || "default_learner";
+  const indicator = document.getElementById("examAutosaveIndicator");
+
+  try {
+    const res = await fetch("/api/exam/autosave", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonStringifySafe({
+        session_id: examSuiteState.activeSessionId,
+        learner_id: activeLearnerId,
+        answers: examSuiteState.answers,
+        flagged: Array.from(examSuiteState.flagged),
+        current_question: examSuiteState.currentIndex + 1,
+        time_spent_seconds: examSuiteState.totalTimeSeconds - examSuiteState.remainingSeconds
+      })
+    });
+
+    if (res.ok && indicator) {
+      indicator.innerHTML = '<span>🟢</span> <span>All answers saved</span>';
+    }
+  } catch (e) {
+    if (indicator) indicator.innerHTML = '<span>🔴</span> <span>Autosave failed (offline)</span>';
+  }
+}
+
+function toggleCurrentQuestionFlag() {
+  const idx = examSuiteState.currentIndex;
+  if (examSuiteState.flagged.has(idx)) {
+    examSuiteState.flagged.delete(idx);
+  } else {
+    examSuiteState.flagged.add(idx);
+  }
+  const flagBtn = document.getElementById("examFlagToggleBtn");
+  if (flagBtn) {
+    flagBtn.textContent = examSuiteState.flagged.has(idx) ? "🚩 Flagged" : "🏳️ Flag Question";
+  }
+  renderExamPalette();
+}
+
+function navigateExamQuestion(delta) {
+  const newIdx = examSuiteState.currentIndex + delta;
+  if (newIdx >= 0 && newIdx < examSuiteState.activeQuestions.length) {
+    examSuiteState.currentIndex = newIdx;
+    renderCurrentExamQuestion();
+  }
+}
+
+function jumpToExamQuestion(index) {
+  if (index >= 0 && index < examSuiteState.activeQuestions.length) {
+    examSuiteState.currentIndex = index;
+    renderCurrentExamQuestion();
+  }
+}
+
+function confirmExitExam() {
+  if (confirm("Are you sure you want to exit the examination? Your progress is saved, and you can resume anytime before your timer expires.")) {
+    clearInterval(examSuiteState.timerInterval);
+    const lobby = document.getElementById("examLobbyView");
+    const workspace = document.getElementById("examActiveWorkspace");
+    if (workspace) workspace.style.display = "none";
+    if (lobby) lobby.style.display = "flex";
+    initExamSuite();
+  }
+}
+
+function confirmSubmitExam() {
+  const total = examSuiteState.activeQuestions.length;
+  let answered = 0;
+  for (let i = 0; i < total; i++) {
+    const item = examSuiteState.activeQuestions[i];
+    if (examSuiteState.answers[item.questionKey] && examSuiteState.answers[item.questionKey].trim().length > 0) {
+      answered++;
+    }
+  }
+
+  const unanswered = total - answered;
+  let msg = `You have completed ${answered} of ${total} questions.`;
+  if (unanswered > 0) {
+    msg += ` You have ${unanswered} UNANSWERED questions remaining!`;
+  }
+  msg += "\n\nAre you sure you want to finalize and submit your examination? Once submitted, your answers will be locked and graded.";
+
+  if (confirm(msg)) {
+    submitExamFinal();
+  }
+}
+
+async function submitExamFinal() {
+  clearInterval(examSuiteState.timerInterval);
+  const activeLearnerId = (typeof appState !== "undefined" && appState.currentLearner && appState.currentLearner.id) || "default_learner";
+
+  try {
+    const res = await fetch("/api/exam/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: jsonStringifySafe({
+        session_id: examSuiteState.activeSessionId,
+        learner_id: activeLearnerId,
+        final_answers: examSuiteState.answers
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      alert(`Submission error: ${err.error || "Failed to process results."}`);
+      return;
+    }
+
+    const data = await res.json();
+    renderExamResults(data.results || data);
+  } catch (e) {
+    console.error("[ExamSuite] Submission failed:", e);
+    alert("Connection error submitting examination.");
+  }
+}
+
+function renderExamResults(results) {
+  const workspace = document.getElementById("examActiveWorkspace");
+  const resultsView = document.getElementById("examResultsView");
+  if (workspace) workspace.style.display = "none";
+  if (resultsView) resultsView.style.display = "flex";
+
+  const overallEl = document.getElementById("resultsOverallBand");
+  const confEl = document.getElementById("resultsConfidenceRange");
+  const timestampEl = document.getElementById("resultsExamTimestamp");
+  const titleEl = document.getElementById("resultsExamTitle");
+  const gridEl = document.getElementById("resultsSkillBandsGrid");
+  const qContainer = document.getElementById("resultsDetailedQuestionsContainer");
+  const recContainer = document.getElementById("resultsRecommendationsList");
+
+  if (overallEl) overallEl.textContent = Number(results.overall_band || 0.0).toFixed(1);
+  if (confEl && results.confidence_range) {
+    confEl.textContent = `Confidence Range: [${results.confidence_range[0]} – ${results.confidence_range[1]}]`;
+  }
+  if (timestampEl) timestampEl.textContent = `Completed on ${new Date().toLocaleDateString()}`;
+  if (titleEl) titleEl.textContent = `${results.track || 'IELTS'} Practice Examination Results`;
+
+  // Render Skill Bands
+  if (gridEl && results.band_breakdown) {
+    gridEl.innerHTML = Object.entries(results.band_breakdown).map(([skill, band]) => `
+      <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:8px; padding:10px;">
+        <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted);">${escapeHtml(skill)}</div>
+        <div style="font-size:1.6rem; font-weight:800; color:var(--text-primary); margin-top:2px;">${Number(band).toFixed(1)}</div>
+      </div>
+    `).join("");
+  }
+
+  // Render Detailed Question Review
+  if (qContainer) {
+    qContainer.innerHTML = "";
+    const skills = results.skills || {};
+
+    // Reading questions review
+    if (skills.reading && skills.reading.questions) {
+      skills.reading.questions.forEach(q => {
+        const isCor = q.is_correct;
+        const card = document.createElement("div");
+        card.style.background = isCor ? "rgba(16, 185, 129, 0.06)" : "rgba(239, 68, 68, 0.06)";
+        card.style.border = `1px solid ${isCor ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`;
+        card.style.borderRadius = "10px";
+        card.style.padding = "1rem";
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong style="color:var(--text-primary);">Reading Q${q.question_num}: ${escapeHtml(q.type || "")}</strong>
+            <span class="badge" style="background:${isCor ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}; color:${isCor ? '#10b981' : '#ef4444'}; font-weight:700;">
+              ${isCor ? '✅ Correct' : '❌ Incorrect'}
+            </span>
+          </div>
+          <div style="font-size:0.92rem; color:var(--text-primary); margin-bottom:8px;">${escapeHtml(q.prompt || "")}</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.86rem; margin-bottom:8px;">
+            <div>Your Answer: <strong style="color:${isCor ? '#10b981' : '#ef4444'};">${escapeHtml(q.user_answer || "Unanswered")}</strong></div>
+            <div>Correct Answer: <strong style="color:#10b981;">${escapeHtml(q.correct_answer || "")}</strong></div>
+          </div>
+          ${q.explanation ? `<div style="font-size:0.84rem; color:var(--text-secondary); background:var(--bg-secondary); padding:8px 12px; border-radius:6px; border-left:3px solid var(--primary-accent);"><em>Explanation:</em> ${escapeHtml(q.explanation)}</div>` : ''}
+        `;
+        qContainer.appendChild(card);
+      });
+    }
+
+    // Listening questions review
+    if (skills.listening && skills.listening.questions) {
+      skills.listening.questions.forEach(q => {
+        const isCor = q.is_correct;
+        const card = document.createElement("div");
+        card.style.background = isCor ? "rgba(16, 185, 129, 0.06)" : "rgba(239, 68, 68, 0.06)";
+        card.style.border = `1px solid ${isCor ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`;
+        card.style.borderRadius = "10px";
+        card.style.padding = "1rem";
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong style="color:var(--text-primary);">Listening Q${q.question_num}</strong>
+            <span class="badge" style="background:${isCor ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}; color:${isCor ? '#10b981' : '#ef4444'}; font-weight:700;">
+              ${isCor ? '✅ Correct' : '❌ Incorrect'}
+            </span>
+          </div>
+          <div style="font-size:0.92rem; color:var(--text-primary); margin-bottom:8px;">${escapeHtml(q.prompt || "")}</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.86rem; margin-bottom:8px;">
+            <div>Your Answer: <strong style="color:${isCor ? '#10b981' : '#ef4444'};">${escapeHtml(q.user_answer || "Unanswered")}</strong></div>
+            <div>Correct Answer: <strong style="color:#10b981;">${escapeHtml(q.correct_answer || "")}</strong></div>
+          </div>
+          ${q.distractor_note ? `<div style="font-size:0.84rem; color:var(--text-secondary); background:var(--bg-secondary); padding:8px 12px; border-radius:6px; border-left:3px solid var(--primary-accent);"><em>Distractor Analysis:</em> ${escapeHtml(q.distractor_note)}</div>` : ''}
+        `;
+        qContainer.appendChild(card);
+      });
+    }
+
+    // Writing review
+    if (skills.writing) {
+      const wCard = document.createElement("div");
+      wCard.style.background = "var(--bg-secondary)";
+      wCard.style.border = "1px solid var(--border-color)";
+      wCard.style.borderRadius = "10px";
+      wCard.style.padding = "1rem";
+      wCard.innerHTML = `
+        <h4 style="margin:0 0 10px 0;">Writing Assessment Rubric Feedback</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.88rem;">
+          <div>Task 1 (${skills.writing.task_1 ? skills.writing.task_1.word_count : 0}w): <strong>Band ${skills.writing.task_1 ? skills.writing.task_1.band : '-'}</strong></div>
+          <div>Task 2 (${skills.writing.task_2 ? skills.writing.task_2.word_count : 0}w): <strong>Band ${skills.writing.task_2 ? skills.writing.task_2.band : '-'}</strong></div>
+        </div>
+        <p style="font-size:0.82rem; color:var(--text-muted); margin:8px 0 0 0;">Weighted formula: Task 1 (1/3) + Task 2 (2/3) strictly applied.</p>
+      `;
+      qContainer.appendChild(wCard);
+    }
+  }
+
+  // Render Targeted Recommendations
+  if (recContainer) {
+    recContainer.innerHTML = `
+      <ul style="padding-left:20px; margin:0;">
+        <li><strong>Mistake Ledger Integration:</strong> Incorrect responses have been automatically filed into your personal Mistake Book for targeted spaced-repetition drills.</li>
+        <li><strong>Recommended Curriculum:</strong> Target B2/C1 grammar modules in the English Academy to reinforce sentence structure and modal hedging.</li>
+        <li><strong>Vocabulary Expansion:</strong> Review high-frequency academic collocations in the Themed Vocabulary Academy.</li>
+      </ul>
+    `;
+  }
+}
+
+async function loadExamHistory() {
+  const activeLearnerId = (typeof appState !== "undefined" && appState.currentLearner && appState.currentLearner.id) || "default_learner";
+  const container = document.getElementById("examHistoryTableContainer");
+  if (!container) return;
+
+  try {
+    const res = await fetch(`/api/exam/history?learner_id=${encodeURIComponent(activeLearnerId)}`);
+    if (res.ok) {
+      const data = await res.json();
+      const history = data.history || [];
+
+      if (history.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem;">No completed examination sessions yet. Choose an exam above to begin!</p>';
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="table" style="width:100%; font-size:0.88rem; border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border-color); text-align:left; color:var(--text-muted);">
+              <th style="padding:8px;">Date</th>
+              <th style="padding:8px;">Module</th>
+              <th style="padding:8px;">Track</th>
+              <th style="padding:8px;">Status</th>
+              <th style="padding:8px;">Overall Band</th>
+              <th style="padding:8px; text-align:right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${history.map(h => `
+              <tr style="border-bottom:1px solid var(--border-color);">
+                <td style="padding:8px;">${new Date(h.started_at).toLocaleDateString()}</td>
+                <td style="padding:8px;"><strong>${escapeHtml(h.module ? h.module.toUpperCase() : '')}</strong></td>
+                <td style="padding:8px;">${escapeHtml(h.track || '')}</td>
+                <td style="padding:8px;"><span class="badge" style="background:${h.status === 'submitted' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)'}; color:${h.status === 'submitted' ? '#10b981' : '#f59e0b'};">${escapeHtml(h.status)}</span></td>
+                <td style="padding:8px; font-weight:700; color:var(--primary-accent);">${h.band_score ? Number(h.band_score).toFixed(1) : '-'}</td>
+                <td style="padding:8px; text-align:right;">
+                  ${h.status === 'submitted' ? `<button class="btn btn-xs btn-outline" onclick="viewHistoricalExamResults('${h.id}')">View Report</button>` : `<button class="btn btn-xs btn-primary" onclick="resumeActiveExam()">Resume</button>`}
+                </td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+  } catch (e) {
+    console.warn("[ExamSuite] Failed to load history:", e);
+  }
+}
+
+async function viewHistoricalExamResults(sessionId) {
+  const activeLearnerId = (typeof appState !== "undefined" && appState.currentLearner && appState.currentLearner.id) || "default_learner";
+  try {
+    const res = await fetch(`/api/exam/results?session_id=${encodeURIComponent(sessionId)}&learner_id=${encodeURIComponent(activeLearnerId)}`);
+    if (res.ok) {
+      const data = await res.json();
+      renderExamResults(data.results || data);
+    }
+  } catch (e) {
+    alert("Could not load historical exam report.");
+  }
+}
+
+function returnToExamLobby() {
+  const lobby = document.getElementById("examLobbyView");
+  const workspace = document.getElementById("examActiveWorkspace");
+  const results = document.getElementById("examResultsView");
+
+  if (workspace) workspace.style.display = "none";
+  if (results) results.style.display = "none";
+  if (lobby) lobby.style.display = "flex";
+
+  initExamSuite();
+}
+
+function showExamInstructionsModal() {
+  alert(
+    "IELTS PRACTICE EXAMINATION INSTRUCTIONS\n\n" +
+    "1. TIMING: Full mock is 164 mins. Individual skills: Reading (60m), Listening (32m), Writing (60m), Speaking (14m).\n" +
+    "2. AUTOSAVE: All answers and flagged items are automatically saved continuously to SQLite.\n" +
+    "3. RECOVERY: Accidental browser refreshes restore your session with elapsed timer preserved.\n" +
+    "4. CONCEALMENT: Answer keys and transcripts remain concealed until final submission.\n" +
+    "5. SCORING: Objective grading out of 40; Writing weighted 1/3 (Task 1) + 2/3 (Task 2); Speaking transcript evaluation."
+  );
+}
+
+// Listening Web Speech synthesis simulation
+function toggleExamAudioPlayback() {
+  if (!("speechSynthesis" in window)) {
+    alert("Web Speech Synthesis is not supported in this browser or device.");
+    return;
+  }
+
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    const btn = document.getElementById("examPlayAudioBtn");
+    if (btn) btn.textContent = "▶️ Play Audio";
+    return;
+  }
+
+  const item = examSuiteState.activeQuestions[examSuiteState.currentIndex];
+  const scriptText = (item && item.stimulusAudioScript) ? item.stimulusAudioScript : "";
+
+  if (!scriptText || scriptText.trim().length === 0) {
+    alert("Audio dialogue script is unavailable for this section.");
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(scriptText);
+  utterance.rate = 0.95;
+  utterance.pitch = 1.0;
+  utterance.lang = "en-GB";
+
+  utterance.onstart = () => {
+    const btn = document.getElementById("examPlayAudioBtn");
+    if (btn) btn.textContent = "⏸️ Pause Audio";
+  };
+
+  utterance.onend = () => {
+    const btn = document.getElementById("examPlayAudioBtn");
+    if (btn) btn.textContent = "▶️ Play Audio";
+  };
+
+  utterance.onerror = (err) => {
+    console.warn("[ExamSuite] Speech synthesis error:", err);
+    const btn = document.getElementById("examPlayAudioBtn");
+    if (btn) btn.textContent = "▶️ Play Audio";
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function stopExamAudioPlayback() {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+    const btn = document.getElementById("examPlayAudioBtn");
+    if (btn) btn.textContent = "▶️ Play Audio";
+  }
+}
+
+// Speaking Part 2 countdown timer
+function startSpeakingPrepCountdown(seconds) {
+  clearInterval(examSuiteState.prepTimerInterval);
+  let rem = seconds;
+  const disp = document.getElementById("prepTimerDisplay");
+  const btn = document.getElementById("startPrepTimerBtn");
+  if (btn) btn.disabled = true;
+
+  examSuiteState.prepTimerInterval = setInterval(() => {
+    rem--;
+    if (disp) {
+      disp.textContent = `00:${rem < 10 ? '0' : ''}${rem}`;
+    }
+    if (rem <= 0) {
+      clearInterval(examSuiteState.prepTimerInterval);
+      if (disp) disp.textContent = "00:00 (Time up! Begin speaking)";
+      if (btn) btn.disabled = false;
+    }
+  }, 1000);
+}
+
+// Speaking Speech-to-Text recording toggle
+function toggleExamVoiceRecognition(targetKey) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("Speech Recognition is not supported by your browser. Please type your response directly into the textarea.");
+    return;
+  }
+
+  const btn = document.getElementById("examRecordVoiceBtn");
+  const textarea = document.getElementById("examSpeakingTextarea");
+
+  if (btn && btn.classList.contains("recording")) {
+    btn.classList.remove("recording");
+    btn.textContent = "🎙️ Record Speech";
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "en-GB";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  if (btn) {
+    btn.classList.add("recording");
+    btn.textContent = "⏹️ Stop Recording";
+  }
+
+  recognition.onresult = (event) => {
+    let transcript = "";
+    for (let i = 0; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript + " ";
+    }
+    if (textarea) {
+      textarea.value = transcript.trim();
+      recordExamAnswer(targetKey, transcript.trim());
+    }
+  };
+
+  recognition.onerror = () => {
+    if (btn) {
+      btn.classList.remove("recording");
+      btn.textContent = "🎙️ Record Speech";
+    }
+  };
+
+  recognition.onend = () => {
+    if (btn) {
+      btn.classList.remove("recording");
+      btn.textContent = "🎙️ Record Speech";
+    }
+  };
+
+  recognition.start();
+}
+
+// =========================================================================
+// PHASE 16: AUTHENTICATION, RBAC & SESSION MANAGEMENT
+// =========================================================================
+window.openAuthModal = function() {
+  const m = document.getElementById("authModal");
+  if (m) m.style.display = "flex";
+};
+
+window.closeAuthModal = function() {
+  const m = document.getElementById("authModal");
+  if (m) m.style.display = "none";
+};
+
+function updateAuthPillUI() {
+  const user = appState.currentUser || { user_id: "learner_alice", role: "learner" };
+  const iconEl = document.getElementById("authRoleIcon");
+  const roleEl = document.getElementById("authRoleLabel");
+  const userEl = document.getElementById("authUsernameLabel");
+
+  const roleIcons = {
+    learner: "👤",
+    teacher: "👩‍🏫",
+    examiner: "👨‍⚖️",
+    admin: "👑"
+  };
+
+  if (iconEl) iconEl.textContent = roleIcons[user.role] || "👤";
+  if (roleEl) roleEl.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+  if (userEl) userEl.textContent = user.user_id;
+
+  const teacherNotice = document.getElementById("teacherActiveUserBadge");
+  if (teacherNotice) {
+    teacherNotice.textContent = `${user.user_id} (${user.role.toUpperCase()})`;
+  }
+}
+
+window.quickLogin = async function(username, password) {
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (data.status === "authenticated") {
+      appState.sessionToken = data.session_token;
+      appState.currentUser = data.user;
+      localStorage.setItem("gama_session_token", data.session_token);
+      localStorage.setItem("gama_current_user", JSON.stringify(data.user));
+      updateAuthPillUI();
+      closeAuthModal();
+      showToastNotification(`Signed in as ${data.user.user_id} (${data.user.role})`);
+      if (appState.currentTab === "teacher") loadTeacherDashboard();
+      if (appState.currentTab === "doublemark") loadDoubleMarkingView();
+    } else {
+      alert("Authentication failed: " + (data.error || "Invalid credentials"));
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Login failed: " + err.message);
+  }
+};
+
+window.handleCustomLogin = async function(e) {
+  e.preventDefault();
+  const u = document.getElementById("loginUsername").value.trim();
+  const p = document.getElementById("loginPassword").value;
+  await quickLogin(u, p);
+};
+
+window.logoutCurrentUser = async function() {
+  if (appState.sessionToken) {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_token: appState.sessionToken })
+      });
+    } catch (e) {}
+  }
+  appState.sessionToken = null;
+  appState.currentUser = { user_id: "anonymous", role: "guest" };
+  localStorage.removeItem("gama_session_token");
+  localStorage.removeItem("gama_current_user");
+  updateAuthPillUI();
+  closeAuthModal();
+  showToastNotification("Signed out successfully");
+};
+
+// =========================================================================
+// PHASE 16: TEACHER REVIEW DASHBOARD & STUDIO
+// =========================================================================
+let currentActiveAssignment = null;
+let currentTeacherAssignments = [];
+
+window.loadTeacherDashboard = async function() {
+  const listEl = document.getElementById("teacherAssignmentList");
+  const countEl = document.getElementById("teacherQueueCountBadge");
+  if (!listEl) return;
+
+  listEl.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.85rem;">Loading review queue...</div>`;
+
+  try {
+    const res = await callApi("/api/teacher/dashboard");
+    if (res.error) {
+      listEl.innerHTML = `<div style="padding:1rem; color:var(--warning-color); font-size:0.85rem;">${res.error} (Sign in as Teacher or Examiner to access this studio)</div>`;
+      return;
+    }
+    currentTeacherAssignments = res.assignments || [];
+    if (countEl) countEl.textContent = `${currentTeacherAssignments.length} items`;
+    filterTeacherQueue();
+  } catch (err) {
+    listEl.innerHTML = `<div style="padding:1rem; color:var(--danger-color); font-size:0.85rem;">Failed to load assignments: ${err.message}</div>`;
+  }
+};
+
+window.filterTeacherQueue = function() {
+  const skill = document.getElementById("teacherSkillFilter")?.value || "all";
+  const status = document.getElementById("teacherStatusFilter")?.value || "all";
+  const listEl = document.getElementById("teacherAssignmentList");
+  if (!listEl) return;
+
+  const filtered = currentTeacherAssignments.filter(a => {
+    if (skill !== "all" && a.skill !== skill) return false;
+    if (status !== "all" && a.status !== status) return false;
+    return true;
+  });
+
+  renderTeacherAssignments(filtered);
+};
+
+function renderTeacherAssignments(assignments) {
+  const listEl = document.getElementById("teacherAssignmentList");
+  if (!listEl) return;
+
+  if (assignments.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.85rem;">No assignments match current filter.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = assignments.map(a => {
+    const isSelected = currentActiveAssignment && currentActiveAssignment.assignment_id === a.assignment_id;
+    const statusColors = {
+      assigned: "rgba(59,130,246,0.15); color:#60a5fa; border:1px solid rgba(59,130,246,0.3);",
+      in_review: "rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.3);",
+      submitted: "rgba(16,185,129,0.15); color:#34d399; border:1px solid rgba(16,185,129,0.3);"
+    };
+
+    return `
+      <div style="background:var(--bg-card); border:${isSelected ? '2px solid var(--cat-educator-accent)' : '1px solid var(--border-color)'}; border-radius:10px; padding:12px; cursor:pointer; transition:border-color 0.15s;" onclick="selectAssignmentForReview('${a.assignment_id}')">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span class="nav-badge ${a.skill === 'writing' ? 'badge-exam' : 'badge-advantage'}" style="text-transform:uppercase; font-size:0.7rem;">${a.skill}</span>
+          <span style="font-size:0.72rem; padding:2px 8px; border-radius:4px; ${statusColors[a.status] || ''}">${a.status}</span>
+        </div>
+        <div style="font-size:0.88rem; font-weight:600; color:var(--text-primary); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${a.prompt_topic || 'Submission ' + a.assignment_id}</div>
+        <div style="font-size:0.75rem; color:var(--text-muted); display:flex; justify-content:space-between;">
+          <span>Candidate: <strong>${a.learner_id}</strong></span>
+          <span>${a.submitted_at ? a.submitted_at.substring(0, 10) : ''}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+window.selectAssignmentForReview = async function(assignmentId) {
+  try {
+    const res = await callApi(`/api/teacher/assignment?assignment_id=${encodeURIComponent(assignmentId)}`);
+    if (res.error) {
+      alert("Error: " + res.error);
+      return;
+    }
+    currentActiveAssignment = res.assignment;
+    renderTeacherAssignments(currentTeacherAssignments);
+    populateReviewStudio(res.assignment, res.evaluation);
+  } catch (err) {
+    alert("Failed to load assignment: " + err.message);
+  }
+};
+
+function populateReviewStudio(assignment, evaluation) {
+  const emptyEl = document.getElementById("teacherStudioEmptyState");
+  const formEl = document.getElementById("teacherStudioActiveForm");
+  if (!emptyEl || !formEl) return;
+
+  emptyEl.style.display = "none";
+  formEl.style.display = "block";
+
+  document.getElementById("studioSkillBadge").textContent = assignment.skill.toUpperCase();
+  document.getElementById("studioTaskTitle").textContent = assignment.prompt_topic || "Assessment Task";
+  document.getElementById("studioCandidateId").textContent = assignment.learner_id;
+  document.getElementById("studioSubmissionDate").textContent = assignment.submitted_at || "Recent";
+  document.getElementById("studioRevisionBadge").textContent = `v${evaluation ? (evaluation.revision_number || 1) : 1}`;
+  document.getElementById("studioPromptContent").textContent = assignment.prompt_topic;
+  document.getElementById("studioSubmissionContent").textContent = assignment.submission_text;
+
+  const modalityEl = document.getElementById("studioSpeakingModalitySection");
+  if (modalityEl) {
+    modalityEl.style.display = assignment.skill === "speaking" ? "block" : "none";
+  }
+
+  // Populate Criteria Sliders
+  const isWriting = assignment.skill === "writing";
+  const criteria = isWriting 
+    ? [
+        { id: "tr", name: "Task Response / Achievement", desc: "Addresses prompt requirements and develops position" },
+        { id: "cc", name: "Coherence & Cohesion", desc: "Logical progression, paragraphing, and cohesive linking" },
+        { id: "lr", name: "Lexical Resource", desc: "Range, precision, collocation, and style appropriateness" },
+        { id: "gra", name: "Grammatical Range & Accuracy", desc: "Complex structures, sentence variety, and error-free rate" }
+      ]
+    : [
+        { id: "fc", name: "Fluency & Coherence", desc: "Speech flow, continuity, and connective markers" },
+        { id: "lr", name: "Lexical Resource", desc: "Idiomatic expressions, precision, and vocabulary range" },
+        { id: "gra", name: "Grammatical Range & Accuracy", desc: "Syntactic variety, tense accuracy, and clause structures" },
+        { id: "p", name: "Pronunciation", desc: "Intonation, phonological clarity, rhythm, and stress" }
+      ];
+
+  const cContainer = document.getElementById("studioCriteriaContainer");
+  const existingScores = evaluation ? (evaluation.criteria_scores || {}) : {};
+
+  cContainer.innerHTML = criteria.map(c => {
+    const val = existingScores[c.id] || 6.5;
+    return `
+      <div class="criteria-score-box">
+        <div class="criteria-score-header">
+          <div>
+            <div style="font-weight:600; font-size:0.85rem; color:var(--text-primary);">${c.name}</div>
+            <div style="font-size:0.72rem; color:var(--text-muted);">${c.desc}</div>
+          </div>
+          <div class="criteria-score-val" id="val_${c.id}">${val.toFixed(1)}</div>
+        </div>
+        <input type="range" class="form-range" id="slider_${c.id}" min="1.0" max="9.0" step="0.5" value="${val}" style="width:100%; cursor:pointer;" oninput="onCriterionSliderChange('${c.id}', this.value)">
+      </div>
+    `;
+  }).join("");
+
+  // Populate Qualitative Fields
+  document.getElementById("studioStrengthsInput").value = evaluation?.strengths || "";
+  document.getElementById("studioImprovementsInput").value = evaluation?.improvements || "";
+  document.getElementById("studioFeedbackInput").value = evaluation?.feedback_text || "";
+
+  updateStudioOverallScore();
+}
+
+window.onCriterionSliderChange = function(critId, val) {
+  const disp = document.getElementById("val_" + critId);
+  if (disp) disp.textContent = parseFloat(val).toFixed(1);
+  updateStudioOverallScore();
+};
+
+function updateStudioOverallScore() {
+  const isWriting = currentActiveAssignment && currentActiveAssignment.skill === "writing";
+  const ids = isWriting ? ["tr", "cc", "lr", "gra"] : ["fc", "lr", "gra", "p"];
+  
+  let total = 0;
+  ids.forEach(id => {
+    const s = document.getElementById("slider_" + id);
+    total += s ? parseFloat(s.value) : 6.5;
+  });
+
+  const avg = total / ids.length;
+  // IELTS band rounding: round to nearest 0.5 (or .25 rounds up to .5, .75 rounds up to next whole)
+  const remainder = avg - Math.floor(avg);
+  let rounded = Math.floor(avg);
+  if (remainder >= 0.75) rounded += 1.0;
+  else if (remainder >= 0.25) rounded += 0.5;
+
+  const overallEl = document.getElementById("studioOverallScoreDisplay");
+  if (overallEl) overallEl.textContent = rounded.toFixed(1);
+}
+
+function gatherStudioEvaluationData(status) {
+  if (!currentActiveAssignment) return null;
+  const isWriting = currentActiveAssignment.skill === "writing";
+  const ids = isWriting ? ["tr", "cc", "lr", "gra"] : ["fc", "lr", "gra", "p"];
+  
+  const criteriaScores = {};
+  ids.forEach(id => {
+    const s = document.getElementById("slider_" + id);
+    criteriaScores[id] = s ? parseFloat(s.value) : 6.5;
+  });
+
+  const overallEl = document.getElementById("studioOverallScoreDisplay");
+  const overallBand = overallEl ? parseFloat(overallEl.textContent) : 6.5;
+
+  return {
+    assignment_id: currentActiveAssignment.assignment_id,
+    reviewer_id: appState.currentUser?.user_id || "teacher_sarah",
+    skill: currentActiveAssignment.skill,
+    overall_band: overallBand,
+    criteria_scores: criteriaScores,
+    strengths: document.getElementById("studioStrengthsInput").value.trim(),
+    improvements: document.getElementById("studioImprovementsInput").value.trim(),
+    feedback_text: document.getElementById("studioFeedbackInput").value.trim(),
+    assessment_mode: document.getElementById("studioAssessmentMode")?.value || "both",
+    status: status
+  };
+}
+
+window.saveTeacherDraft = async function() {
+  const data = gatherStudioEvaluationData("draft");
+  if (!data) return;
+
+  try {
+    const res = await callApi("/api/teacher/review/save", "POST", data);
+    if (res.error) {
+      alert("Error: " + res.error);
+    } else {
+      showToastNotification(`Working draft saved (Revision v${res.evaluation.revision_number})`);
+      document.getElementById("studioRevisionBadge").textContent = `v${res.evaluation.revision_number}`;
+      loadTeacherDashboard();
+    }
+  } catch (err) {
+    alert("Draft save failed: " + err.message);
+  }
+};
+
+window.submitTeacherEvaluation = async function() {
+  const data = gatherStudioEvaluationData("submitted");
+  if (!data) return;
+
+  if (!confirm(`Submit official examiner evaluation with Overall Band ${data.overall_band}? This will commit your marks to the candidate record.`)) {
+    return;
+  }
+
+  try {
+    const res = await callApi("/api/teacher/review/submit", "POST", data);
+    if (res.error) {
+      alert("Error: " + res.error);
+    } else {
+      showToastNotification(`Evaluation submitted successfully (Overall Band: ${data.overall_band})`);
+      loadTeacherDashboard();
+    }
+  } catch (err) {
+    alert("Submission failed: " + err.message);
+  }
+};
+
+// New Assignment Modal functions
+window.openNewAssignmentModal = function() {
+  const m = document.getElementById("newAssignmentModal");
+  if (m) m.style.display = "flex";
+};
+window.closeNewAssignmentModal = function() {
+  const m = document.getElementById("newAssignmentModal");
+  if (m) m.style.display = "none";
+};
+window.handleCreateAssignment = async function(e) {
+  e.preventDefault();
+  const payload = {
+    skill: document.getElementById("assignSkill").value,
+    reviewer_id: document.getElementById("assignReviewerId").value.trim(),
+    learner_id: document.getElementById("assignLearnerId").value.trim(),
+    prompt_topic: document.getElementById("assignPrompt").value.trim(),
+    submission_text: document.getElementById("assignSubmissionText").value.trim()
+  };
+
+  try {
+    const res = await callApi("/api/teacher/assignment/create", "POST", payload);
+    if (res.error) {
+      alert("Error: " + res.error);
+    } else {
+      closeNewAssignmentModal();
+      showToastNotification("New review assignment created!");
+      loadTeacherDashboard();
+    }
+  } catch (err) {
+    alert("Failed to create assignment: " + err.message);
+  }
+};
+
+// =========================================================================
+// PHASE 16: BLIND DOUBLE-MARKING & RECONCILIATION
+// =========================================================================
+let currentDoubleMarkPairs = [];
+let activeDoubleMarkPair = null;
+
+window.loadDoubleMarkingView = async function() {
+  const listEl = document.getElementById("doubleMarkPairsList");
+  const countEl = document.getElementById("doubleMarkPairCountBadge");
+  if (!listEl) return;
+
+  listEl.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.85rem;">Loading paired assignments...</div>`;
+
+  try {
+    const res = await callApi("/api/examiner/double_marking");
+    if (res.error) {
+      listEl.innerHTML = `<div style="padding:1rem; color:var(--warning-color); font-size:0.85rem;">${res.error} (Sign in as Examiner or Admin)</div>`;
+      return;
+    }
+    currentDoubleMarkPairs = res.double_marked_assignments || [];
+    if (countEl) countEl.textContent = `${currentDoubleMarkPairs.length} pairs`;
+    renderDoubleMarkPairs(currentDoubleMarkPairs);
+  } catch (err) {
+    listEl.innerHTML = `<div style="padding:1rem; color:var(--danger-color); font-size:0.85rem;">Failed to load double-marking: ${err.message}</div>`;
+  }
+};
+
+function renderDoubleMarkPairs(pairs) {
+  const listEl = document.getElementById("doubleMarkPairsList");
+  if (!listEl) return;
+
+  if (pairs.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.85rem;">No paired assignments active.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = pairs.map(p => {
+    const isSelected = activeDoubleMarkPair && activeDoubleMarkPair.pair_id === p.pair_id;
+    return `
+      <div style="background:var(--bg-card); border:${isSelected ? '2px solid var(--cat-educator-accent)' : '1px solid var(--border-color)'}; border-radius:10px; padding:12px; cursor:pointer;" onclick="selectDoubleMarkPair('${p.pair_id}')">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span class="nav-badge badge-educator">Pair #${p.pair_id.substring(0,8)}</span>
+          <span style="font-size:0.75rem; color:${p.disagreement_detected ? 'var(--danger-color)' : 'var(--success-color)'}; font-weight:700;">
+            ${p.disagreement_detected ? '⚠️ Divergence >0.5' : (p.is_reconciled ? '✅ Reconciled' : 'In Review')}
+          </span>
+        </div>
+        <div style="font-size:0.85rem; font-weight:600; color:var(--text-primary); margin-bottom:2px;">Submission ${p.submission_id}</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">
+          Examiners: ${p.reviewer_1_id} &amp; ${p.reviewer_2_id}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+window.selectDoubleMarkPair = function(pairId) {
+  const pair = currentDoubleMarkPairs.find(p => p.pair_id === pairId);
+  if (!pair) return;
+
+  activeDoubleMarkPair = pair;
+  renderDoubleMarkPairs(currentDoubleMarkPairs);
+
+  const emptyEl = document.getElementById("doubleMarkEmptyState");
+  const wsEl = document.getElementById("doubleMarkActiveWorkspace");
+  emptyEl.style.display = "none";
+  wsEl.style.display = "block";
+
+  document.getElementById("dmSkillBadge").textContent = (pair.skill || "Writing").toUpperCase();
+  document.getElementById("dmSubmissionTitle").textContent = `Submission #${pair.submission_id}`;
+  document.getElementById("dmPairIdBadge").textContent = pair.pair_id;
+
+  const gateBadge = document.getElementById("dmGateStatusBadge");
+  const blindAlert = document.getElementById("dmBlindProtectionAlert");
+
+  if (pair.evaluations_count < 2) {
+    gateBadge.textContent = "BLIND MARKING ACTIVE";
+    gateBadge.style.background = "rgba(245,158,11,0.15)";
+    gateBadge.style.color = "var(--warning-color)";
+    blindAlert.style.display = "block";
+  } else {
+    gateBadge.textContent = pair.disagreement_detected ? "RECONCILIATION REQUIRED" : "CONSENSUS ALIGNED";
+    gateBadge.style.background = pair.disagreement_detected ? "rgba(239,68,68,0.15)" : "rgba(16,185,129,0.15)";
+    gateBadge.style.color = pair.disagreement_detected ? "var(--danger-color)" : "var(--success-color)";
+    blindAlert.style.display = "none";
+  }
+
+  // Render Disagreement Matrix
+  const tbody = document.getElementById("dmMatrixTableBody");
+  const matrix = pair.disagreement_matrix || {};
+  const criteriaKeys = Object.keys(matrix);
+
+  if (criteriaKeys.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">Awaiting second examiner submission to unlock matrix.</td></tr>`;
+  } else {
+    tbody.innerHTML = criteriaKeys.map(key => {
+      const row = matrix[key];
+      const diff = row.difference || 0;
+      const isAlert = diff > 0.5;
+      return `
+        <tr>
+          <td><strong>${key.toUpperCase()}</strong></td>
+          <td>${row.reviewer_1_score !== undefined ? row.reviewer_1_score.toFixed(1) : '--'}</td>
+          <td>${row.reviewer_2_score !== undefined ? row.reviewer_2_score.toFixed(1) : '--'}</td>
+          <td><span class="${isAlert ? 'diff-alert' : 'diff-ok'}">${diff.toFixed(1)}</span></td>
+          <td>${isAlert ? '<span style="color:var(--danger-color); font-weight:700;">Exceeds ±0.5 Band</span>' : '<span style="color:var(--success-color);">Within Tolerance</span>'}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+};
+
+window.submitSeniorReconciliation = async function() {
+  if (!activeDoubleMarkPair) return;
+  const band = parseFloat(document.getElementById("dmReconciledBandSelect").value);
+  const notes = document.getElementById("dmReconciliationNotesInput").value.trim();
+
+  if (!notes) {
+    alert("Please provide reconciliation rationale & audit commentary explaining the final consensus determination.");
+    return;
+  }
+
+  const payload = {
+    pair_id: activeDoubleMarkPair.pair_id,
+    senior_examiner_id: appState.currentUser?.user_id || "examiner_clara",
+    reconciled_overall_band: band,
+    reconciliation_notes: notes
+  };
+
+  try {
+    const res = await callApi("/api/examiner/reconcile", "POST", payload);
+    if (res.error) {
+      alert("Error: " + res.error);
+    } else {
+      showToastNotification(`Consensus Band ${band} committed. Both examiner records preserved in audit ledger.`);
+      loadDoubleMarkingView();
+    }
+  } catch (err) {
+    alert("Reconciliation failed: " + err.message);
+  }
+};
+
+// =========================================================================
+// PHASE 16: SUPERVISED BETA PILOT & ASSESSMENT CALIBRATION
+// =========================================================================
+window.loadBetaManagement = async function() {
+  loadCalibrationMetrics();
+  loadBetaCohorts();
+};
+
+async function loadCalibrationMetrics() {
+  try {
+    const res = await callApi("/api/benchmark/calibration");
+    const badge = document.getElementById("calibrationStateBadge");
+    const nEl = document.getElementById("calibMetricN");
+    const maeEl = document.getElementById("calibMetricMae");
+    const biasEl = document.getElementById("calibMetricBias");
+    const agree05El = document.getElementById("calibMetricAgreement05");
+    const agree10El = document.getElementById("calibMetricAgreement10");
+
+    if (res.status === "pending_human_calibration" || res.valid_samples === 0) {
+      if (badge) badge.textContent = "PENDING HUMAN CALIBRATION";
+      if (nEl) nEl.textContent = "0";
+      if (maeEl) maeEl.textContent = "N=0";
+      if (biasEl) biasEl.textContent = "N=0";
+      if (agree05El) agree05El.textContent = "N=0";
+      if (agree10El) agree10El.textContent = "N=0";
+    } else {
+      if (badge) {
+        badge.textContent = "CALIBRATION ACTIVE";
+        badge.style.background = "rgba(16,185,129,0.15)";
+        badge.style.color = "var(--success-color)";
+      }
+      if (nEl) nEl.textContent = res.valid_samples;
+      if (maeEl) maeEl.textContent = (res.mae !== undefined ? res.mae.toFixed(2) : "--");
+      if (biasEl) biasEl.textContent = (res.mean_bias !== undefined ? (res.mean_bias > 0 ? "+" : "") + res.mean_bias.toFixed(2) : "--");
+      if (agree05El) agree05El.textContent = (res.within_0_5_band_rate !== undefined ? (res.within_0_5_band_rate * 100).toFixed(1) + "%" : "--");
+      if (agree10El) agree10El.textContent = (res.within_1_0_band_rate !== undefined ? (res.within_1_0_band_rate * 100).toFixed(1) + "%" : "--");
+    }
+  } catch (err) {
+    console.warn("Failed to load calibration metrics:", err);
+  }
+}
+
+async function loadBetaCohorts() {
+  const container = document.getElementById("betaCohortsContainer");
+  if (!container) return;
+
+  try {
+    const res = await callApi("/api/beta/cohorts");
+    const cohorts = res.cohorts || [];
+
+    container.innerHTML = cohorts.map(c => `
+      <div class="beta-cohort-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span class="nav-badge badge-educator" style="font-size:0.72rem;">${c.cohort_type.toUpperCase()}</span>
+          <span style="font-size:0.75rem; color:var(--text-muted);">${c.status}</span>
+        </div>
+        <h4 style="margin:0 0 4px 0; font-size:1.05rem; color:var(--text-primary);">${c.name}</h4>
+        <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:12px;">Target Band: <strong>${c.target_band_min} – ${c.target_band_max}</strong></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; border-top:1px solid var(--border-color); padding-top:8px;">
+          <span>Enrolled: <strong>${c.enrolled_count || 0} / ${c.target_capacity}</strong></span>
+          <span style="font-size:0.75rem; color:var(--primary-accent);">${Math.round(((c.enrolled_count || 0) / c.target_capacity) * 100)}% Cap</span>
+        </div>
+      </div>
+    `).join("");
+  } catch (err) {
+    container.innerHTML = `<div style="color:var(--danger-color); padding:1rem;">Failed to load cohorts: ${err.message}</div>`;
+  }
+}
+
+// Enroll Participant Modal
+window.openEnrollParticipantModal = function() {
+  const m = document.getElementById("enrollParticipantModal");
+  if (m) m.style.display = "flex";
+};
+window.closeEnrollParticipantModal = function() {
+  const m = document.getElementById("enrollParticipantModal");
+  if (m) m.style.display = "none";
+};
+window.handleEnrollParticipant = async function(e) {
+  e.preventDefault();
+  const consent = document.getElementById("enrollConsentCheckbox").checked;
+  if (!consent) {
+    alert("Mandatory informed consent must be provided to enroll in the supervised pilot.");
+    return;
+  }
+
+  const payload = {
+    cohort_id: document.getElementById("enrollCohortSelect").value,
+    user_id: document.getElementById("enrollUserId").value.trim(),
+    target_band: parseFloat(document.getElementById("enrollTargetBand").value),
+    informed_consent: true
+  };
+
+  try {
+    const res = await callApi("/api/beta/participants/enroll", "POST", payload);
+    if (res.error) {
+      alert("Error: " + res.error);
+    } else {
+      closeEnrollParticipantModal();
+      showToastNotification(`Participant ${payload.user_id} enrolled in cohort!`);
+      loadBetaCohorts();
+    }
+  } catch (err) {
+    alert("Enrollment failed: " + err.message);
+  }
+};
+
+window.handleBetaFeedbackSubmit = async function(e) {
+  e.preventDefault();
+  const payload = {
+    participant_id: document.getElementById("feedbackParticipantId").value.trim(),
+    category: document.getElementById("feedbackCategory").value,
+    rating: parseInt(document.getElementById("feedbackRating").value, 10),
+    comments: document.getElementById("feedbackText").value.trim()
+  };
+
+  try {
+    const res = await callApi("/api/beta/feedback", "POST", payload);
+    if (res.error) {
+      alert("Error: " + res.error);
+    } else {
+      showToastNotification("Thank you! Pilot feedback recorded.");
+      document.getElementById("feedbackText").value = "";
+    }
+  } catch (err) {
+    alert("Feedback submission failed: " + err.message);
+  }
+};
+
+window.handleBetaBugSubmit = async function(e) {
+  e.preventDefault();
+  const payload = {
+    reporter_id: document.getElementById("bugReporterId").value.trim(),
+    severity: document.getElementById("bugSeverity").value,
+    title: document.getElementById("bugTitle").value.trim(),
+    description: document.getElementById("bugDescription").value.trim()
+  };
+
+  try {
+    const res = await callApi("/api/beta/bugs", "POST", payload);
+    if (res.error) {
+      alert("Error: " + res.error);
+    } else {
+      showToastNotification(`Bug report logged (${payload.severity.toUpperCase()}): #${res.bug_id}`);
+      document.getElementById("bugTitle").value = "";
+      document.getElementById("bugDescription").value = "";
+    }
+  } catch (err) {
+    alert("Bug logging failed: " + err.message);
+  }
+};
+
+// Initial setup on document load
+document.addEventListener("DOMContentLoaded", () => {
+  updateAuthPillUI();
+});
+

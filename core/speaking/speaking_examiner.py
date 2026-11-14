@@ -12,10 +12,14 @@ from typing import Dict, Any, List, Optional
 from .fluency_tracker import FluencyTracker
 from ..scoring.criteria_evaluator import CriteriaEvaluator
 from ..grammar.grammar_engine import GrammarEngine
+from ..database.db_manager import DatabaseManager
+from ..database.repositories import TestResultRepository
 
 
 class SpeakingExaminer:
     """Simulates an interactive IELTS speaking examiner with authentic Cambridge question banks."""
+
+    ALGORITHM_VERSION = "1.6.0"
 
     EXAM_SETS = [
         {
@@ -291,14 +295,53 @@ class SpeakingExaminer:
         cls,
         transcript: str,
         duration_seconds: float = 90.0,
-        pronunciation_rating: float = 6.5
+        pronunciation_rating: float = 6.5,
+        learner_id: Optional[str] = None,
+        db: Optional[DatabaseManager] = None
     ) -> Dict[str, Any]:
         """Evaluates a learner's spoken turn across all four official criteria with formative optimization."""
+        words = transcript.strip().lower().split()
+        word_count = len(words)
+
+        if word_count == 0:
+            return {
+                "estimated_band": 0.0,
+                "confidence_range": [0.0, 0.5],
+                "fluency_coherence_band": 0.0,
+                "lexical_resource_band": 0.0,
+                "grammatical_range_band": 0.0,
+                "pronunciation_band": 0.0,
+                "criteria_scores": {"FC": 0.0, "LR": 0.0, "GRA": 0.0, "P": 0.0},
+                "feedback": "No spoken response detected (Band 0.0). Please check your microphone or enter a spoken response.",
+                "corrections": [],
+                "band_upgrades": [],
+                "actionable_tips": [
+                    "Ensure your microphone is connected and browser permission is granted.",
+                    "In IELTS Speaking, candidates who do not attempt the turn receive Band 0.0."
+                ]
+            }
+
+        if word_count < 10:
+            return {
+                "estimated_band": 1.5,
+                "confidence_range": [1.0, 2.0],
+                "fluency_coherence_band": 1.5,
+                "lexical_resource_band": 1.5,
+                "grammatical_range_band": 1.5,
+                "pronunciation_band": 1.5,
+                "criteria_scores": {"FC": 1.5, "LR": 1.5, "GRA": 1.5, "P": 1.5},
+                "feedback": f"Spoken turn was extremely brief ({word_count} words). Candidate cannot sustain coherent speech.",
+                "corrections": [],
+                "band_upgrades": [],
+                "actionable_tips": [
+                    "Expand your answers using the 3-Step Formula: Direct Answer -> Reason -> Example."
+                ]
+            }
+
         fluency_data = FluencyTracker.analyze_fluency(transcript, duration_seconds)
         fc_score = fluency_data["estimated_fc_band"]
 
         # Lexical Resource check
-        words = transcript.lower().split()
         unique_ratio = len(set(words)) / max(1, len(words))
         lr_score = 6.0
         if unique_ratio > 0.6:
@@ -333,4 +376,21 @@ class SpeakingExaminer:
             "Avoid short, monosyllabic answers in Part 1; elaborate with 2-3 coherent sentences.",
             "In Part 3, explore multiple viewpoints with concession phrases ('While some argue X, on balance I believe Y')."
         ]
+
+        if learner_id:
+            try:
+                db_mgr = db or DatabaseManager()
+                test_repo = TestResultRepository(db_mgr)
+                test_repo.record_result(
+                    learner_id=learner_id,
+                    test_type="speaking",
+                    track="Speaking",
+                    overall_band=criteria_result["estimated_band"],
+                    speaking_band=criteria_result["estimated_band"],
+                    details=criteria_result
+                )
+            except Exception:
+                pass
+
+        criteria_result["algorithm_version"] = cls.ALGORITHM_VERSION
         return criteria_result
